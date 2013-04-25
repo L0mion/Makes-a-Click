@@ -55,6 +55,12 @@
     <ClInclude Include="..\..\Source\managementCB.h">
       <Filter>ManagmentCB</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\cbDesc.h">
+      <Filter>ManagmentCB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\vertex.h">
+      <Filter>Utilties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -78,6 +84,18 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\Shaders\csPrimaryRayStage.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\psDefault.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\vsDefault.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\constantBuffers.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\structs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

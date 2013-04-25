@@ -5,9 +5,8 @@
 
 struct CBFrame
 {
-	DirectX::XMFLOAT4X4 viewMatrix_;
-	DirectX::XMFLOAT4X4 projectionMatrix_;
+	DirectX::XMFLOAT4X4 finalMatrix_;
 };
-static const unsigned int CB_FRAME_SIZE = 128;
+static const unsigned int CB_FRAME_SIZE = 64;
 
 #endif //CB_DESC_H

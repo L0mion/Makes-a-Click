@@ -11,11 +11,36 @@ ManagementCB::~ManagementCB()
 	SAFE_RELEASE(cbFrame_);
 }
 
-void ManagementCB::updateCBFrame(ID3D11DeviceContext* devcon, DirectX::XMFLOAT4X4 viewMatrix, DirectX::XMFLOAT4X4 projectionMatrix)
+void ManagementCB::vsSetCB(ID3D11DeviceContext* devcon, CBType cbType)
+{
+	switch(cbType)
+	{
+	case CB_TYPE_FRAME:
+		devcon->VSSetConstantBuffers(CB_REGISTER_FRAME, 1, &cbFrame_);
+		break;
+	default:
+		devcon->VSSetConstantBuffers(0, 0, NULL);
+		break;
+	}
+}
+void ManagementCB::psSetCB(ID3D11DeviceContext* devcon, CBType cbType)
+{
+	switch(cbType)
+	{
+	case CB_TYPE_FRAME:
+		devcon->PSSetConstantBuffers(CB_REGISTER_FRAME, 1, &cbFrame_);
+		break;
+	default:
+		devcon->PSSetConstantBuffers(0, 0, NULL);
+		break;
+	}
+}
+
+
+void ManagementCB::updateCBFrame(ID3D11DeviceContext* devcon, DirectX::XMFLOAT4X4 finalMatrix)
 {
 	CBFrame cBuffer;
-	cBuffer.viewMatrix_ = viewMatrix;
-	cBuffer.projectionMatrix_ = projectionMatrix;
+	cBuffer.finalMatrix_ = finalMatrix;
 
 	devcon->UpdateSubresource(cbFrame_, 0, 0, &cBuffer, 0, 0);
 }

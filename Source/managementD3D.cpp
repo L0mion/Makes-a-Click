@@ -25,20 +25,11 @@ void ManagementD3D::present()
 	if(swapChain_)
 		swapChain_->Present(0, 0);
 }
-void ManagementD3D::csSetUAV(UAVId uavId, unsigned int startSlot)
+
+void ManagementD3D::setBackBuffer()
 {
-	ID3D11UnorderedAccessView* uav = NULL;
-
-	switch(uavId)
-	{
-	case UAV_ID_BACK_BUFFER:
-		uav = uavBackBuffer_;
-		break;
-	}
-
-	devcon_->CSSetUnorderedAccessViews(startSlot, 1, &uav, NULL);
+	devcon_->OMSetRenderTargets(1, &rtvBackBuffer_, dsvDepthBuffer_);
 }
-
 
 ID3D11Device* ManagementD3D::getDevice() const
 {

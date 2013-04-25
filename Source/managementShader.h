@@ -5,9 +5,15 @@
 #include <d3dcompiler.h>
 #include <string>
 
-enum ShaderID
+enum ShaderId
 {
-	SHADER_ID_CS_PRIMARY_RAY_STAGE
+	SHADER_ID_VS_DEFAULT,
+	SHADER_ID_PS_DEFAULT
+};
+
+enum InputLayoutId
+{
+	INPUT_LAYOUT_ID_VS_DEFAULT
 };
 
 class ManagementShader
@@ -16,15 +22,27 @@ public:
 	ManagementShader();
 	~ManagementShader();
 
-	void setShader(ShaderID shaderID, ID3D11DeviceContext* devcon);
+	void setShader(ID3D11DeviceContext* devcon, ShaderId shaderId);
+	void setInputLayout(ID3D11DeviceContext* devcon, InputLayoutId inputLayoutId);
 
 	HRESULT init(ID3D11Device* device);
 private:
-	HRESULT initComputeShader(ID3D11Device* device, std::wstring filePath, std::wstring fileName, ID3D11ComputeShader** shader);
+	HRESULT initShaders(ID3D11Device* device);
+	HRESULT initVertexShader(ID3D11Device* device, std::wstring filePath, std::wstring fileName, ID3D11VertexShader** shader, ID3DBlob** blob);
+	HRESULT initPixelShader(ID3D11Device* device, std::wstring filePath, std::wstring fileName, ID3D11PixelShader** shader, ID3DBlob** blob);
 
-	ID3D11ComputeShader* csPrimaryRayStage_;
+	HRESULT initInputLayouts(ID3D11Device* device);
+	HRESULT initVSDefaultInputLayout(ID3D11Device* device);
 
-	bool debugShaders_;
+	std::wstring decideFilePath();
+
+	ID3D11VertexShader* vsDefault_;
+	ID3D11PixelShader* psDefault_;
+
+	ID3DBlob* vsDefaultBlob_;
+	ID3DBlob* psDefaultBlob_;
+
+	ID3D11InputLayout* vsDefaultIL_;
 };
 
 #endif //MANAGEMENT_SHADER_H
