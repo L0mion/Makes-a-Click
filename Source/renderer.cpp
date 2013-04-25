@@ -16,10 +16,10 @@ Renderer::~Renderer()
 
 void Renderer::render()
 {
+	FLOAT colorBlack[4] = {0, 0, 0, 0};
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
-	managementShader_->setShader(SHADER_ID_CS_PRIMARY_RAY_STAGE, devcon);
-	managementD3D_->csSetUAV(UAV_ID_BACK_BUFFER, 0);
-	devcon->Dispatch(25, 25, 1);
+	devcon->ClearRenderTargetView(managementD3D_->getRTVBackBuffer(), colorBlack);
+	devcon->ClearDepthStencilView(managementD3D_->getDSVDepthBuffer(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	managementD3D_->present();
 }

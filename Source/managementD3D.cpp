@@ -7,6 +7,8 @@ ManagementD3D::ManagementD3D()
 	device_			= NULL;
 	devcon_			= NULL;
 	uavBackBuffer_	= NULL;
+	rtvBackBuffer_	= NULL;
+	dsvDepthBuffer_ = NULL;
 }
 ManagementD3D::~ManagementD3D()
 {
@@ -14,6 +16,8 @@ ManagementD3D::~ManagementD3D()
 	SAFE_RELEASE(device_);
 	SAFE_RELEASE(devcon_);
 	SAFE_RELEASE(uavBackBuffer_);
+	SAFE_RELEASE(rtvBackBuffer_);
+	SAFE_RELEASE(dsvDepthBuffer_);
 }
 
 void ManagementD3D::present()
@@ -44,6 +48,14 @@ ID3D11DeviceContext* ManagementD3D::getDeviceContext() const
 {
 	return devcon_;
 }
+ID3D11RenderTargetView* ManagementD3D::getRTVBackBuffer()
+{
+	return rtvBackBuffer_;
+}
+ID3D11DepthStencilView* ManagementD3D::getDSVDepthBuffer()
+{
+	return dsvDepthBuffer_;
+}
 
 HRESULT ManagementD3D::init(HWND windowHandle)
 {
@@ -51,6 +63,8 @@ HRESULT ManagementD3D::init(HWND windowHandle)
 	hr = initDeviceAndSwapChain(windowHandle);
 	if(SUCCEEDED(hr))
 		hr = initBackBuffer();
+	if(SUCCEEDED(hr))
+		hr = initDepthBuffer();
 	if(SUCCEEDED(hr))
 		initViewport();
 
@@ -122,8 +136,39 @@ HRESULT ManagementD3D::initBackBuffer()
 
 	ID3D11Texture2D* texBackBuffer;
 	swapChain_->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&texBackBuffer);
-	hr = device_->CreateUnorderedAccessView(texBackBuffer, NULL, &uavBackBuffer_);
+	//hr = device_->CreateUnorderedAccessView(texBackBuffer, NULL, &uavBackBuffer_);
+	hr = device_->CreateRenderTargetView(texBackBuffer, NULL, &rtvBackBuffer_);
+
 	SAFE_RELEASE(texBackBuffer);
+
+	return hr;
+}
+HRESULT ManagementD3D::initDepthBuffer()
+{
+	HRESULT hr = S_OK;
+
+	D3D11_TEXTURE2D_DESC texDesc;
+	ZeroMemory(&texDesc, sizeof(texDesc));
+
+	texDesc.Width = SCREEN_WIDTH;
+	texDesc.Height = SCREEN_HEIGHT;
+	texDesc.ArraySize = 1;
+	texDesc.MipLevels = 1;
+	texDesc.SampleDesc.Count = 4;
+	texDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+	ID3D11Texture2D *depthBuffer;
+	device_->CreateTexture2D(&texDesc, NULL, &depthBuffer);
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvd;
+	ZeroMemory(&dsvd, sizeof(dsvd));
+
+	dsvd.Format = DXGI_FORMAT_D32_FLOAT;
+	dsvd.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+
+	hr = device_->CreateDepthStencilView(depthBuffer, &dsvd, &dsvDepthBuffer_);
+	SAFE_RELEASE(depthBuffer);
 
 	return hr;
 }

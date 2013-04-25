@@ -20,11 +20,14 @@ public:
 
 	ID3D11Device* getDevice() const;
 	ID3D11DeviceContext* getDeviceContext() const;
+	ID3D11RenderTargetView* getRTVBackBuffer();
+	ID3D11DepthStencilView* getDSVDepthBuffer();
 
 	HRESULT init(HWND windowHandle);
 private:
 	HRESULT initDeviceAndSwapChain(HWND windowHandle);
 	HRESULT initBackBuffer();
+	HRESULT initDepthBuffer();
 	void initViewport();
 	
 
@@ -32,6 +35,8 @@ private:
 	ID3D11Device* device_;
 	ID3D11DeviceContext* devcon_;
 	ID3D11UnorderedAccessView* uavBackBuffer_;
+	ID3D11RenderTargetView* rtvBackBuffer_;
+	ID3D11DepthStencilView* dsvDepthBuffer_;
 };
 
 #endif // MANAGEMENT_D3D_H
