@@ -81,45 +81,6 @@
       <AdditionalDependencies>d3d11.lib;d3dx10.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\SourceCode\Camera.cpp" />
-    <ClCompile Include="..\..\SourceCode\D3DHandler.cpp" />
-    <ClCompile Include="..\..\SourceCode\DrawBehaviorIndexed.cpp" />
-    <ClCompile Include="..\..\SourceCode\Game.cpp" />
-    <ClCompile Include="..\..\SourceCode\GameObject.cpp" />
-    <ClCompile Include="..\..\SourceCode\IndexBehaviorCube.cpp" />
-    <ClCompile Include="..\..\SourceCode\IndexBehaviorGrid.cpp" />
-    <ClCompile Include="..\..\SourceCode\ShaderManager.cpp" />
-    <ClCompile Include="..\..\SourceCode\SoundManager.cpp" />
-    <ClCompile Include="..\..\SourceCode\Terrain.cpp" />
-    <ClCompile Include="..\..\SourceCode\VertexBehaviorCube.cpp" />
-    <ClCompile Include="..\..\SourceCode\VertexBehaviorHeightmap.cpp" />
-    <ClCompile Include="..\..\SourceCode\Window.cpp" />
-    <ClCompile Include="..\..\SourceCode\WinMain.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\SourceCode\Camera.h" />
-    <ClInclude Include="..\..\SourceCode\CBuffer.h" />
-    <ClInclude Include="..\..\SourceCode\D3DHandler.h" />
-    <ClInclude Include="..\..\SourceCode\DrawBehavior.h" />
-    <ClInclude Include="..\..\SourceCode\DrawBehaviorIndexed.h" />
-    <ClInclude Include="..\..\SourceCode\Game.h" />
-    <ClInclude Include="..\..\SourceCode\GameObject.h" />
-    <ClInclude Include="..\..\SourceCode\IndexBehavior.h" />
-    <ClInclude Include="..\..\SourceCode\IndexBehaviorCube.h" />
-    <ClInclude Include="..\..\SourceCode\IndexBehaviorGrid.h" />
-    <ClInclude Include="..\..\SourceCode\InputContainer.h" />
-    <ClInclude Include="..\..\SourceCode\Light.h" />
-    <ClInclude Include="..\..\SourceCode\ShaderManager.h" />
-    <ClInclude Include="..\..\SourceCode\SoundManager.h" />
-    <ClInclude Include="..\..\SourceCode\Terrain.h" />
-    <ClInclude Include="..\..\SourceCode\Utility.h" />
-    <ClInclude Include="..\..\SourceCode\Vertex.h" />
-    <ClInclude Include="..\..\SourceCode\VertexBehavior.h" />
-    <ClInclude Include="..\..\SourceCode\VertexBehaviorCube.h" />
-    <ClInclude Include="..\..\SourceCode\VertexBehaviorHeightmap.h" />
-    <ClInclude Include="..\..\SourceCode\Window.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
