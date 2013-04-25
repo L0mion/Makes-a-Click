@@ -25,14 +25,14 @@ ShaderManager::~ShaderManager()
 
 void ShaderManager::createShaders()
 {
-	D3DX11CompileFromFile(L"Files/Shaders/BasicShader.hlsl", 0, 0, "VShader", "vs_5_0", SHADER_COMPILE_FLAG, 0, 0, &vs, &error, 0);
+	D3DX11CompileFromFile(L"../../Shaders/BasicShader.hlsl", 0, 0, "VShader", "vs_5_0", SHADER_COMPILE_FLAG, 0, 0, &vs, &error, 0);
 	if(error != NULL)
 	{
 		MessageBox(NULL, L"Vertex shader failed to compile", L"Vertex shader error!", MB_OK | MB_ICONEXCLAMATION);
 	}
 	
 	error = NULL;
-	D3DX11CompileFromFile(L"Files/Shaders/BasicShader.hlsl", 0, 0, "PShader", "ps_5_0", SHADER_COMPILE_FLAG, 0, 0, &ps, &error, 0);
+	D3DX11CompileFromFile(L"../../Shaders/BasicShader.hlsl", 0, 0, "PShader", "ps_5_0", SHADER_COMPILE_FLAG, 0, 0, &ps, &error, 0);
 	if(error != NULL)
 	{
 		MessageBox(NULL, L"Pixel shader failed to compile", L"Pixel shader error!", MB_OK | MB_ICONEXCLAMATION);

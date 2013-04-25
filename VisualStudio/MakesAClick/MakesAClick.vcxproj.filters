@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{c702bdb6-1325-43df-9d04-782257ed8cc6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\SourceCode\Camera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\D3DHandler.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\DrawBehaviorIndexed.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\Game.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\GameObject.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\IndexBehaviorCube.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\IndexBehaviorGrid.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\ShaderManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\SoundManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\Terrain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\VertexBehaviorCube.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\VertexBehaviorHeightmap.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\Window.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\SourceCode\WinMain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\SourceCode\Camera.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\CBuffer.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\D3DHandler.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\DrawBehavior.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\DrawBehaviorIndexed.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\Game.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\GameObject.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\IndexBehavior.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\IndexBehaviorCube.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\IndexBehaviorGrid.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\InputContainer.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\Light.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\ShaderManager.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\SoundManager.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\Terrain.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\Utility.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\Vertex.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\VertexBehavior.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\VertexBehaviorCube.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\VertexBehaviorHeightmap.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\SourceCode\Window.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

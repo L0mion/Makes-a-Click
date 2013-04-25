@@ -67,7 +67,7 @@ void Game::createTerrain()
 	int numRows = 250;
 	int numColumns = 250;
 
-	VertexBehavior *vertexBehavior = new VertexBehaviorHeightmap(d3dHandler->getDevice(), numRows, numColumns, 5, 0.5f, "Files/Heightmaps/TerrainHeightmap.raw");
+	VertexBehavior *vertexBehavior = new VertexBehaviorHeightmap(d3dHandler->getDevice(), numRows, numColumns, 5, 0.5f, "../../Heightmaps/TerrainHeightmap.raw");
 	vertexBehavior->constructVertexBuffer();
 	
 	IndexBehavior *indexBehavior = new IndexBehaviorGrid(d3dHandler->getDevice(), numRows, numColumns);
@@ -84,7 +84,7 @@ void Game::createTerrain()
 
 	terrain = new Terrain(	d3dHandler->getDevice(),
 							d3dHandler->getDeviceContext(),
-							L"Files/Textures/grass.png",
+							L"../../Textures/grass.png",
 							drawBehavior,
 							vertexBehavior,
 							indexBehavior);	
@@ -131,19 +131,19 @@ GameObject* Game::createCube(	LPCTSTR textureFilename,
 
 void Game::createCubes()
 {
-	cubes.push_back(createCube(	L"Files/Textures/red.png",
+	cubes.push_back(createCube(	L"../../Textures/red.png",
 								D3DXVECTOR3(500.0f, 45.0f, 500.0f),
 								D3DXVECTOR3(2.0f, 2.0f, 2.0f),
 								D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 								D3DXVECTOR3(1.0f, 1.0f, 1.0f)));
 
-	cubes.push_back(createCube(	L"Files/Textures/teal.png",
+	cubes.push_back(createCube(	L"../../Textures/teal.png",
 								D3DXVECTOR3(-500.0f, 70.0f, 500.0f),
 								D3DXVECTOR3(2.0f, 2.0f, 2.0f),
 								D3DXVECTOR3(0.0f, 0.0f, 0.0f),
 								D3DXVECTOR3(1.0f, 1.0f, 1.0f)));
 
-	cubes.push_back(createCube(	L"Files/Textures/blue.png",
+	cubes.push_back(createCube(	L"../../Textures/blue.png",
 								D3DXVECTOR3(500.0f, 85.0f, -500.0f),
 								D3DXVECTOR3(2.0f, 2.0f, 2.0f),
 								D3DXVECTOR3(0.0f, 0.0f, 0.0f),
