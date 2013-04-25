@@ -48,6 +48,7 @@ Desktop.ini
 *.sdf
 *.tlog
 *.obj
+*.pdb
 *.lastcodeanalysissucceeded
 /Build/*.dll.txt
 /Build/*.exe.txt

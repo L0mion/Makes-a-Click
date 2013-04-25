@@ -1,2 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" />
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\Source\camera.cpp" />
+    <ClCompile Include="..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\Source\managementD3D.cpp" />
+    <ClCompile Include="..\..\Source\managementShader.cpp" />
+    <ClCompile Include="..\..\Source\mathHelper.cpp" />
+    <ClCompile Include="..\..\Source\renderer.cpp" />
+    <ClCompile Include="..\..\Source\window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Source\camera.h" />
+    <ClInclude Include="..\..\Source\inputDesc.h" />
+    <ClInclude Include="..\..\Source\keyCodes.h" />
+    <ClInclude Include="..\..\Source\managementD3D.h" />
+    <ClInclude Include="..\..\Source\managementShader.h" />
+    <ClInclude Include="..\..\Source\mathHelper.h" />
+    <ClInclude Include="..\..\Source\renderer.h" />
+    <ClInclude Include="..\..\Source\utility.h" />
+    <ClInclude Include="..\..\Source\window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{5842adae-3d0b-42ca-b303-949b19310f44}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\Shaders\csPrimaryRayStage.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
