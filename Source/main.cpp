@@ -11,6 +11,17 @@
 #include "renderer.h"
 #include "camera.h"
 #include "utility.h"
+#include "inputDesc.h"
+#include "keyCodes.h"
+#include "mathHelper.h"
+
+HRESULT initialize(HINSTANCE hInstance, int cmdShow);
+void handleInput(InputDesc inputDesc, float dt);
+void clean();
+
+Window* window;
+Renderer* renderer;
+Camera* camera;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int cmdShow)
 {
@@ -24,35 +35,81 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	HRESULT hr = S_OK;
 
-	Window	 window(hInstance, cmdShow);
-	Renderer renderer;
-	Camera	 camera;
-
-	hr = window.initialize();
-	if(SUCCEEDED(hr))
-		hr = renderer.init(window.getWindowHandle());
-
-	camera.setLens(DirectX::XM_PIDIV4, static_cast<float>(SCREEN_WIDTH)/static_cast<float>(SCREEN_HEIGHT), 1.0f, 100.0f);
-	camera.rebuildView();
-
+	hr = initialize(hInstance, cmdShow);
+	
 	if(SUCCEEDED(hr))
 	{
-		while(window.isActive())
-		{
-			window.checkMessages();
+		LARGE_INTEGER freq, old, current;
+		QueryPerformanceFrequency (&freq);
+		QueryPerformanceCounter (&old);
 
-			DirectX::XMFLOAT4X4 finalMatrix;
-			DirectX::XMFLOAT4X4 view = camera.getViewMatrix();
-			DirectX::XMFLOAT4X4 projection = camera.getProjectionMatrix();
-			DirectX::XMMATRIX xmView = DirectX::XMLoadFloat4x4(&view);
-			DirectX::XMMATRIX xmProjection = DirectX::XMLoadFloat4x4(&projection);
-			DirectX::XMMATRIX xmFinal = DirectX::XMMatrixMultiply(xmView, xmProjection);
-			DirectX::XMStoreFloat4x4(&finalMatrix, xmFinal);
-			
-			renderer.update(finalMatrix);
-			renderer.render();
+		while(window->isActive())
+		{
+			QueryPerformanceCounter(&current);
+			float dt = float (current.QuadPart - old.QuadPart) / float(freq.QuadPart);
+
+			window->checkMessages();
+			InputDesc inputDesc = window->getInput();
+
+			handleInput(inputDesc, dt);
+			camera->rebuildView();
+
+			DirectX::XMFLOAT4X4 finalMatrix = MathHelper::multiplyMatrix(camera->getViewMatrix(), camera->getProjectionMatrix());
+
+			renderer->update(finalMatrix);
+			renderer->render();
+
+			old.QuadPart = current.QuadPart;
 		}
 	}
 
+	clean();
 	return 0;
+}
+
+HRESULT initialize(HINSTANCE hInstance, int cmdShow)
+{
+	HRESULT hr = S_OK;
+
+	window = new Window(hInstance, cmdShow);
+	hr = window->initialize();
+	if(SUCCEEDED(hr))
+	{
+		renderer = new Renderer();
+		hr = renderer->init(window->getWindowHandle());
+	}
+	if(SUCCEEDED(hr))
+	{
+		camera = new Camera();
+		camera->setLens(DirectX::XM_PIDIV4, static_cast<float>(SCREEN_WIDTH)/static_cast<float>(SCREEN_HEIGHT), 1.0f, 100.0f);
+		camera->rebuildView();
+	}
+
+	return hr;
+}
+
+void handleInput(InputDesc inputDesc, float dt)
+{
+	float distance = 10.0f * dt;
+	if(inputDesc.keys_[KeyCodes::VK_W])
+		camera->walk(distance);
+	if(inputDesc.keys_[KeyCodes::VK_S])
+		camera->walk(-distance);
+	if(inputDesc.keys_[KeyCodes::VK_A])
+		camera->strafe(-distance);
+	if(inputDesc.keys_[KeyCodes::VK_D])
+		camera->strafe(distance);
+	if(inputDesc.keys_[KeyCodes::VK_X])
+		camera->verticalWalk(distance);
+	if(inputDesc.keys_[KeyCodes::VK_Z])
+		camera->verticalWalk(-distance);
+
+	camera->yaw(inputDesc.mouseDeltaX_ * dt);
+	camera->pitch(inputDesc.mouseDeltaY_ * dt);
+}
+void clean()
+{
+	SAFE_DELETE(window);
+	SAFE_DELETE(renderer);
+	SAFE_DELETE(camera);
 }

@@ -32,7 +32,7 @@ void Renderer::render()
 {
 	FLOAT colorBlack[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
-	devcon->ClearRenderTargetView(managementD3D_->getRTVBackBuffer(), colorBlack);
+	managementD3D_->clearBackBuffer();
 	devcon->ClearDepthStencilView(managementD3D_->getDSVDepthBuffer(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	managementD3D_->setBackBuffer();

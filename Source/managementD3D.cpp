@@ -30,6 +30,11 @@ void ManagementD3D::setBackBuffer()
 {
 	devcon_->OMSetRenderTargets(1, &rtvBackBuffer_, dsvDepthBuffer_);
 }
+void ManagementD3D::clearBackBuffer()
+{
+	FLOAT clearColor[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+	devcon_->ClearRenderTargetView(rtvBackBuffer_, clearColor); 
+}
 
 ID3D11Device* ManagementD3D::getDevice() const
 {
@@ -73,7 +78,7 @@ HRESULT ManagementD3D::initDeviceAndSwapChain(HWND windowHandle)
 	scd.BufferDesc.Format					= DXGI_FORMAT_R8G8B8A8_UNORM;
 	scd.BufferDesc.Width					= SCREEN_WIDTH;
 	scd.BufferDesc.Height					= SCREEN_HEIGHT;
-	scd.BufferUsage							= DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_UNORDERED_ACCESS;
+	scd.BufferUsage							= DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	scd.OutputWindow						= windowHandle;
 	scd.BufferDesc.RefreshRate.Numerator	= 60;
 	scd.BufferDesc.RefreshRate.Denominator	= 1;
@@ -145,7 +150,7 @@ HRESULT ManagementD3D::initDepthBuffer()
 	texDesc.Height = SCREEN_HEIGHT;
 	texDesc.ArraySize = 1;
 	texDesc.MipLevels = 1;
-	texDesc.SampleDesc.Count = 4;
+	texDesc.SampleDesc.Count = 1;
 	texDesc.Format = DXGI_FORMAT_D32_FLOAT;
 	texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
