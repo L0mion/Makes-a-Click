@@ -80,7 +80,7 @@ settings.input
 *.dgml
 *.bsc
 *.vspx
-
+*.suo
 */log.txt
 
 [Ll]oc[Mm]etrics*.*
