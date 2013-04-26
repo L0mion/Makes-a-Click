@@ -87,7 +87,6 @@ HRESULT initialize(HINSTANCE hInstance, int cmdShow)
 
 	return hr;
 }
-
 void handleInput(InputDesc inputDesc, float dt)
 {
 	float distance = 10.0f * dt;

@@ -8,7 +8,7 @@
 #define NULL 0
 #endif //NULL
 
-static const unsigned int SCREEN_WIDTH	= 800;
-static const unsigned int SCREEN_HEIGHT = 800;
+static const unsigned int SCREEN_WIDTH	= 720;
+static const unsigned int SCREEN_HEIGHT = 480;
 
 #endif //UTILITY_H
