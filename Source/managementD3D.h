@@ -18,6 +18,7 @@ public:
 	void present();
 	
 	void setBackBuffer();
+	void clearBackBuffer();
 
 
 	ID3D11Device* getDevice() const;
