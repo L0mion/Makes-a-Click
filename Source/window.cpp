@@ -1,7 +1,8 @@
-#include "window.h"
+#include "DebugGUI.h"
+#include "inputDesc.h"
 #include "keyCodes.h"
 #include "utility.h"
-#include "inputDesc.h"
+#include "window.h"
 
 std::vector<bool> Window::keys_;
 int Window::mouseDeltaX_;
@@ -130,6 +131,9 @@ void Window::mouseDeltaMove(LPARAM lParam)
 
 LRESULT CALLBACK Window::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	if(DebugGUI::getInstance()->updateMsgProc(hWnd, message, wParam, lParam))
+		return 0;
+
 	switch(message)
 	{
 	case WM_DESTROY:

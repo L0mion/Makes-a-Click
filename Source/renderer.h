@@ -19,6 +19,9 @@ public:
 	void update(DirectX::XMFLOAT4X4 finalMatrix);
 
 	HRESULT init(HWND windowHandle);
+
+	ManagementD3D* getD3DManagement();
+
 private:
 	HRESULT initManagementD3D(HWND windowHandle);
 	HRESULT initManagementShader(ID3D11Device* device);
