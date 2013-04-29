@@ -10,12 +10,16 @@ DebugGUI* DebugGUI::getInstance()
 	return &instance;
 }
 
-void DebugGUI::init( ManagementD3D* p_deviceHandler )
+void DebugGUI::init( ManagementD3D* p_deviceHandler, HWND p_handle )
 {
 	m_deviceHandler = p_deviceHandler;
 	TwInit(TW_DIRECT3D11, m_deviceHandler->getDevice());
 	//TwWindowSize(m_deviceHandler->getWindowWidth(), m_deviceHandler->getWindowHeight());
-	TwWindowSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+	RECT rc;
+	GetClientRect( p_handle, &rc );
+	int clientWidth = rc.right - rc.left;
+	int clientHeight = rc.bottom - rc.top;
+	TwWindowSize( clientWidth, clientHeight );
 }
 
 DebugGUI::Results DebugGUI::addVar( string p_barName, Types p_type,

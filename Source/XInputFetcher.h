@@ -4,6 +4,9 @@
 
 #include <Windows.h>
 #include <Xinput.h>
+#include <string>
+
+using namespace std;
 
 // =======================================================================================
 //                                      XInputFetcher
@@ -53,6 +56,8 @@ private:
 
 private:
 	static int s_btnMaskMap[InputHelper::Xbox360Digitals_CNT];
+	static string s_btnNames[InputHelper::Xbox360Digitals_CNT];
+	static string s_analogNames[InputHelper::Xbox360Analogs_CNT];
 
 	int m_rawAnalogs[InputHelper::Xbox360Analogs_CNT];
 	int m_analogOffsets[InputHelper::Xbox360Analogs_CNT];

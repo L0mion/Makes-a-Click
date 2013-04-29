@@ -1,5 +1,6 @@
 #include "XInputFetcher.h"
 #include <math.h>
+#include "DebugGUI.h"
 
 int XInputFetcher::s_btnMaskMap[InputHelper::Xbox360Digitals_CNT] = 
 {
@@ -19,14 +20,60 @@ int XInputFetcher::s_btnMaskMap[InputHelper::Xbox360Digitals_CNT] =
 	XINPUT_GAMEPAD_Y
 };
 
+string XInputFetcher::s_btnNames[InputHelper::Xbox360Digitals_CNT] = 
+{
+	"DPAD_UP",
+	"DPAD_DOWN",
+	"DPAD_LEFT", 
+	"DPAD_RIGHT",
+	"START",
+	"BACK",
+	"LEFT_THUMB",
+	"RIGHT_THUMB",
+	"LEFT_SHOULDER",
+	"RIGHT_SHOULDER",
+	"A",
+	"B",
+	"X",
+	"Y"
+};
+
+string XInputFetcher::s_analogNames[InputHelper::Xbox360Analogs_CNT] = 
+{
+	"THUMB_LX_POSITIVE",
+	"THUMB_LX_NEGATIVE",
+	"THUMB_LY_POSITIVE",
+	"THUMB_LY_NEGATIVE",
+	"THUMB_RX_POSITIVE",
+	"THUMB_RX_NEGATIVE",
+	"THUMB_RY_POSITIVE",
+	"THUMB_RY_NEGATIVE",
+	"TRIGGER_L",
+	"TRIGGER_R"
+};
+
 XInputFetcher::XInputFetcher()
 {
 	m_epsilon = 0.0;
 	m_sensitivity = 1.0;
 
-	//ZeroMemory( &m_analogOffsets, sizeof(m_analogOffsets) );
-	//ZeroMemory( &m_currentState, sizeof(XINPUT_STATE) );
 	clearBuffers();
+
+	// Add input to DebugGUI
+	DebugGUI* dbgGui = DebugGUI::getInstance();
+
+	for( int btnIdx=0; btnIdx<InputHelper::Xbox360Digitals_CNT; btnIdx++ )
+	{
+		dbgGui->addVar( "Controller Buttons", DebugGUI::Types_INT,
+			DebugGUI::Permissions_READ_ONLY, s_btnNames[btnIdx],
+			&m_btns[btnIdx], "" );
+	}
+	for( int axisIdx=0; axisIdx<InputHelper::Xbox360Analogs_CNT; axisIdx++ )
+	{
+		dbgGui->addVar( "Controller Axes", DebugGUI::Types_INT,
+			DebugGUI::Permissions_READ_ONLY, s_analogNames[axisIdx],
+			&m_rawAnalogs[axisIdx], "" );
+	}
 }
 
 XInputFetcher::~XInputFetcher()
@@ -144,12 +191,12 @@ void XInputFetcher::calibrate( double p_epsilon )
 void XInputFetcher::vibrate(float p_leftMotor, float p_rightMotor) const
 {
 	// Create state
-    XINPUT_VIBRATION vibration;
-    ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-    vibration.wLeftMotorSpeed = (WORD)(min(100.0f,p_leftMotor)*655.35f);
-    vibration.wRightMotorSpeed = (WORD)(min(100.0f,p_rightMotor)*655.35f);
+	XINPUT_VIBRATION vibration;
+	ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
+	vibration.wLeftMotorSpeed = (WORD)(min(100.0f,p_leftMotor)*655.35f);
+	vibration.wRightMotorSpeed = (WORD)(min(100.0f,p_rightMotor)*655.35f);
 	// execute
-    XInputSetState(0, &vibration);
+	XInputSetState(0, &vibration);
 }
 
 void XInputFetcher::clearBuffers()

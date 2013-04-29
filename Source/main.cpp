@@ -15,6 +15,7 @@
 #include "renderer.h"
 #include "utility.h"
 #include "window.h"
+#include "XInputFetcher.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void handleInput(InputDesc inputDesc, float dt);
@@ -37,16 +38,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	hr = initialize(hInstance, cmdShow);
 	
-	DebugGUI::getInstance()->init(renderer->getD3DManagement());
+	DebugGUI::getInstance()->init( renderer->getD3DManagement(), window->getWindowHandle() );
 
-	DebugGUI::getInstance()->setPosition( "shietz", 0, 0 );
-	DebugGUI::getInstance()->setSize( "shietz", 380, 430 );
+	XInputFetcher* xinput = new XInputFetcher();
 
 	int answerToLifeTheUniverseAndEverything = 42;
-	DebugGUI::getInstance()->addVar( "shietz", DebugGUI::Types_INT,
+	DebugGUI::getInstance()->addVar( "Main", DebugGUI::Types_INT,
 		DebugGUI::Permissions_READ_ONLY,
 		"Answer to life, the universe and everything",
 		&answerToLifeTheUniverseAndEverything, "");
+
+	float dt = 0.0f;
+	DebugGUI::getInstance()->addVar( "Main", DebugGUI::Types_FLOAT,
+		DebugGUI::Permissions_READ_ONLY, "dt", &dt, "");
+
+	float fps = 0.0f;
+	DebugGUI::getInstance()->addVar( "Main", DebugGUI::Types_FLOAT,
+		DebugGUI::Permissions_READ_ONLY, "fps", &fps, "");
 
 	if(SUCCEEDED(hr))
 	{
@@ -57,7 +65,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		while(window->isActive())
 		{
 			QueryPerformanceCounter(&current);
-			float dt = float (current.QuadPart - old.QuadPart) / float(freq.QuadPart);
+			dt = float (current.QuadPart - old.QuadPart) / float(freq.QuadPart);
+			fps = 1/dt;
 
 			window->checkMessages();
 			InputDesc inputDesc = window->getInput();
@@ -67,12 +76,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			DirectX::XMFLOAT4X4 finalMatrix = MathHelper::multiplyMatrix(camera->getViewMatrix(), camera->getProjectionMatrix());
 
+			xinput->update();
 			renderer->update(finalMatrix);
 			renderer->render();
 
 			old.QuadPart = current.QuadPart;
+
+			Sleep(8);
 		}
 	}
+
+	delete xinput;
 
 	DebugGUI::getInstance()->terminate();
 

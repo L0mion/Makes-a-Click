@@ -104,7 +104,7 @@ void Window::initializeCursor()
 {
 	SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 	SetCapture(windowHandle_);
-	ShowCursor(false);
+	//ShowCursor(false);
 }
 
 void Window::mouseDeltaMove(LPARAM lParam)
@@ -126,13 +126,14 @@ void Window::mouseDeltaMove(LPARAM lParam)
 	mouseDeltaY_ = mouseY - SCREEN_HEIGHT/2;
 
 	//Return cursor to screen center
-	SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+	//SetCursorPos(SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 }
 
 LRESULT CALLBACK Window::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	if(DebugGUI::getInstance()->updateMsgProc(hWnd, message, wParam, lParam))
-		return 0;
+	if(DebugGUI::getInstance()->updateMsgProc(hWnd, message, wParam, lParam)) {
+		return 0; // Event has been handled by AntTweakBar
+	}
 
 	switch(message)
 	{
@@ -143,17 +144,17 @@ LRESULT CALLBACK Window::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPAR
 	case WM_KEYDOWN:
 		if(wParam == VK_ESCAPE)
 			DestroyWindow(hWnd);
-		keys_[wParam] = true;
+		//keys_[wParam] = true;
 		return 0;
 		break;
-	case WM_KEYUP:
-		keys_[wParam] = false;
-		return 0;
-		break;
-	case WM_MOUSEMOVE:
-		mouseDeltaMove(lParam);
-		return 0;
-		break;
+	//case WM_KEYUP:
+	//	keys_[wParam] = false;
+	//	return 0;
+	//	break;
+	//case WM_MOUSEMOVE:
+	//	mouseDeltaMove(lParam);
+	//	return 0;
+		//break;
 	}
 
 	return DefWindowProc(hWnd, message, wParam, lParam);
