@@ -23,6 +23,15 @@
     <ClCompile Include="..\..\Source\managementCB.cpp">
       <Filter>ManagmentCB</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\DebugGUI.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\XInputFetcher.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\InputHelper.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h">
@@ -61,6 +70,15 @@
     <ClInclude Include="..\..\Source\vertex.h">
       <Filter>Utilties</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\DebugGUI.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\XInputFetcher.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\InputHelper.h">
+      <Filter>Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -72,14 +90,17 @@
     <Filter Include="Utilties">
       <UniqueIdentifier>{5328dbe3-30ea-4ca6-a428-ff7f83689bc6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Renderer">
-      <UniqueIdentifier>{5e2a92b0-aad9-4736-8cd9-8ee6ddbc386c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Window">
       <UniqueIdentifier>{10e33707-ff6d-49ff-aa00-347528747914}</UniqueIdentifier>
     </Filter>
     <Filter Include="ManagmentCB">
       <UniqueIdentifier>{bd5b333e-f29f-468a-8e53-dded6132f526}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{7cd705d2-8727-43f9-8220-8e351798052b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{5e2a92b0-aad9-4736-8cd9-8ee6ddbc386c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
