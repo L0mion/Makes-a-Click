@@ -1,9 +1,20 @@
-﻿Build started 2013-04-29 11:02:13.
+﻿Build started 2013-04-29 11:42:16.
      1>Project "C:\Users\Mattias\Documents\Programmering\Makes-a-Click\VisualStudio\MakesAClick\MakesAClick.vcxproj" on node 2 (Build target(s)).
      1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Mattias\Documents\Programmering\Makes-a-Click\VisualStudio\Debug\MakesAClick.exe" /INCREMENTAL /NOLOGO xinput.lib AntTweakBar.lib Parser.lib D3dcompiler.lib d3d11.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Mattias\Documents\Programmering\Makes-a-Click\VisualStudio\Debug\MakesAClick.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Mattias\Documents\Programmering\Makes-a-Click\VisualStudio\Debug\MakesAClick.lib" /MACHINE:X86 Debug\camera.obj
+         Debug\DebugGUI.obj
+         Debug\InputHelper.obj
+         Debug\main.obj
+         Debug\managementCB.obj
+         Debug\managementD3D.obj
+         Debug\managementShader.obj
+         Debug\mathHelper.obj
+         Debug\renderer.obj
+         Debug\window.obj
+         Debug\XInputFetcher.obj
          MakesAClick.vcxproj -> C:\Users\Mattias\Documents\Programmering\Makes-a-Click\VisualStudio\Debug\MakesAClick.exe
      1>Done Building Project "C:\Users\Mattias\Documents\Programmering\Makes-a-Click\VisualStudio\MakesAClick\MakesAClick.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.14
+Time Elapsed 00:00:00.94

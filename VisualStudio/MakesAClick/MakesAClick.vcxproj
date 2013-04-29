@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\Source\camera.cpp" />
     <ClCompile Include="..\..\Source\DebugGUI.cpp" />
+    <ClCompile Include="..\..\Source\InputHelper.cpp" />
     <ClCompile Include="..\..\Source\main.cpp" />
     <ClCompile Include="..\..\Source\managementCB.cpp" />
     <ClCompile Include="..\..\Source\managementD3D.cpp" />
@@ -20,12 +21,14 @@
     <ClCompile Include="..\..\Source\mathHelper.cpp" />
     <ClCompile Include="..\..\Source\renderer.cpp" />
     <ClCompile Include="..\..\Source\window.cpp" />
+    <ClCompile Include="..\..\Source\XInputFetcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h" />
     <ClInclude Include="..\..\Source\cbDesc.h" />
     <ClInclude Include="..\..\Source\DebugGUI.h" />
     <ClInclude Include="..\..\Source\inputDesc.h" />
+    <ClInclude Include="..\..\Source\InputHelper.h" />
     <ClInclude Include="..\..\Source\keyCodes.h" />
     <ClInclude Include="..\..\Source\managementCB.h" />
     <ClInclude Include="..\..\Source\managementD3D.h" />
@@ -35,6 +38,7 @@
     <ClInclude Include="..\..\Source\utility.h" />
     <ClInclude Include="..\..\Source\vertex.h" />
     <ClInclude Include="..\..\Source\window.h" />
+    <ClInclude Include="..\..\Source\XInputFetcher.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\Shaders\constantBuffers.hlsl">
@@ -116,7 +120,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>AntTweakBar.lib;Parser.lib;D3dcompiler.lib;d3d11.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xinput.lib;AntTweakBar.lib;Parser.lib;D3dcompiler.lib;d3d11.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
