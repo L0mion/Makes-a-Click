@@ -1,32 +1,98 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\Source\camera.cpp" />
     <ClCompile Include="..\..\Source\main.cpp" />
-    <ClCompile Include="..\..\Source\managementD3D.cpp" />
-    <ClCompile Include="..\..\Source\managementShader.cpp" />
-    <ClCompile Include="..\..\Source\mathHelper.cpp" />
-    <ClCompile Include="..\..\Source\renderer.cpp" />
-    <ClCompile Include="..\..\Source\window.cpp" />
+    <ClCompile Include="..\..\Source\camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\mathHelper.cpp">
+      <Filter>Utilties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\managementShader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\managementD3D.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\window.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\managementCB.cpp">
+      <Filter>ManagmentCB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\camera.h" />
-    <ClInclude Include="..\..\Source\inputDesc.h" />
-    <ClInclude Include="..\..\Source\keyCodes.h" />
-    <ClInclude Include="..\..\Source\managementD3D.h" />
-    <ClInclude Include="..\..\Source\managementShader.h" />
-    <ClInclude Include="..\..\Source\mathHelper.h" />
-    <ClInclude Include="..\..\Source\renderer.h" />
-    <ClInclude Include="..\..\Source\utility.h" />
-    <ClInclude Include="..\..\Source\window.h" />
+    <ClInclude Include="..\..\Source\camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\mathHelper.h">
+      <Filter>Utilties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\utility.h">
+      <Filter>Utilties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\inputDesc.h">
+      <Filter>Utilties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\keyCodes.h">
+      <Filter>Utilties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\managementShader.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\managementD3D.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\window.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\managementCB.h">
+      <Filter>ManagmentCB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\cbDesc.h">
+      <Filter>ManagmentCB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\vertex.h">
+      <Filter>Utilties</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
       <UniqueIdentifier>{5842adae-3d0b-42ca-b303-949b19310f44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{5de9a7b3-9b65-4c51-abfd-e27911cb22d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilties">
+      <UniqueIdentifier>{5328dbe3-30ea-4ca6-a428-ff7f83689bc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{5e2a92b0-aad9-4736-8cd9-8ee6ddbc386c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{10e33707-ff6d-49ff-aa00-347528747914}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ManagmentCB">
+      <UniqueIdentifier>{bd5b333e-f29f-468a-8e53-dded6132f526}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\Shaders\csPrimaryRayStage.hlsl">
+    <FxCompile Include="..\..\Shaders\psDefault.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\vsDefault.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\constantBuffers.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\structs.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

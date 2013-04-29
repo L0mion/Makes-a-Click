@@ -49,6 +49,7 @@ Desktop.ini
 *.tlog
 *.obj
 *.pdb
+*.cso
 *.lastcodeanalysissucceeded
 /Build/*.dll.txt
 /Build/*.exe.txt
@@ -79,7 +80,7 @@ settings.input
 *.dgml
 *.bsc
 *.vspx
-
+*.suo
 */log.txt
 
 [Ll]oc[Mm]etrics*.*

@@ -16,7 +16,10 @@ public:
 	~ManagementD3D();
 
 	void present();
-	void csSetUAV(UAVId uavId, unsigned int startSlot);
+	
+	void setBackBuffer();
+	void clearBackBuffer();
+
 
 	ID3D11Device* getDevice() const;
 	ID3D11DeviceContext* getDeviceContext() const;

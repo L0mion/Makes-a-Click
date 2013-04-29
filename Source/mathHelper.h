@@ -6,7 +6,7 @@
 namespace MathHelper
 {
 	DirectX::XMFLOAT3 multiplyFloat3Scalar(DirectX::XMFLOAT3 vector, float scalar);
-	DirectX::XMFLOAT3 transformNormalFloat3(DirectX::XMFLOAT3 vector, float angle);
+	DirectX::XMFLOAT4X4 multiplyMatrix(DirectX::XMFLOAT4X4 matrix1, DirectX::XMFLOAT4X4 matrix2);
 };
 
 #endif //MATH_HELPER_H
