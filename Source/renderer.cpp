@@ -2,10 +2,11 @@
 
 #include <DirectXMath.h>
 
-#include "renderer.h"
+#include "DebugGUI.h"
+#include "managementCB.h"
 #include "managementD3D.h"
 #include "managementShader.h"
-#include "managementCB.h"
+#include "renderer.h"
 #include "utility.h"
 #include "vertex.h"
 
@@ -52,6 +53,8 @@ void Renderer::render()
 
 	devcon->DrawIndexed(36, 0, 0);
 
+	DebugGUI::getInstance()->draw();
+
 	managementD3D_->present();
 }
 void Renderer::update(DirectX::XMFLOAT4X4 finalMatrix)
@@ -77,6 +80,12 @@ HRESULT Renderer::init(HWND windowHandle)
 
 	return hr;
 }
+
+ManagementD3D* Renderer::getD3DManagement()
+{
+	return managementD3D_;
+}
+
 HRESULT Renderer::initManagementD3D(HWND windowHandle)
 {
 	HRESULT hr = S_OK;

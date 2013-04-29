@@ -59,6 +59,10 @@ Desktop.ini
 /Build/*.log
 *.etl
 *.krn
+*.idb
+*.ilk
+*.log
+*.lastbuildstate
 
 # DONT REMOVE LINES BELOW! /ML
 settings.settings
@@ -87,3 +91,4 @@ settings.input
 
 ### ADD EXPCETIONS TO RULES ABOVE!!!
 # Exceptions
+!External/

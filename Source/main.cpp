@@ -7,13 +7,14 @@
 #include <crtdbg.h>
 #endif
 
-#include "window.h"
-#include "renderer.h"
+#include "DebugGUI.h"
 #include "camera.h"
-#include "utility.h"
 #include "inputDesc.h"
 #include "keyCodes.h"
 #include "mathHelper.h"
+#include "renderer.h"
+#include "utility.h"
+#include "window.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void handleInput(InputDesc inputDesc, float dt);
@@ -36,6 +37,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	hr = initialize(hInstance, cmdShow);
 	
+	DebugGUI::getInstance()->init(renderer->getD3DManagement());
+
+	DebugGUI::getInstance()->setPosition( "shietz", 0, 0 );
+	DebugGUI::getInstance()->setSize( "shietz", 380, 430 );
+
+	int answerToLifeTheUniverseAndEverything = 42;
+	DebugGUI::getInstance()->addVar( "shietz", DebugGUI::Types_INT,
+		DebugGUI::Permissions_READ_ONLY,
+		"Answer to life, the universe and everything",
+		&answerToLifeTheUniverseAndEverything, "");
+
 	if(SUCCEEDED(hr))
 	{
 		LARGE_INTEGER freq, old, current;
@@ -61,6 +73,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			old.QuadPart = current.QuadPart;
 		}
 	}
+
+	DebugGUI::getInstance()->terminate();
 
 	clean();
 	return 0;

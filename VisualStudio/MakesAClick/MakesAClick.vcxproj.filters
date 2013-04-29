@@ -23,6 +23,9 @@
     <ClCompile Include="..\..\Source\managementCB.cpp">
       <Filter>ManagmentCB</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\DebugGUI.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h">
@@ -60,6 +63,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\vertex.h">
       <Filter>Utilties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\DebugGUI.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
