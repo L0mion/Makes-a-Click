@@ -131,8 +131,8 @@ void Window::mouseDeltaMove(LPARAM lParam)
 
 LRESULT CALLBACK Window::WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	if(DebugGUI::getInstance()->updateMsgProc(hWnd, message, wParam, lParam))
-		return 0;
+//	if(DebugGUI::getInstance()->updateMsgProc(hWnd, message, wParam, lParam))
+//		return 0;
 
 	switch(message)
 	{
