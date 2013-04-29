@@ -1,15 +1,24 @@
-﻿Build started 2013-04-26 15:41:36.
+﻿Build started 2013-04-29 08:54:16.
      1>Project "C:\Users\David\Programming\C++\Makes-a-Click\VisualStudio\MakesAClick\MakesAClick.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\Source\main.cpp ..\..\Source\managementCB.cpp ..\..\Source\managementD3D.cpp ..\..\Source\managementShader.cpp ..\..\Source\renderer.cpp ..\..\Source\window.cpp
+     1>FxCompile:
+         C:\Program Files (x86)\Windows Kits\8.0\bin\x86\fxc.exe /nologo /E"psDefault" /T ps_5_0 /Fo "C:\Users\David\Programming\C++\Makes-a-Click\VisualStudio\Debug\psDefault.cso" /Od /Zi ..\..\Shaders\psDefault.hlsl 
+         compilation object save succeeded; see C:\Users\David\Programming\C++\Makes-a-Click\VisualStudio\Debug\psDefault.cso
+         C:\Program Files (x86)\Windows Kits\8.0\bin\x86\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "C:\Users\David\Programming\C++\Makes-a-Click\VisualStudio\Debug\structs.cso" /Od /Zi ..\..\Shaders\structs.hlsl 
+         compilation object save succeeded; see C:\Users\David\Programming\C++\Makes-a-Click\VisualStudio\Debug\structs.cso
+         C:\Program Files (x86)\Windows Kits\8.0\bin\x86\fxc.exe /nologo /E"vsDefault" /T vs_5_0 /Fo "C:\Users\David\Programming\C++\Makes-a-Click\VisualStudio\Debug\vsDefault.cso" /Od /Zi ..\..\Shaders\vsDefault.hlsl 
+         compilation object save succeeded; see C:\Users\David\Programming\C++\Makes-a-Click\VisualStudio\Debug\vsDefault.cso
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\Source\camera.cpp ..\..\Source\main.cpp ..\..\Source\managementCB.cpp ..\..\Source\managementShader.cpp ..\..\Source\renderer.cpp ..\..\Source\window.cpp
          window.cpp
+         managementShader.cpp
+         managementCB.cpp
+         camera.cpp
+         Generating Code...
+         Compiling...
+         main.cpp
          Generating Code...
          Compiling...
          renderer.cpp
-         managementShader.cpp
-         managementD3D.cpp
-         managementCB.cpp
-         main.cpp
          Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\David\Programming\C++\Makes-a-Click\VisualStudio\Debug\MakesAClick.exe" /INCREMENTAL /NOLOGO D3dcompiler.lib d3d11.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\David\Programming\C++\Makes-a-Click\VisualStudio\Debug\MakesAClick.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\David\Programming\C++\Makes-a-Click\VisualStudio\Debug\MakesAClick.lib" /MACHINE:X86 Debug\camera.obj
@@ -25,4 +34,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:09.28
+Time Elapsed 00:00:08.28
