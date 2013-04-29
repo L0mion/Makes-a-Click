@@ -13,11 +13,13 @@
   <ItemGroup>
     <ClCompile Include="Source\Parser.cpp" />
     <ClCompile Include="Source\Rdr.cpp" />
+    <ClCompile Include="Source\ParserXML.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Parser.h" />
     <ClInclude Include="Source\RapidXML.h" />
     <ClInclude Include="Source\Rdr.h" />
+    <ClInclude Include="Source\ParserXML.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{604BDA89-BBBA-4C55-8F8D-F61029B60C26}</ProjectGuid>
