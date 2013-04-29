@@ -72,8 +72,6 @@ settings.input
 
 *.agl
 *.fbx
-*.png
-*.dds
 *.tga
 *.jpg
 *.jpeg

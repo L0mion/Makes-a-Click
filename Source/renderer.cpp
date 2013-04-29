@@ -6,6 +6,7 @@
 #include "managementCB.h"
 #include "managementD3D.h"
 #include "managementShader.h"
+#include "managementTex.h"
 #include "renderer.h"
 #include "utility.h"
 #include "vertex.h"
@@ -15,6 +16,7 @@ Renderer::Renderer()
 	managementD3D_	  = NULL;
 	managementShader_ = NULL;
 	managementCB_	  = NULL;
+	managementTex_	  = NULL;
 
 	vertexBuffer_ = NULL;
 	indexBuffer_ = NULL;
@@ -24,6 +26,7 @@ Renderer::~Renderer()
 	SAFE_DELETE(managementD3D_);
 	SAFE_DELETE(managementShader_);
 	SAFE_DELETE(managementCB_);
+	SAFE_DELETE(managementTex_);
 
 	SAFE_RELEASE(vertexBuffer_);
 	SAFE_RELEASE(indexBuffer_);
@@ -105,6 +108,13 @@ HRESULT Renderer::initManagementCB(ID3D11Device* device)
 	HRESULT hr = S_OK;
 	managementCB_ = new ManagementCB();
 	hr = managementCB_->init(device);
+	return hr;
+}
+HRESULT Renderer::initManagementTex(ID3D11Device* device)
+{
+	HRESULT hr = S_OK;
+	managementTex_ = new ManagementTex();
+	managementTex_->init(device);
 	return hr;
 }
 

@@ -8,6 +8,7 @@
 class ManagementD3D;
 class ManagementShader;
 class ManagementCB;
+class ManagementTex;
 
 class Renderer
 {
@@ -26,10 +27,12 @@ private:
 	HRESULT initManagementD3D(HWND windowHandle);
 	HRESULT initManagementShader(ID3D11Device* device);
 	HRESULT initManagementCB(ID3D11Device* device);
+	HRESULT initManagementTex(ID3D11Device* device);
 
 	ManagementD3D*	  managementD3D_;
 	ManagementShader* managementShader_;
 	ManagementCB*	  managementCB_;
+	ManagementTex*	  managementTex_;
 
 	/*TEMP*/
 

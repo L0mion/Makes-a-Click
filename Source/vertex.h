@@ -20,4 +20,21 @@ struct Vertex
 	}
 };
 
+struct SpriteVertex
+{
+	DirectX::XMFLOAT3 m_position;
+	DirectX::XMFLOAT2 m_texCoords;
+
+	SpriteVertex()
+	{
+		m_position  = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+		m_texCoords = DirectX::XMFLOAT2(0.0f, 0.0f);
+	}
+	SpriteVertex(DirectX::XMFLOAT3 p_position, DirectX::XMFLOAT2 p_texCoords)
+	{
+		m_position = p_position;
+		m_texCoords  = p_texCoords;
+	}
+};
+
 #endif //VERTEX_H
