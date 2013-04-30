@@ -35,6 +35,9 @@
     <ClCompile Include="..\..\Source\managementTex.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\managementSprite.cpp">
+      <Filter>Sprite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h">
@@ -88,6 +91,9 @@
     <ClInclude Include="..\..\Source\textureIds.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\managementSprite.h">
+      <Filter>Sprite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -123,6 +129,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\..\Shaders\structs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\psSprite.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\vsSprite.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

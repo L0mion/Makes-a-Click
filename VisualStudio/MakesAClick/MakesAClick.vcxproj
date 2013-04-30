@@ -18,6 +18,7 @@
     <ClCompile Include="..\..\Source\managementCB.cpp" />
     <ClCompile Include="..\..\Source\managementD3D.cpp" />
     <ClCompile Include="..\..\Source\managementShader.cpp" />
+    <ClCompile Include="..\..\Source\managementSprite.cpp" />
     <ClCompile Include="..\..\Source\managementTex.cpp" />
     <ClCompile Include="..\..\Source\mathHelper.cpp" />
     <ClCompile Include="..\..\Source\renderer.cpp" />
@@ -34,6 +35,7 @@
     <ClInclude Include="..\..\Source\managementCB.h" />
     <ClInclude Include="..\..\Source\managementD3D.h" />
     <ClInclude Include="..\..\Source\managementShader.h" />
+    <ClInclude Include="..\..\Source\managementSprite.h" />
     <ClInclude Include="..\..\Source\managementTex.h" />
     <ClInclude Include="..\..\Source\mathHelper.h" />
     <ClInclude Include="..\..\Source\renderer.h" />
@@ -58,6 +60,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="..\..\Shaders\psSprite.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">psSprite</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">psSprite</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="..\..\Shaders\structs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
@@ -71,6 +81,14 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vsDefault</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\vsSprite.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vsSprite</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vsSprite</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -8,4 +8,9 @@ cbuffer cbFrame : register (b0)
 	row_major float4x4 finalMatrix;
 };
 
+cbuffer cbSprite : register (b1)
+{
+	row_major float4x4 spriteTransform;
+};
+
 #endif //CONSTANT_BUFFERS_HLSL

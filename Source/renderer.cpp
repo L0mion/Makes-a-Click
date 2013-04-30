@@ -7,6 +7,8 @@
 #include "managementD3D.h"
 #include "managementShader.h"
 #include "managementTex.h"
+#include "managementSprite.h"
+#include "sprite.h"
 #include "renderer.h"
 #include "utility.h"
 #include "vertex.h"
@@ -17,6 +19,7 @@ Renderer::Renderer()
 	managementShader_ = NULL;
 	managementCB_	  = NULL;
 	managementTex_	  = NULL;
+	managementSprite_ = NULL;
 
 	vertexBuffer_ = NULL;
 	indexBuffer_ = NULL;
@@ -27,6 +30,7 @@ Renderer::~Renderer()
 	SAFE_DELETE(managementShader_);
 	SAFE_DELETE(managementCB_);
 	SAFE_DELETE(managementTex_);
+	SAFE_DELETE(managementSprite_);
 
 	SAFE_RELEASE(vertexBuffer_);
 	SAFE_RELEASE(indexBuffer_);
@@ -41,9 +45,9 @@ void Renderer::render()
 
 	managementD3D_->setBackBuffer();
 
-	managementShader_->setShader(devcon, SHADER_ID_VS_DEFAULT);
-	managementShader_->setShader(devcon, SHADER_ID_PS_DEFAULT);
-	managementShader_->setInputLayout(devcon, INPUT_LAYOUT_ID_VS_DEFAULT);
+	managementShader_->setShader(devcon, ManagementShader::ShaderIds_VS_DEFAULT);
+	managementShader_->setShader(devcon, ManagementShader::ShaderIds_PS_DEFAULT);
+	managementShader_->setInputLayout(devcon, ManagementShader::InputLayoutIds_VS_DEFAULT);
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
@@ -63,7 +67,7 @@ void Renderer::render()
 void Renderer::update(DirectX::XMFLOAT4X4 finalMatrix)
 {
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
-	managementCB_->vsSetCB(devcon, CB_TYPE_FRAME);
+	managementCB_->vsSetCB(devcon, ManagementCB::CBTypes_FRAME);
 	managementCB_->updateCBFrame(devcon, finalMatrix);
 }
 
@@ -76,6 +80,8 @@ HRESULT Renderer::init(HWND windowHandle)
 		hr = initManagementShader(managementD3D_->getDevice());
 	if(SUCCEEDED(hr))
 		hr = initManagementCB(managementD3D_->getDevice());
+	if(SUCCEEDED(hr))
+		hr = initManagementSprite(managementD3D_->getDevice());
 
 	//TEMP
 	createVertices();
@@ -117,9 +123,46 @@ HRESULT Renderer::initManagementTex(ID3D11Device* device)
 	managementTex_->init(device);
 	return hr;
 }
+HRESULT Renderer::initManagementSprite(ID3D11Device* device)
+{
+	HRESULT hr = S_OK;
+	managementSprite_ = new ManagementSprite();
+	managementSprite_->init(device);
+	return hr;
+}
 
 
 /*TEMP*/
+
+void Renderer::renderSprite()
+{
+	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
+
+	managementShader_->setShader(devcon, ManagementShader::ShaderIds_VS_SPRITE);
+	managementShader_->setShader(devcon, ManagementShader::ShaderIds_PS_SPRITE);
+	managementShader_->setInputLayout(devcon, ManagementShader::InputLayoutIds_VS_SPRITE);
+
+	managementCB_->vsSetCB(devcon, ManagementCB::CBTypes_SPRITE);
+	Sprite* sprite = managementSprite_->getSprite(ManagementSprite::SpriteIds_PLACEHOLDER);
+	DirectX::XMFLOAT4X4 spriteTransform = sprite->getWorldMatrix();
+	managementCB_->updateCBSprite(devcon, spriteTransform);
+
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_PLACEHOLDER, 0);
+
+	UINT stride = sizeof(SpriteVertex);
+	UINT offset = 0;
+
+	devcon->OMSetDepthStencilState(0, 0);
+
+	ID3D11Buffer* vertexBuffer = managementSprite_->getVertexBuffer();
+	ID3D11Buffer* indexBuffer = managementSprite_->getIndexBuffer();
+
+	devcon->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	devcon->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	devcon->DrawIndexed(6, 0, 0);
+}
 
 void Renderer::createVertices()
 {

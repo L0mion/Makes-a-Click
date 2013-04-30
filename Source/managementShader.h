@@ -5,25 +5,28 @@
 #include <d3dcompiler.h>
 #include <string>
 
-enum ShaderId
-{
-	SHADER_ID_VS_DEFAULT,
-	SHADER_ID_PS_DEFAULT
-};
-
-enum InputLayoutId
-{
-	INPUT_LAYOUT_ID_VS_DEFAULT
-};
-
 class ManagementShader
 {
 public:
 	ManagementShader();
 	~ManagementShader();
 
-	void setShader(ID3D11DeviceContext* devcon, ShaderId shaderId);
-	void setInputLayout(ID3D11DeviceContext* devcon, InputLayoutId inputLayoutId);
+	enum ShaderIds
+	{
+		ShaderIds_VS_DEFAULT,
+		ShaderIds_VS_SPRITE,
+		ShaderIds_PS_DEFAULT,
+		ShaderIds_PS_SPRITE
+	};
+	
+	enum InputLayoutIds
+	{
+		InputLayoutIds_VS_DEFAULT,
+		InputLayoutIds_VS_SPRITE
+	};
+
+	void setShader(ID3D11DeviceContext* devcon, ShaderIds shaderId);
+	void setInputLayout(ID3D11DeviceContext* devcon, InputLayoutIds inputLayoutId);
 
 	HRESULT init(ID3D11Device* device);
 private:
@@ -33,16 +36,22 @@ private:
 
 	HRESULT initInputLayouts(ID3D11Device* device);
 	HRESULT initVSDefaultInputLayout(ID3D11Device* device);
+	HRESULT initVSSpriteInputLayout(ID3D11Device* device);
 
 	std::wstring decideFilePath();
 
 	ID3D11VertexShader* vsDefault_;
-	ID3D11PixelShader* psDefault_;
+	ID3D11VertexShader* vsSprite_;
+	ID3D11PixelShader*	psDefault_;
+	ID3D11PixelShader*	psSprite_;
 
 	ID3DBlob* vsDefaultBlob_;
+	ID3DBlob* vsSpriteBlob_;
 	ID3DBlob* psDefaultBlob_;
+	ID3DBlob* psSpriteBlob_;
 
 	ID3D11InputLayout* vsDefaultIL_;
+	ID3D11InputLayout* vsSpriteIL_;
 };
 
 #endif //MANAGEMENT_SHADER_H
