@@ -32,6 +32,15 @@
     <ClCompile Include="..\..\Source\InputHelper.cpp">
       <Filter>Input</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\Vertex.cpp">
+      <Filter>Utilties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\HeightMap.cpp">
+      <Filter>Utilties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CubeFactory.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h">
@@ -78,6 +87,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\InputHelper.h">
       <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\HeightMap.h">
+      <Filter>Utilties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\EntityBufferInfo.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CubeFactory.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

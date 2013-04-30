@@ -8,6 +8,8 @@
 #endif
 
 #include "DebugGUI.h"
+#include "HeightMap.h"
+#include "XInputFetcher.h"
 #include "camera.h"
 #include "inputDesc.h"
 #include "keyCodes.h"
@@ -15,7 +17,6 @@
 #include "renderer.h"
 #include "utility.h"
 #include "window.h"
-#include "XInputFetcher.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void handleInput(InputDesc inputDesc, float dt);
@@ -56,6 +57,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	DebugGUI::getInstance()->addVar( "Main", DebugGUI::Types_FLOAT,
 		DebugGUI::Permissions_READ_ONLY, "fps", &fps, "");
 
+	HeightMap* heightMap = new HeightMap();
+
 	if(SUCCEEDED(hr))
 	{
 		LARGE_INTEGER freq, old, current;
@@ -78,7 +81,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			xinput->update();
 			renderer->update(finalMatrix);
-			renderer->render();
+			renderer->beginRender();
+			renderer->renderCube();
+			renderer->renderHeightMap( heightMap );
+			renderer->endRender();
 
 			old.QuadPart = current.QuadPart;
 
@@ -86,6 +92,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
+	delete heightMap;
 	delete xinput;
 
 	DebugGUI::getInstance()->terminate();

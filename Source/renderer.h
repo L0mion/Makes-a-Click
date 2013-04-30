@@ -5,9 +5,12 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
+class HeightMap;
 class ManagementD3D;
 class ManagementShader;
 class ManagementCB;
+
+struct EntityBufferInfo;
 
 class Renderer
 {
@@ -15,7 +18,10 @@ public:
 	Renderer();
 	~Renderer();
 
-	void render();
+	void beginRender();
+	void renderHeightMap( HeightMap* m_heightMap );
+	void renderCube();
+	void endRender();
 	void update(DirectX::XMFLOAT4X4 finalMatrix);
 
 	HRESULT init(HWND windowHandle);
@@ -33,11 +39,10 @@ private:
 
 	/*TEMP*/
 
-	ID3D11Buffer* vertexBuffer_;
-	ID3D11Buffer* indexBuffer_;
+	EntityBufferInfo* m_cube;
 
-	void createVertices();
-	void createIndices();
+	//ID3D11Buffer* vertexBuffer_;
+	//ID3D11Buffer* indexBuffer_;
 
 };
 

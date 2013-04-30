@@ -77,14 +77,17 @@ HRESULT Window::createWindow()
 
 	RegisterClassEx(&wc);
 
+	static const int windowBorderX = 16;
+	static const int windowBorderY = 39;
+
 	windowHandle_ = CreateWindowEx(NULL,
 								   L"WindowClass",
 								   L"Raytracer",
 								   WS_OVERLAPPEDWINDOW,
 								   100,
 								   100,
-								   SCREEN_WIDTH,
-								   SCREEN_HEIGHT,
+								   SCREEN_WIDTH  + windowBorderX,
+								   SCREEN_HEIGHT + windowBorderY,
 								   NULL,
 								   NULL,
 								   hInstance_,

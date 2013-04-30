@@ -12,7 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\camera.cpp" />
+    <ClCompile Include="..\..\Source\CubeFactory.cpp" />
     <ClCompile Include="..\..\Source\DebugGUI.cpp" />
+    <ClCompile Include="..\..\Source\HeightMap.cpp" />
     <ClCompile Include="..\..\Source\InputHelper.cpp" />
     <ClCompile Include="..\..\Source\main.cpp" />
     <ClCompile Include="..\..\Source\managementCB.cpp" />
@@ -20,13 +22,17 @@
     <ClCompile Include="..\..\Source\managementShader.cpp" />
     <ClCompile Include="..\..\Source\mathHelper.cpp" />
     <ClCompile Include="..\..\Source\renderer.cpp" />
+    <ClCompile Include="..\..\Source\Vertex.cpp" />
     <ClCompile Include="..\..\Source\window.cpp" />
     <ClCompile Include="..\..\Source\XInputFetcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h" />
     <ClInclude Include="..\..\Source\cbDesc.h" />
+    <ClInclude Include="..\..\Source\CubeFactory.h" />
     <ClInclude Include="..\..\Source\DebugGUI.h" />
+    <ClInclude Include="..\..\Source\EntityBufferInfo.h" />
+    <ClInclude Include="..\..\Source\HeightMap.h" />
     <ClInclude Include="..\..\Source\inputDesc.h" />
     <ClInclude Include="..\..\Source\InputHelper.h" />
     <ClInclude Include="..\..\Source\keyCodes.h" />
