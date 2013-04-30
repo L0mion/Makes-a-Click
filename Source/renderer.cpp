@@ -8,6 +8,7 @@
 #include "managementShader.h"
 #include "managementTex.h"
 #include "managementSprite.h"
+#include "managementSS.h"
 #include "sprite.h"
 #include "renderer.h"
 #include "utility.h"
@@ -20,6 +21,7 @@ Renderer::Renderer()
 	managementCB_	  = NULL;
 	managementTex_	  = NULL;
 	managementSprite_ = NULL;
+	managementSS_     = NULL;
 
 	vertexBuffer_ = NULL;
 	indexBuffer_ = NULL;
@@ -31,6 +33,7 @@ Renderer::~Renderer()
 	SAFE_DELETE(managementCB_);
 	SAFE_DELETE(managementTex_);
 	SAFE_DELETE(managementSprite_);
+	SAFE_DELETE(managementSS_);
 
 	SAFE_RELEASE(vertexBuffer_);
 	SAFE_RELEASE(indexBuffer_);
@@ -60,6 +63,8 @@ void Renderer::render()
 
 	devcon->DrawIndexed(36, 0, 0);
 
+	renderSprite();
+
 	DebugGUI::getInstance()->draw();
 
 	managementD3D_->present();
@@ -81,7 +86,11 @@ HRESULT Renderer::init(HWND windowHandle)
 	if(SUCCEEDED(hr))
 		hr = initManagementCB(managementD3D_->getDevice());
 	if(SUCCEEDED(hr))
+		hr = initManagementTex(managementD3D_->getDevice());
+	if(SUCCEEDED(hr))
 		hr = initManagementSprite(managementD3D_->getDevice());
+	if(SUCCEEDED(hr))
+		hr = initManagementSS(managementD3D_->getDevice());
 
 	//TEMP
 	createVertices();
@@ -130,6 +139,13 @@ HRESULT Renderer::initManagementSprite(ID3D11Device* device)
 	managementSprite_->init(device);
 	return hr;
 }
+HRESULT Renderer::initManagementSS(ID3D11Device* device)
+{
+	HRESULT hr = S_OK;
+	managementSS_ = new ManagementSS();
+	managementSS_->init(device);
+	return hr;
+}
 
 
 /*TEMP*/
@@ -148,11 +164,10 @@ void Renderer::renderSprite()
 	managementCB_->updateCBSprite(devcon, spriteTransform);
 
 	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_PLACEHOLDER, 0);
+	managementSS_->setSS(devcon, ManagementSS::SSTypes_DEFAULT, 0);
 
 	UINT stride = sizeof(SpriteVertex);
 	UINT offset = 0;
-
-	devcon->OMSetDepthStencilState(0, 0);
 
 	ID3D11Buffer* vertexBuffer = managementSprite_->getVertexBuffer();
 	ID3D11Buffer* indexBuffer = managementSprite_->getIndexBuffer();

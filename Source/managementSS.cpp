@@ -10,6 +10,16 @@ ManagementSS::~ManagementSS()
 	SAFE_RELEASE(m_ssDefault);
 }
 
+void ManagementSS::setSS(ID3D11DeviceContext* devcon, SSTypes ssType, unsigned int shaderRegister)
+{
+	switch(ssType)
+	{
+	case SSTypes_DEFAULT:
+		devcon->PSSetSamplers(shaderRegister, 1, &m_ssDefault);
+		break;
+	}
+}
+
 HRESULT ManagementSS::init(ID3D11Device* p_device)
 {
 	HRESULT hr = S_OK;

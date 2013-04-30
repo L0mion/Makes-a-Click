@@ -18,7 +18,7 @@ public:
 
 	HRESULT init(ID3D11Device* p_device);
 private:
-	HRESULT loadTexture(ID3D11Device* p_device, std::wstring p_filename);
+	HRESULT loadTexture(ID3D11Device* p_device, std::wstring p_filename, TextureIds::Id textureId);
 
 
 	std::vector<ID3D11ShaderResourceView*> m_srvTextures;

@@ -38,6 +38,9 @@
     <ClCompile Include="..\..\Source\managementSprite.cpp">
       <Filter>Sprite</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\managementSS.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h">
@@ -93,6 +96,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\managementSprite.h">
       <Filter>Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\managementSS.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

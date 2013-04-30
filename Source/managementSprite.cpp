@@ -111,18 +111,17 @@ void ManagementSprite::initSprites()
 	m_sprites = new std::vector<Sprite*>();
 	m_sprites->resize(SpriteIds_COUNT, NULL);
 
-	m_sprites->at(SpriteIds_PLACEHOLDER) = new Sprite(0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, TextureIds::TextureIds_PLACEHOLDER);
+	m_sprites->at(SpriteIds_PLACEHOLDER) = new Sprite(0.0f, 0.0f, 0.0f, 0.0f, 0.4f, 0.4f, TextureIds::TextureIds_PLACEHOLDER);
 }
-
 
 std::vector<SpriteVertex> ManagementSprite::createVertices()
 {
 	std::vector<SpriteVertex> vertices;
 
-	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT2(0.0f, 0.0f)));
-	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT2(1.0f, 0.0f)));
-	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(0.0f, 1.0f)));
-	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(1.0f, 1.0f)));
+	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(0.0f, 0.0f)));
+	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(1.0f, 0.0f)));
+	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT2(0.0f, 1.0f)));
+	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT2(1.0f, 1.0f)));
 
 	return vertices;
 }

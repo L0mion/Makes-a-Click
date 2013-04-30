@@ -10,6 +10,7 @@ class ManagementShader;
 class ManagementCB;
 class ManagementTex;
 class ManagementSprite;
+class ManagementSS;
 
 class Renderer
 {
@@ -30,12 +31,14 @@ private:
 	HRESULT initManagementCB(ID3D11Device* device);
 	HRESULT initManagementTex(ID3D11Device* device);
 	HRESULT initManagementSprite(ID3D11Device* device);
+	HRESULT initManagementSS(ID3D11Device* device);
 
 	ManagementD3D*	  managementD3D_;
 	ManagementShader* managementShader_;
 	ManagementCB*	  managementCB_;
 	ManagementTex*	  managementTex_;
 	ManagementSprite* managementSprite_;
+	ManagementSS*	  managementSS_;
 
 	/*TEMP*/
 	void renderSprite();

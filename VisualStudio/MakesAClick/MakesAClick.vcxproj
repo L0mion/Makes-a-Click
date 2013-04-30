@@ -19,6 +19,7 @@
     <ClCompile Include="..\..\Source\managementD3D.cpp" />
     <ClCompile Include="..\..\Source\managementShader.cpp" />
     <ClCompile Include="..\..\Source\managementSprite.cpp" />
+    <ClCompile Include="..\..\Source\managementSS.cpp" />
     <ClCompile Include="..\..\Source\managementTex.cpp" />
     <ClCompile Include="..\..\Source\mathHelper.cpp" />
     <ClCompile Include="..\..\Source\renderer.cpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="..\..\Source\managementD3D.h" />
     <ClInclude Include="..\..\Source\managementShader.h" />
     <ClInclude Include="..\..\Source\managementSprite.h" />
+    <ClInclude Include="..\..\Source\managementSS.h" />
     <ClInclude Include="..\..\Source\managementTex.h" />
     <ClInclude Include="..\..\Source\mathHelper.h" />
     <ClInclude Include="..\..\Source\renderer.h" />
