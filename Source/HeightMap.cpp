@@ -1,168 +1,26 @@
 #include "HeightMap.h"
+
+#include "EntityBufferInfo.h"
+
 HeightMap::HeightMap(/*System* pSystem*/)
 {
 	//system = pSystem;
+	m_bufferInfo = NULL;
 
 	//Vars for the HeightMap
-	cellSize = 1.0f;
-	nrOfCols = 257;
-	nrOfRows = 257;
-	nrOfFaces = (nrOfRows-1) * (nrOfCols-1) * 2;
+	m_cellSize	= 1.0f;
+	m_colCnt	= 257;
+	m_rowCnt	= 257;
+	m_faceCnt	= (m_rowCnt-1) * (m_colCnt-1) * 2;
 
-	int numVertices = nrOfRows*nrOfCols;
-	loadHeightMap(numVertices);
+	int vertexCnt = m_rowCnt*m_colCnt;
+	loadHeightMap( vertexCnt );
 	smoothHeightMap();
 }
 
-void HeightMap::loadHeightMap(int numVertices)
+HeightMap::~HeightMap()
 {
-	float scale = 0.1f;
-	float offset = 0.0f;
-
-	vector<unsigned char> in(numVertices);
-	ifstream inFile;
-	inFile.open("assets/heightmaps/korb.raw",  std::ios_base::binary);
-
-	if(inFile)
-	{
-		inFile.read((char*)&in[0], in.size());
-		inFile.close();
-	}
-
-	heightMap.resize(numVertices, 0);
-	for(int i=0; i<numVertices; i++)
-		heightMap[i] = in[i]*scale + offset;
-
-}
-
-void HeightMap::smoothHeightMap()
-{
-	vector<float> dest(heightMap.size());
-
-	for(int i=0; i < nrOfRows; i++)
-		for(int j=0; j < nrOfCols; j++)
-			dest[nrOfCols*i + j] = average(i,j);
-
-	heightMap = dest;
-}
-
-float HeightMap::average(int posRow, int posCol)
-{
-	float avg = 0.0f;
-	float num = 0.0f;
-
-	for(int i = posRow-1; i <= posRow+1; i++)
-	{
-		for(int j = posCol-1; j <= posCol+1; j++)
-		{
-			if(inBounds(i,j))
-			{
-				avg += heightMap[i*nrOfCols + j];
-				num += 1.0f;
-			}
-		}
-	}
-
-	return avg / num;
-}
-
-bool HeightMap::inBounds(int i, int j)
-{
-	return i >= 0 && i < nrOfRows &&
-		   j >= 0 && j < nrOfCols;
-}
-
-vector<HeightMapVertex> HeightMap::defineVertexBuffer(int numVertices)
-{
-	int pos;
-	float x, y, z;
-
-	//create geometry
-	vector<HeightMapVertex> vertices(numVertices);
-	float halfWidth = (nrOfCols-1)*cellSize*0.5f;
-	float halfDepth = (nrOfRows-1)*cellSize*0.5f;
-
-	float du = 1.0f /*/ (nrOfCols-1)*/;
-	float dv = 1.0f /*/ (nrOfRows-1)*/;
-
-
-	for(int i=0; i<nrOfRows; i++)
-	{
-		z = halfDepth - i*cellSize;
-		for(int j=0; j<nrOfCols; j++)
-		{
-			x = -halfWidth + j*cellSize;
-
-			//get height
-			pos = i*nrOfCols + j;
-			y = heightMap[pos];
-
-			vertices[pos].position[Coords::X]	= x;
-			vertices[pos].position[Coords::Y]	= y;
-			vertices[pos].position[Coords::Z]	= z;
-			vertices[pos].normal[Coords::X]		= 0.0f; //HACK: hardcoded
-			vertices[pos].normal[Coords::Y]		= 1.0f; //HACK: hardcoded
-			vertices[pos].normal[Coords::Z]		= 0.0f; //HACK: hardcoded
-			vertices[pos].texCoord[Coords::U]	= (float)(j*du);
-			vertices[pos].texCoord[Coords::V]	= (float)(i*dv);
-		}
-	}
-
-	// Estimate normals for interior nodes using central difference.
-	float invTwoDX = 1.0f / (2.0f*cellSize);
-	float invTwoDZ = 1.0f / (2.0f*cellSize);
-	for(int i = 2; i <nrOfRows-1; ++i)
-	{
-		for(int j = 2; j < nrOfCols-1; ++j)
-		{
-			float t = heightMap[(i-1)*nrOfCols + j];
-			float b = heightMap[(i+1)*nrOfCols + j];
-			float l = heightMap[i*nrOfCols + j - 1];
-			float r = heightMap[i*nrOfCols + j + 1];
-
-			/*D3DXVECTOR3 tanZ(0.0f, (t-b)*invTwoDZ, 1.0f);
-			D3DXVECTOR3 tanX(1.0f, (r-l)*invTwoDX, 0.0f);
-
-			D3DXVECTOR3 N;
-			D3DXVec3Cross(&N, &tanZ, &tanX);
-			D3DXVec3Normalize(&N, &N);*/
-
-			DirectX::XMVECTOR tanZ = DirectX::XMVectorSet( 0.0f, (t-b)*invTwoDZ, 1.0f, 0.0f );
-			DirectX::XMVECTOR tanX = DirectX::XMVectorSet( 1.0f, (r-l)*invTwoDX, 0.0f, 0.0f );
-			DirectX::XMVECTOR N = DirectX::XMVector3Cross( tanZ, tanX );
-			N = DirectX::XMVector3Normalize(N);
-			DirectX::XMFLOAT3 normal;
-			DirectX::XMStoreFloat3( &normal, N );
-
-			vertices[i*nrOfCols+j].normal[Coords::X] = normal.x;
-			vertices[i*nrOfCols+j].normal[Coords::Y] = normal.y;
-			vertices[i*nrOfCols+j].normal[Coords::Z] = normal.z;
-		}
-	}
-	return vertices;
-}
-
-vector<int> HeightMap::defineIndexBuffer(int numIndices)
-{
-	int k = 0;
-
-	vector<int> indices(numIndices);
-	for(int i = 0; i<nrOfRows-1; i++)
-	{
-		for(int j = 0; j<nrOfCols-1; j++)
-		{
-			indices[k]   = i*nrOfCols+j;
-			indices[k+1] = i*nrOfCols+j+1;
-			indices[k+2] = (i+1)*nrOfCols+j;
-
-			indices[k+3] = (i+1)*nrOfCols+j;
-			indices[k+4] = i*nrOfCols+j+1;
-			indices[k+5] = (i+1)*nrOfCols+j+1;
-
-			k += 6; // next quad
-		}
-	}
-	return indices;
+	delete m_bufferInfo;
 }
 
 //vector<Model> HeightMap::createModels(/*int pTechNr, int pPassNr, */int maxSize)
@@ -226,17 +84,17 @@ vector<int> HeightMap::defineIndexBuffer(int numIndices)
 //	return models;
 //}
 
-float HeightMap::getHeight(float x, float z)
+float HeightMap::getHeight( float p_x, float p_z )
 {
-	if((x > (nrOfCols-1)*cellSize*0.5f) || (x < -1*(nrOfCols-1)*cellSize*0.5f))
+	if((p_x > (m_colCnt-1)*m_cellSize*0.5f) || (p_x < -1*(m_colCnt-1)*m_cellSize*0.5f))
 		return 5.0f; //HACK:
-	if((z > (nrOfRows-1)*cellSize*0.5f) || (z < -1*(nrOfRows-1)*cellSize*0.5f))
+	if((p_z > (m_rowCnt-1)*m_cellSize*0.5f) || (p_z < -1*(m_rowCnt-1)*m_cellSize*0.5f))
 		return 5.0f; //HACK:
 
 
 	// Transform from terrain local space to "cell" space.
-	float c = (x + 0.5f*(nrOfCols-1)*cellSize) / cellSize;
-	float d = (z - 0.5f*(nrOfRows-1)*cellSize) / -cellSize;
+	float c = (p_x + 0.5f*(m_colCnt-1)*m_cellSize) / m_cellSize;
+	float d = (p_z - 0.5f*(m_rowCnt-1)*m_cellSize) / -m_cellSize;
 
 	// Get the row and column we are in.
 	int row = (int)floorf(d);
@@ -247,10 +105,10 @@ float HeightMap::getHeight(float x, float z)
 	//   | /|
 	//   |/ |
 	// C 0--0 D
-	float A = heightMap[row*nrOfCols + col];
-	float B = heightMap[row*nrOfCols + col + 1];
-	float C = heightMap[(row+1)*nrOfCols + col];
-	float D = heightMap[(row+1)*nrOfCols + col + 1];
+	float A = m_heightMap[row*m_colCnt + col];
+	float B = m_heightMap[row*m_colCnt + col + 1];
+	float C = m_heightMap[(row+1)*m_colCnt + col];
+	float D = m_heightMap[(row+1)*m_colCnt + col + 1];
 
 	// Where we are relative to the cell.
 	float s = c - (float)col;
@@ -268,4 +126,163 @@ float HeightMap::getHeight(float x, float z)
 		float vy = B - D;
 		return D + (1.0f-s)*uy + (1.0f-t)*vy;
 	}
+}
+
+EntityBufferInfo* HeightMap::getEntityBufferInfo()
+{
+	return m_bufferInfo;
+}
+
+void HeightMap::loadHeightMap( int p_vertexCnt )
+{
+	float scale = 0.1f;
+	float offset = 0.0f;
+
+	vector<unsigned char> in(p_vertexCnt);
+	ifstream inFile;
+	inFile.open("assets/heightmaps/korb.raw",  std::ios_base::binary);
+
+	if(inFile)
+	{
+		inFile.read((char*)&in[0], in.size());
+		inFile.close();
+	}
+
+	m_heightMap.resize(p_vertexCnt, 0);
+	for(int i=0; i<p_vertexCnt; i++) {
+		m_heightMap[i] = in[i]*scale + offset;
+	}
+}
+
+void HeightMap::smoothHeightMap()
+{
+	vector<float> dest(m_heightMap.size());
+
+	for( int rowIdx=0; rowIdx<m_rowCnt; rowIdx++ ) {
+		for( int colIdx=0; colIdx<m_colCnt; colIdx++ ) {
+			dest[m_colCnt*rowIdx + colIdx] = average(rowIdx,colIdx);
+		}
+	}
+	m_heightMap = dest;
+}
+
+float HeightMap::average(int p_posRow, int p_posCol)
+{
+	float avg = 0.0f;
+	float num = 0.0f;
+
+	for( int rowIdx = p_posRow-1; rowIdx <= p_posRow+1; rowIdx++ ) {
+		for( int colIdx = p_posCol-1; colIdx <= p_posCol+1; colIdx++ ) {
+			if(inBounds(rowIdx,colIdx)) {
+				avg += m_heightMap[rowIdx*m_colCnt + colIdx];
+				num += 1.0f;
+			}
+		}
+	}
+
+	return avg / num;
+}
+
+bool HeightMap::inBounds( int i, int j )
+{
+	return i >= 0 && i < m_rowCnt &&
+		   j >= 0 && j < m_colCnt;
+}
+
+
+
+void HeightMap::createEntityBufferInfo()
+{
+	int numVertices = m_rowCnt*m_colCnt;
+	int numIndices = m_faceCnt*3;
+	
+	vector<HeightMapVertex> vertices = defineVertexBuffer(numVertices);
+	vector<int> indices = defineIndexBuffer(numIndices);
+}
+
+vector<HeightMapVertex> HeightMap::defineVertexBuffer( int p_vertexCnt )
+{
+	int pos;
+	float x, y, z;
+
+	//create geometry
+	vector<HeightMapVertex> vertices( p_vertexCnt );
+	float halfWidth = (m_colCnt-1)*m_cellSize*0.5f;
+	float halfDepth = (m_rowCnt-1)*m_cellSize*0.5f;
+
+	float du = 1.0f /*/ (nrOfCols-1)*/;
+	float dv = 1.0f /*/ (nrOfRows-1)*/;
+
+	for( int rowIdx=0; rowIdx<m_rowCnt; rowIdx++ ) {
+		z = halfDepth - rowIdx*m_cellSize;
+		for( int colIdx=0; colIdx<m_colCnt; colIdx++ ) {
+			x = -halfWidth + colIdx*m_cellSize;
+
+			//get height
+			pos = rowIdx*m_colCnt + colIdx;
+			y = m_heightMap[pos];
+
+			vertices[pos].position[Coords::X]	= x;
+			vertices[pos].position[Coords::Y]	= y;
+			vertices[pos].position[Coords::Z]	= z;
+			vertices[pos].normal[Coords::X]		= 0.0f; //HACK: hardcoded
+			vertices[pos].normal[Coords::Y]		= 1.0f; //HACK: hardcoded
+			vertices[pos].normal[Coords::Z]		= 0.0f; //HACK: hardcoded
+			vertices[pos].texCoord[Coords::U]	= (float)(colIdx*du);
+			vertices[pos].texCoord[Coords::V]	= (float)(rowIdx*dv);
+		}
+	}
+
+	// Estimate normals for interior nodes using central difference.
+	float invTwoDX = 1.0f / (2.0f*m_cellSize);
+	float invTwoDZ = 1.0f / (2.0f*m_cellSize);
+
+	for( int rowIdx = 2; rowIdx <m_rowCnt-1; rowIdx++ ) {
+		for( int colIdx = 2; colIdx < m_colCnt-1; colIdx++ ) {
+			float t = m_heightMap[(rowIdx-1)*m_colCnt + colIdx];
+			float b = m_heightMap[(rowIdx+1)*m_colCnt + colIdx];
+			float l = m_heightMap[rowIdx*m_colCnt + colIdx - 1];
+			float r = m_heightMap[rowIdx*m_colCnt + colIdx + 1];
+
+			/*D3DXVECTOR3 tanZ(0.0f, (t-b)*invTwoDZ, 1.0f);
+			D3DXVECTOR3 tanX(1.0f, (r-l)*invTwoDX, 0.0f);
+
+			D3DXVECTOR3 N;
+			D3DXVec3Cross(&N, &tanZ, &tanX);
+			D3DXVec3Normalize(&N, &N);*/
+
+			DirectX::XMVECTOR tanZ = DirectX::XMVectorSet( 0.0f, (t-b)*invTwoDZ, 1.0f, 0.0f );
+			DirectX::XMVECTOR tanX = DirectX::XMVectorSet( 1.0f, (r-l)*invTwoDX, 0.0f, 0.0f );
+			DirectX::XMVECTOR N = DirectX::XMVector3Cross( tanZ, tanX );
+			N = DirectX::XMVector3Normalize(N);
+			DirectX::XMFLOAT3 normal;
+			DirectX::XMStoreFloat3( &normal, N );
+
+			vertices[rowIdx*m_colCnt+colIdx].normal[Coords::X] = normal.x;
+			vertices[rowIdx*m_colCnt+colIdx].normal[Coords::Y] = normal.y;
+			vertices[rowIdx*m_colCnt+colIdx].normal[Coords::Z] = normal.z;
+		}
+	}
+	return vertices;
+}
+
+vector<int> HeightMap::defineIndexBuffer( int p_indexCnt )
+{
+	int k = 0;
+
+	vector<int> indices(p_indexCnt);
+	for( int rowIdx = 0; rowIdx<m_rowCnt-1; rowIdx++ ) {
+		for( int colIdx = 0; colIdx<m_colCnt-1; colIdx++ ) {
+			indices[k]   = rowIdx*m_colCnt+colIdx;
+			indices[k+1] = rowIdx*m_colCnt+colIdx+1;
+			indices[k+2] = (rowIdx+1)*m_colCnt+colIdx;
+
+			indices[k+3] = (rowIdx+1)*m_colCnt+colIdx;
+			indices[k+4] = rowIdx*m_colCnt+colIdx+1;
+			indices[k+5] = (rowIdx+1)*m_colCnt+colIdx+1;
+
+			k += 6; // next quad
+		}
+	}
+	return indices;
 }

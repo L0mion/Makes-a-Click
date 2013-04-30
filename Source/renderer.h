@@ -19,8 +19,9 @@ public:
 	~Renderer();
 
 	void beginRender();
-	void renderHeightMap( HeightMap* m_heightMap );
+	void renderHeightMap( HeightMap* p_heightMap );
 	void renderCube();
+	void renderEntityBufferInfo( EntityBufferInfo* p_info );
 	void endRender();
 	void update(DirectX::XMFLOAT4X4 finalMatrix);
 

@@ -2,15 +2,15 @@
 
 #include <DirectXMath.h>
 
+#include "CubeFactory.h"
 #include "DebugGUI.h"
+#include "EntityBufferInfo.h"
 #include "managementCB.h"
 #include "managementD3D.h"
 #include "managementShader.h"
 #include "renderer.h"
 #include "utility.h"
 #include "vertex.h"
-#include "CubeFactory.h"
-#include "EntityBufferInfo.h"
 
 Renderer::Renderer()
 {
@@ -42,25 +42,33 @@ void Renderer::beginRender()
 	managementShader_->setInputLayout(devcon, INPUT_LAYOUT_ID_VS_DEFAULT);
 }
 
-void Renderer::renderHeightMap( HeightMap* m_heightMap )
+void Renderer::renderHeightMap( HeightMap* p_heightMap )
 {
+	EntityBufferInfo* info = NULL;
+	//info = p_heightMap->getEntityBufferInfo();
+
 
 }
 
 void Renderer::renderCube()
 {
+	renderEntityBufferInfo(m_cube);
+}
+
+void Renderer::renderEntityBufferInfo( EntityBufferInfo* p_info )
+{
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
 
-	UINT stride = sizeof(Vertex);
+	UINT stride = p_info->m_stride;
 	UINT offset = 0;
 
 	devcon->OMSetDepthStencilState(0, 0);
 
-	devcon->IASetVertexBuffers(0, 1, &m_cube->m_vertexBuffer, &stride, &offset);
-	devcon->IASetIndexBuffer(m_cube->m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	devcon->IASetVertexBuffers(0, 1, &p_info->m_vertexBuffer, &stride, &offset);
+	devcon->IASetIndexBuffer(p_info->m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	devcon->DrawIndexed(36, 0, 0);
+	devcon->DrawIndexed(p_info->m_indicesCnt, 0, 0);
 }
 
 void Renderer::endRender()

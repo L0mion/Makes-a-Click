@@ -13,6 +13,7 @@ HRESULT CubeFactory::createCube( ManagementD3D* p_managementD3D,
 	if( out_cube != NULL )
 	{
 		EntityBufferInfo* cube = new EntityBufferInfo();
+		cube->m_stride = sizeof(Vertex);
 
 		hr = createVertices( p_managementD3D, cube );
 		if( !FAILED(hr) ) {
@@ -79,6 +80,7 @@ HRESULT CubeFactory::createVertices( ManagementD3D* p_managementD3D,
 	vinitData.pSysMem = &vertices[0];
 	ID3D11Device* device = p_managementD3D->getDevice();
 	HRESULT hr = device->CreateBuffer(&vbd, &vinitData, &inout_cube->m_vertexBuffer);
+	inout_cube->m_verticesCnt = vertices.size();
 	return hr;
 }
 
@@ -146,5 +148,6 @@ HRESULT CubeFactory::createIndices( ManagementD3D* p_managementD3D,
 	iinitData.pSysMem = &indices[0];
 	ID3D11Device* device = p_managementD3D->getDevice();
 	HRESULT hr = device->CreateBuffer(&ibd, &iinitData, &inout_cube->m_indexBuffer);
+	inout_cube->m_indicesCnt = indices.size();
 	return hr;
 }
