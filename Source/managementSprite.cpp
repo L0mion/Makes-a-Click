@@ -111,7 +111,7 @@ void ManagementSprite::initSprites()
 	m_sprites = new std::vector<Sprite*>();
 	m_sprites->resize(SpriteIds_COUNT, NULL);
 
-	m_sprites->at(SpriteIds_PLACEHOLDER) = new Sprite(0.0f, 0.0f, 0.0f, 0.0f, 0.4f, 0.4f, TextureIds::TextureIds_PLACEHOLDER);
+	m_sprites->at(SpriteIds_PLACEHOLDER) = new Sprite(0.75f, 0.75f, 0.0f, 0.0f, 0.20f, 0.20f, TextureIds::TextureIds_PLACEHOLDER);
 }
 
 std::vector<SpriteVertex> ManagementSprite::createVertices()

@@ -5,6 +5,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 
+class HeightMap;
 class ManagementD3D;
 class ManagementShader;
 class ManagementCB;
@@ -12,13 +13,20 @@ class ManagementTex;
 class ManagementSprite;
 class ManagementSS;
 
+struct EntityBufferInfo;
+
 class Renderer
 {
 public:
 	Renderer();
 	~Renderer();
 
-	void render();
+	void beginRender();
+	void renderHeightMap( HeightMap* p_heightMap );
+	void renderSprites();
+	void renderCube();
+	void renderEntityBufferInfo( EntityBufferInfo* p_info );
+	void endRender();
 	void update(DirectX::XMFLOAT4X4 finalMatrix);
 
 	HRESULT init(HWND windowHandle);
@@ -40,14 +48,10 @@ private:
 	ManagementSprite* managementSprite_;
 	ManagementSS*	  managementSS_;
 
-	/*TEMP*/
-	void renderSprite();
+	EntityBufferInfo* m_cube;
 
-	ID3D11Buffer* vertexBuffer_;
-	ID3D11Buffer* indexBuffer_;
-
-	void createVertices();
-	void createIndices();
+	//ID3D11Buffer* vertexBuffer_;
+	//ID3D11Buffer* indexBuffer_;
 
 };
 

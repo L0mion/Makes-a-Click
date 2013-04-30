@@ -39,6 +39,21 @@
       <Filter>Sprite</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\managementSS.cpp">
+		<Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\XInputFetcher.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\InputHelper.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vertex.cpp">
+      <Filter>Utilties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\HeightMap.cpp">
+      <Filter>Utilties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CubeFactory.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
@@ -98,6 +113,21 @@
       <Filter>Sprite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\managementSS.h">
+		<Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\XInputFetcher.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\InputHelper.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\HeightMap.h">
+      <Filter>Utilties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\EntityBufferInfo.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CubeFactory.h">
       <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
@@ -111,9 +141,6 @@
     <Filter Include="Utilties">
       <UniqueIdentifier>{5328dbe3-30ea-4ca6-a428-ff7f83689bc6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Renderer">
-      <UniqueIdentifier>{5e2a92b0-aad9-4736-8cd9-8ee6ddbc386c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Window">
       <UniqueIdentifier>{10e33707-ff6d-49ff-aa00-347528747914}</UniqueIdentifier>
     </Filter>
@@ -122,6 +149,12 @@
     </Filter>
     <Filter Include="Sprite">
       <UniqueIdentifier>{c74b0c5d-ce1d-4581-801c-c0212d161123}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{7cd705d2-8727-43f9-8220-8e351798052b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{5e2a92b0-aad9-4736-8cd9-8ee6ddbc386c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

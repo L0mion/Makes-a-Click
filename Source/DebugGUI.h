@@ -42,7 +42,7 @@ public:
 	TwBar* barFromString( string p_barName ); // Should be private
 
 	static DebugGUI* getInstance();
-	void init( ManagementD3D* p_deviceHandler );
+	void init( ManagementD3D* p_deviceHandler, HWND p_handle );
 	Results addVar( string p_barName, Types p_type, Permissions p_permissions,
 		string p_name, void *p_var, string p_options );
 

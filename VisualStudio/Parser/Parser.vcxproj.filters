@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Source\Parser.cpp" />
+    <ClCompile Include="Source\Rdr.cpp">
+      <Filter>Rdr</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ParserXML.cpp">
+      <Filter>XMLer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Parser.h" />
+    <ClInclude Include="Source\RapidXML.h" />
+    <ClInclude Include="Source\Rdr.h">
+      <Filter>Rdr</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ParserXML.h">
+      <Filter>XMLer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Rdr">
+      <UniqueIdentifier>{f46e5125-ebc0-42e3-a4e5-ec1dc4447957}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="XMLer">
+      <UniqueIdentifier>{d3d6a177-ce70-47f9-88cd-2b9650d31e37}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

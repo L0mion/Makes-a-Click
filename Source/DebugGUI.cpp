@@ -10,7 +10,7 @@ DebugGUI* DebugGUI::getInstance()
 	return &instance;
 }
 
-void DebugGUI::init( ManagementD3D* p_deviceHandler )
+void DebugGUI::init( ManagementD3D* p_deviceHandler, HWND p_handle )
 {
 	m_deviceHandler = p_deviceHandler;
 	TwInit(TW_DIRECT3D11, m_deviceHandler->getDevice());

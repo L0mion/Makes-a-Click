@@ -2,7 +2,9 @@
 
 #include <DirectXMath.h>
 
+#include "CubeFactory.h"
 #include "DebugGUI.h"
+#include "EntityBufferInfo.h"
 #include "managementCB.h"
 #include "managementD3D.h"
 #include "managementShader.h"
@@ -23,9 +25,9 @@ Renderer::Renderer()
 	managementSprite_ = NULL;
 	managementSS_     = NULL;
 
-	vertexBuffer_ = NULL;
-	indexBuffer_ = NULL;
+	m_cube				= NULL;
 }
+
 Renderer::~Renderer()
 {
 	SAFE_DELETE(managementD3D_);
@@ -35,11 +37,10 @@ Renderer::~Renderer()
 	SAFE_DELETE(managementSprite_);
 	SAFE_DELETE(managementSS_);
 
-	SAFE_RELEASE(vertexBuffer_);
-	SAFE_RELEASE(indexBuffer_);
+	SAFE_DELETE( m_cube );
 }
 
-void Renderer::render()
+void Renderer::beginRender()
 {
 	FLOAT colorBlack[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
@@ -52,23 +53,71 @@ void Renderer::render()
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_PS_DEFAULT);
 	managementShader_->setInputLayout(devcon, ManagementShader::InputLayoutIds_VS_DEFAULT);
 
-	UINT stride = sizeof(Vertex);
+}
+
+void Renderer::renderHeightMap( HeightMap* p_heightMap )
+{
+	EntityBufferInfo* info = NULL;
+	//info = p_heightMap->getEntityBufferInfo();
+}
+
+void Renderer::renderSprites()
+{
+	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
+
+	managementShader_->setShader(devcon, ManagementShader::ShaderIds_VS_SPRITE);
+	managementShader_->setShader(devcon, ManagementShader::ShaderIds_PS_SPRITE);
+	managementShader_->setInputLayout(devcon, ManagementShader::InputLayoutIds_VS_SPRITE);
+
+	managementCB_->vsSetCB(devcon, ManagementCB::CBTypes_SPRITE);
+	Sprite* sprite = managementSprite_->getSprite(ManagementSprite::SpriteIds_PLACEHOLDER);
+	DirectX::XMFLOAT4X4 spriteTransform = sprite->getWorldMatrix();
+	managementCB_->updateCBSprite(devcon, spriteTransform);
+
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_PLACEHOLDER, 0);
+	managementSS_->setSS(devcon, ManagementSS::SSTypes_DEFAULT, 0);
+
+	UINT stride = sizeof(SpriteVertex);
+	UINT offset = 0;
+
+	ID3D11Buffer* vertexBuffer = managementSprite_->getVertexBuffer();
+	ID3D11Buffer* indexBuffer = managementSprite_->getIndexBuffer();
+
+	devcon->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	devcon->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	devcon->DrawIndexed(6, 0, 0);
+}
+
+void Renderer::renderCube()
+{
+	renderEntityBufferInfo(m_cube);
+}
+
+void Renderer::renderEntityBufferInfo( EntityBufferInfo* p_info )
+{
+	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
+
+	UINT stride = p_info->m_stride;
 	UINT offset = 0;
 
 	devcon->OMSetDepthStencilState(0, 0);
 
-	devcon->IASetVertexBuffers(0, 1, &vertexBuffer_, &stride, &offset);
-	devcon->IASetIndexBuffer(indexBuffer_, DXGI_FORMAT_R32_UINT, 0);
+	devcon->IASetVertexBuffers(0, 1, &p_info->m_vertexBuffer, &stride, &offset);
+	devcon->IASetIndexBuffer(p_info->m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	devcon->DrawIndexed(36, 0, 0);
+	devcon->DrawIndexed(p_info->m_indicesCnt, 0, 0);
+}
 
-	renderSprite();
-
+void Renderer::endRender()
+{
 	DebugGUI::getInstance()->draw();
 
 	managementD3D_->present();
 }
+
 void Renderer::update(DirectX::XMFLOAT4X4 finalMatrix)
 {
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
@@ -93,8 +142,7 @@ HRESULT Renderer::init(HWND windowHandle)
 		hr = initManagementSS(managementD3D_->getDevice());
 
 	//TEMP
-	createVertices();
-	createIndices();
+	CubeFactory::createCube( managementD3D_, &m_cube );
 
 	return hr;
 }
@@ -147,150 +195,3 @@ HRESULT Renderer::initManagementSS(ID3D11Device* device)
 	return hr;
 }
 
-
-/*TEMP*/
-
-void Renderer::renderSprite()
-{
-	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
-
-	managementShader_->setShader(devcon, ManagementShader::ShaderIds_VS_SPRITE);
-	managementShader_->setShader(devcon, ManagementShader::ShaderIds_PS_SPRITE);
-	managementShader_->setInputLayout(devcon, ManagementShader::InputLayoutIds_VS_SPRITE);
-
-	managementCB_->vsSetCB(devcon, ManagementCB::CBTypes_SPRITE);
-	Sprite* sprite = managementSprite_->getSprite(ManagementSprite::SpriteIds_PLACEHOLDER);
-	DirectX::XMFLOAT4X4 spriteTransform = sprite->getWorldMatrix();
-	managementCB_->updateCBSprite(devcon, spriteTransform);
-
-	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_PLACEHOLDER, 0);
-	managementSS_->setSS(devcon, ManagementSS::SSTypes_DEFAULT, 0);
-
-	UINT stride = sizeof(SpriteVertex);
-	UINT offset = 0;
-
-	ID3D11Buffer* vertexBuffer = managementSprite_->getVertexBuffer();
-	ID3D11Buffer* indexBuffer = managementSprite_->getIndexBuffer();
-
-	devcon->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-	devcon->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
-	devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	devcon->DrawIndexed(6, 0, 0);
-}
-
-void Renderer::createVertices()
-{
-	std::vector<Vertex> vertices;
-
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)));   
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
-																		
-	// side 2															 
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)));    
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
-																		
-	// side 3															 
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f))); 
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f),		DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
-																		
-	// side 4																 
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)));  
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
-																		
-	// side 5																	 
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)));  
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
-							  											
-	// side 6				  											
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)));  
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
-
-	D3D11_BUFFER_DESC vbd;
-	vbd.Usage = D3D11_USAGE_DYNAMIC;
-	vbd.ByteWidth = sizeof(Vertex) * vertices.size();
-	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	vbd.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA vinitData;
-	vinitData.pSysMem = &vertices[0];
-	ID3D11Device* device = managementD3D_->getDevice();
-	HRESULT hr = device->CreateBuffer(&vbd, &vinitData, &vertexBuffer_);
-}
-void Renderer::createIndices()
-{
-	std::vector<DWORD> indices;
-
-	indices.push_back(0);
-	indices.push_back(1);
-	indices.push_back(2);
-
-	indices.push_back(2);
-	indices.push_back(1);
-	indices.push_back(3);
-
-	indices.push_back(4);
-	indices.push_back(5);
-	indices.push_back(6);
-
-	indices.push_back(6);
-	indices.push_back(5);
-	indices.push_back(7);
-
-	indices.push_back(8);
-	indices.push_back(9);
-	indices.push_back(10);
-
-	indices.push_back(10);
-	indices.push_back(9);
-	indices.push_back(11);
-
-	indices.push_back(12);
-	indices.push_back(13);
-	indices.push_back(14);
-
-	indices.push_back(14);
-	indices.push_back(13);
-	indices.push_back(15);
-
-	indices.push_back(16);
-	indices.push_back(17);
-	indices.push_back(18);
-
-	indices.push_back(18);
-	indices.push_back(17);
-	indices.push_back(19);
-
-	indices.push_back(20);
-	indices.push_back(21);
-	indices.push_back(22);
-
-	indices.push_back(22);
-	indices.push_back(21);
-	indices.push_back(23);
-
-	D3D11_BUFFER_DESC ibd;
-	ibd.Usage = D3D11_USAGE_DYNAMIC;
-	ibd.ByteWidth = sizeof(DWORD) * indices.size();
-	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	ibd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	ibd.MiscFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA iinitData;
-	iinitData.pSysMem = &indices[0];
-	ID3D11Device* device = managementD3D_->getDevice();
-	HRESULT hr = device->CreateBuffer(&ibd, &iinitData, &indexBuffer_);
-}
