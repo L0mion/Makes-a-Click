@@ -24,8 +24,6 @@ Renderer::Renderer()
 	managementTex_	  = NULL;
 	managementSprite_ = NULL;
 	managementSS_     = NULL;
-
-	m_cube				= NULL;
 }
 
 Renderer::~Renderer()
@@ -37,7 +35,9 @@ Renderer::~Renderer()
 	SAFE_DELETE(managementSprite_);
 	SAFE_DELETE(managementSS_);
 
-	SAFE_DELETE( m_cube );
+	for( unsigned int i=0; i<m_entities.size(); i++ ) {
+		SAFE_DELETE( m_entities[i] );
+	}
 }
 
 void Renderer::beginRender()
@@ -90,9 +90,11 @@ void Renderer::renderSprites()
 	devcon->DrawIndexed(6, 0, 0);
 }
 
-void Renderer::renderCube()
+void Renderer::renderEntities()
 {
-	renderEntityBufferInfo(m_cube);
+	for( unsigned int i=0; i<m_entities.size(); i++ ) {
+		renderEntityBufferInfo( m_entities[i] );
+	}
 }
 
 void Renderer::renderEntityBufferInfo( EntityBufferInfo* p_info )
@@ -142,7 +144,9 @@ HRESULT Renderer::init(HWND windowHandle)
 		hr = initManagementSS(managementD3D_->getDevice());
 
 	//TEMP
-	CubeFactory::createCube( managementD3D_, &m_cube );
+	EntityBufferInfo* cube = NULL;
+	CubeFactory::createCube( managementD3D_, &cube );
+	addEntity( cube );
 
 	return hr;
 }
@@ -193,5 +197,12 @@ HRESULT Renderer::initManagementSS(ID3D11Device* device)
 	managementSS_ = new ManagementSS();
 	managementSS_->init(device);
 	return hr;
+}
+
+void Renderer::addEntity( EntityBufferInfo* p_entity )
+{
+	if ( p_entity ) {
+		m_entities.push_back( p_entity );
+	}
 }
 

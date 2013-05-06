@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include <vector>
 
 class HeightMap;
 class ManagementD3D;
@@ -24,7 +25,7 @@ public:
 	void beginRender();
 	void renderHeightMap( HeightMap* p_heightMap );
 	void renderSprites();
-	void renderCube();
+	void renderEntities();
 	void renderEntityBufferInfo( EntityBufferInfo* p_info );
 	void endRender();
 	void update(DirectX::XMFLOAT4X4 finalMatrix);
@@ -32,6 +33,9 @@ public:
 	HRESULT init(HWND windowHandle);
 
 	ManagementD3D* getD3DManagement();
+
+	/// Takes ownership of the identity
+	void addEntity( EntityBufferInfo* p_entity );
 
 private:
 	HRESULT initManagementD3D(HWND windowHandle);
@@ -48,7 +52,9 @@ private:
 	ManagementSprite* managementSprite_;
 	ManagementSS*	  managementSS_;
 
-	EntityBufferInfo* m_cube;
+	//EntityBufferInfo* m_cube;
+
+	vector<EntityBufferInfo*> m_entities;
 
 	//ID3D11Buffer* vertexBuffer_;
 	//ID3D11Buffer* indexBuffer_;

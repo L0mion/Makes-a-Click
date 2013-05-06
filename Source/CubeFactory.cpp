@@ -34,54 +34,45 @@ HRESULT CubeFactory::createVertices( ManagementD3D* p_managementD3D,
 {
 	std::vector<Vertex> vertices;
 
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)));   
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)) );   
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)) );
 
-	// side 2															 
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)));    
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
+	// side 2															 										   
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)) );    
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)) );
 
-	// side 3															 
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f))); 
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f),		DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
+	// side 3															 										   
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)) ); 
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)) );
 
-	// side 4																 
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)));  
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
+	// side 4																 									   
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)) );  
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)) );
 
-	// side 5																	 
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)));  
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
+	// side 5																	 								   
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)) );  
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)) );
 
-	// side 6				  											
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)));  
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)));
-	vertices.push_back(Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)));
+	// side 6				  																					   
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f),	DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)) );  
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)) );
+	vertices.push_back( Vertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f),	DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f)) );
 
-	D3D11_BUFFER_DESC vbd;
-	vbd.Usage = D3D11_USAGE_DYNAMIC;
-	vbd.ByteWidth = sizeof(Vertex) * vertices.size();
-	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	vbd.MiscFlags = 0;
+	HRESULT vertexResult = inout_cube->setVertexBuffer( sizeof(Vertex),
+		vertices.size(), &vertices[0], p_managementD3D );
 
-	D3D11_SUBRESOURCE_DATA vinitData;
-	vinitData.pSysMem = &vertices[0];
-	ID3D11Device* device = p_managementD3D->getDevice();
-	HRESULT hr = device->CreateBuffer(&vbd, &vinitData, &inout_cube->m_vertexBuffer);
-	inout_cube->m_verticesCnt = vertices.size();
-	return hr;
+	return vertexResult;
 }
 
 HRESULT CubeFactory::createIndices( ManagementD3D* p_managementD3D,
@@ -137,17 +128,8 @@ HRESULT CubeFactory::createIndices( ManagementD3D* p_managementD3D,
 	indices.push_back(21);
 	indices.push_back(23);
 
-	D3D11_BUFFER_DESC ibd;
-	ibd.Usage = D3D11_USAGE_DYNAMIC;
-	ibd.ByteWidth = sizeof(DWORD) * indices.size();
-	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	ibd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	ibd.MiscFlags = 0;
+	HRESULT indexResult = inout_cube->setIndexBuffer( indices.size(),
+		&indices[0], p_managementD3D );
 
-	D3D11_SUBRESOURCE_DATA iinitData;
-	iinitData.pSysMem = &indices[0];
-	ID3D11Device* device = p_managementD3D->getDevice();
-	HRESULT hr = device->CreateBuffer(&ibd, &iinitData, &inout_cube->m_indexBuffer);
-	inout_cube->m_indicesCnt = indices.size();
-	return hr;
+	return indexResult;
 }

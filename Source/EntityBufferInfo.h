@@ -2,6 +2,8 @@
 #include <d3d11.h>
 #include "utility.h"
 
+class ManagementD3D;
+
 struct EntityBufferInfo
 {
 	int m_stride;
@@ -11,23 +13,13 @@ struct EntityBufferInfo
 	ID3D11Buffer* m_vertexBuffer;
 	ID3D11Buffer* m_indexBuffer;
 
-	EntityBufferInfo()
-	{
-		m_verticesCnt = -1;
-		m_indicesCnt = -1;
-		m_stride = -1;
+	EntityBufferInfo();
 
-		m_vertexBuffer = NULL;
-		m_indexBuffer = NULL;
-	}
+	~EntityBufferInfo();
 
-	~EntityBufferInfo()
-	{
-		SAFE_RELEASE( m_vertexBuffer );
-		SAFE_RELEASE( m_indexBuffer );
+	HRESULT setVertexBuffer( const int p_vertexSize, const int p_verticesCnt,
+		const void* p_vertices, const ManagementD3D* p_managementD3D );
 
-		m_stride = -1;
-		m_verticesCnt = -1;
-		m_indicesCnt = -1;
-	}
+	HRESULT setIndexBuffer( const int p_indexCnt, const void* p_indices,
+		const ManagementD3D* p_managementD3D );
 };

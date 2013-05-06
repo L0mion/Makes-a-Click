@@ -89,4 +89,7 @@ settings.input
 
 ### ADD EXPCETIONS TO RULES ABOVE!!!
 # Exceptions
-!External/
+!External/*
+!external/*
+!External/*/*
+!external/*/*

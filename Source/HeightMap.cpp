@@ -1,9 +1,12 @@
 #include "HeightMap.h"
 
 #include "EntityBufferInfo.h"
+#include "managementD3D.h"
 
-HeightMap::HeightMap(/*System* pSystem*/)
+HeightMap::HeightMap( ManagementD3D* p_managementD3D )
 {
+	m_managementD3D = p_managementD3D;
+
 	//system = pSystem;
 	m_bufferInfo = NULL;
 
@@ -16,6 +19,7 @@ HeightMap::HeightMap(/*System* pSystem*/)
 	int vertexCnt = m_rowCnt*m_colCnt;
 	loadHeightMap( vertexCnt );
 	smoothHeightMap();
+	createEntityBufferInfo();
 }
 
 HeightMap::~HeightMap()
@@ -198,6 +202,11 @@ void HeightMap::createEntityBufferInfo()
 	
 	vector<HeightMapVertex> vertices = defineVertexBuffer(numVertices);
 	vector<int> indices = defineIndexBuffer(numIndices);
+
+	m_bufferInfo = new EntityBufferInfo();
+	m_bufferInfo->setVertexBuffer( sizeof(HeightMapVertex), numVertices,
+		&vertices[0], m_managementD3D );
+	m_bufferInfo->setIndexBuffer( numIndices, &indices[0], m_managementD3D );
 }
 
 vector<HeightMapVertex> HeightMap::defineVertexBuffer( int p_vertexCnt )

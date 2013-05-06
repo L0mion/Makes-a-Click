@@ -39,7 +39,7 @@
       <Filter>Sprite</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\managementSS.cpp">
-		<Filter>Renderer</Filter>
+      <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\XInputFetcher.cpp">
       <Filter>Input</Filter>
@@ -54,6 +54,9 @@
       <Filter>Utilties</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\CubeFactory.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\EntityBufferInfo.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
@@ -113,7 +116,7 @@
       <Filter>Sprite</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\managementSS.h">
-		<Filter>Renderer</Filter>
+      <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\XInputFetcher.h">
       <Filter>Input</Filter>
@@ -149,7 +152,7 @@
     </Filter>
     <Filter Include="Sprite">
       <UniqueIdentifier>{c74b0c5d-ce1d-4581-801c-c0212d161123}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="Input">
       <UniqueIdentifier>{7cd705d2-8727-43f9-8220-8e351798052b}</UniqueIdentifier>
     </Filter>

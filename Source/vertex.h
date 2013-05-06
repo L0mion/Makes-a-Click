@@ -50,7 +50,8 @@ struct HeightMapVertex
 	float texCoord[Coords::UV_CNT];
 
 	HeightMapVertex();
-	HeightMapVertex( float p_posX,	float p_posY,	float p_posZ,
+	HeightMapVertex( 
+		float p_posX,	float p_posY,	float p_posZ,
 		float p_normX,	float p_normY,	float p_normZ, 
 		float p_texU,	float p_texV );
 };

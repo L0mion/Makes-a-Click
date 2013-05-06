@@ -57,7 +57,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	DebugGUI::getInstance()->addVar( "Main", DebugGUI::Types_FLOAT,
 		DebugGUI::Permissions_READ_ONLY, "fps", &fps, "");
 
-	HeightMap* heightMap = new HeightMap();
+	HeightMap* heightMap = new HeightMap( renderer->getD3DManagement() );
 
 	if(SUCCEEDED(hr))
 	{
@@ -82,7 +82,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			xinput->update();
 			renderer->update(finalMatrix);
 			renderer->beginRender();
-			renderer->renderCube();
+			renderer->renderEntities();
 			renderer->renderHeightMap( heightMap );
 			renderer->renderSprites();
 			renderer->endRender();
