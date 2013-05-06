@@ -12,6 +12,7 @@ class ManagementCB;
 class ManagementTex;
 class ManagementSprite;
 class ManagementSS;
+class ManagementBS;
 
 struct EntityBufferInfo;
 
@@ -40,6 +41,7 @@ private:
 	HRESULT initManagementTex(ID3D11Device* device);
 	HRESULT initManagementSprite(ID3D11Device* device);
 	HRESULT initManagementSS(ID3D11Device* device);
+	HRESULT initManagementBS(ID3D11Device* device);
 
 	ManagementD3D*	  managementD3D_;
 	ManagementShader* managementShader_;
@@ -47,6 +49,7 @@ private:
 	ManagementTex*	  managementTex_;
 	ManagementSprite* managementSprite_;
 	ManagementSS*	  managementSS_;
+	ManagementBS*	  managementBS_;
 
 	EntityBufferInfo* m_cube;
 
