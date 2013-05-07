@@ -40,7 +40,7 @@ bool ParserXML::init() {
 }
 
 void ParserXML::parse(std::string txtToParse) {
-	ParserXML parserXML(txtToParse);
+	RdrXML parserXML(txtToParse);
 
 	bool sucessfulParse = false;
 	sucessfulParse = parserXML.init();

@@ -6,10 +6,10 @@ typedef char ParserXMLCharType;
 
 #include "RapidXML.h"
 
-class ParserXML {
+class RdrXML {
 public:
-	ParserXML(std::string xmlRaw);
-	~ParserXML();
+	RdrXML(std::string xmlRaw);
+	~RdrXML();
 
 	bool init();
 protected:

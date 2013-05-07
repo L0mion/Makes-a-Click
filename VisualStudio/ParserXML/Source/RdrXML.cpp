@@ -1,18 +1,18 @@
 #include <exception>
 
-#include "ParserXML.h"
+#include "RdrXML.h"
 
-ParserXML::ParserXML(std::string xmlRaw) {
+RdrXML::RdrXML(std::string xmlRaw) {
 	m_xmlRaw = xmlRaw;
 
 	m_xmlDoc = nullptr;
 }
-ParserXML::~ParserXML() {
+RdrXML::~RdrXML() {
 	if( m_xmlDoc )
 		delete m_xmlDoc;
 }
 
-bool ParserXML::init() {
+bool RdrXML::init() {
 	bool sucessfulParse = true;
 
 	//Create our representation of the XML-tree.
