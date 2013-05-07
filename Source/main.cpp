@@ -10,6 +10,7 @@
 #include "DebugGUI.h"
 #include "HeightMap.h"
 #include "XInputFetcher.h"
+#include "InputHelper.h"
 #include "camera.h"
 #include "inputDesc.h"
 #include "keyCodes.h"
@@ -21,7 +22,7 @@
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void initDebugGui( float* p_dt, float* p_fps );
-void handleInput(InputDesc inputDesc, float dt);
+void handleInput(XInputFetcher* xinput, float dt);
 void clean();
 
 Window* window;
@@ -52,6 +53,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	float fps = 0.0f;
 	initDebugGui( &dt, &fps );
 	XInputFetcher* xinput = new XInputFetcher();
+	xinput->calibrate(0.4);
 
 	HeightMap* heightMap = new HeightMap( renderer->getD3DManagement() );
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
@@ -71,14 +73,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			fps = 1/dt;
 
 			window->checkMessages();
-			InputDesc inputDesc = window->getInput();
 
-			handleInput(inputDesc, dt);
+			xinput->update();
+			handleInput(xinput, dt);
 			camera->rebuildView();
 
 			DirectX::XMFLOAT4X4 finalMatrix = MathHelper::multiplyMatrix(camera->getViewMatrix(), camera->getProjectionMatrix());
 
-			xinput->update();
 			renderer->update(finalMatrix);
 			renderer->beginRender();
 			renderer->renderEntities();
@@ -137,24 +138,25 @@ void initDebugGui( float* p_dt, float* p_fps )
 		DebugGUI::Permissions_READ_ONLY, "fps", p_fps, "");
 }
 
-void handleInput(InputDesc inputDesc, float dt)
+void handleInput(XInputFetcher* xinput, float dt)
 {
-	float distance = 10.0f * dt;
-	if(inputDesc.keys_[KeyCodes::VK_W])
-		camera->walk(distance);
-	if(inputDesc.keys_[KeyCodes::VK_S])
-		camera->walk(-distance);
-	if(inputDesc.keys_[KeyCodes::VK_A])
-		camera->strafe(-distance);
-	if(inputDesc.keys_[KeyCodes::VK_D])
-		camera->strafe(distance);
-	if(inputDesc.keys_[KeyCodes::VK_X])
-		camera->verticalWalk(distance);
-	if(inputDesc.keys_[KeyCodes::VK_Z])
-		camera->verticalWalk(-distance);
+	float leftAnalogSens  = 8.0f;
+	float rightAnalogSens = 1.0f;
 
-	camera->yaw(inputDesc.mouseDeltaX_ * dt);
-	camera->pitch(inputDesc.mouseDeltaY_ * dt);
+	double walkDistance	  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE);
+	double strafeDistance = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE);
+	double yawAngle		  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE);
+	double pitchAngle	  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);
+
+	float walk	 = static_cast<float>(walkDistance) * leftAnalogSens * dt;
+	float strafe = static_cast<float>(strafeDistance) * leftAnalogSens * dt;
+	float yaw	 = static_cast<float>(yawAngle) * rightAnalogSens * dt;
+	float pitch  = static_cast<float>(pitchAngle) * rightAnalogSens * dt * -1;
+
+	camera->walk(walk);
+	camera->strafe(strafe);
+	camera->yaw(yaw);
+	camera->pitch(pitch);
 }
 
 void clean()
