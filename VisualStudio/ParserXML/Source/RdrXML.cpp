@@ -17,7 +17,7 @@ bool ParserXML::init() {
 
 	//Create our representation of the XML-tree.
 	m_xmlDoc = new rapidxml::xml_document<ParserXMLCharType>(); //Character Type defaults to Char because of esoteric template-stuff.
-	
+
 	//Parse the XML-document into the tree. May throw a parse_error exception.
 	try {
 		m_xmlDoc->parse<0>((char*)m_xmlRaw.c_str()); //Potential flags are in place of '0'.

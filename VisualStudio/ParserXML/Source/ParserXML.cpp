@@ -1,18 +1,18 @@
 #include "Rdr.h"
+#include "RdrXML.h"
+
 #include "ParserXML.h"
 
-#include "Parser.h"
-
-Parser::Parser(std::string filePath, std::string fileName) {
+ParserXML::ParserXML(std::string filePath, std::string fileName) {
 	m_filePath		= filePath;
 	m_fileName		= fileName;
 	m_filePathFull	= filePath + fileName;
 }
-Parser::~Parser() {
+ParserXML::~ParserXML() {
 	//Do nothing.
 }
 
-bool Parser::init() {
+bool ParserXML::init() {
 	Rdr rdr = Rdr(m_filePathFull);
 	Rdr::RdStatuses rdStatus = Rdr::RdStatuses_OK;
 	rdStatus = rdr.init();
@@ -39,9 +39,9 @@ bool Parser::init() {
 	return sucessfulParse;
 }
 
-void Parser::parse(std::string txtToParse) {
+void ParserXML::parse(std::string txtToParse) {
 	ParserXML parserXML(txtToParse);
-	
+
 	bool sucessfulParse = false;
 	sucessfulParse = parserXML.init();
 

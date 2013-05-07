@@ -2,10 +2,10 @@
 
 #include <string>
 
-class Parser {
+class ParserXML {
 public:
-	Parser(std::string filePath, std::string fileName);
-	~Parser();
+	ParserXML(std::string filePath, std::string fileName);
+	~ParserXML();
 
 	bool init();
 protected:

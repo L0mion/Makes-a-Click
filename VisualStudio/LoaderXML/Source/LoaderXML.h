@@ -19,8 +19,14 @@ public:
 	LoaderXML();
 	~LoaderXML();
 
-	void init();
+	bool init();
 protected:
 private:
+	bool parse();
+	bool parseXML(
+		const std::wstring filePath, 
+		const std::wstring fileName, 
+		const std::wstring fileEnding);
+
 	WinDetective* m_winDetective;
 };
