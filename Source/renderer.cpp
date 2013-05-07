@@ -5,6 +5,7 @@
 #include "CubeFactory.h"
 #include "DebugGUI.h"
 #include "EntityBufferInfo.h"
+#include "managementBS.h"
 #include "managementCB.h"
 #include "managementD3D.h"
 #include "managementShader.h"
@@ -24,6 +25,7 @@ Renderer::Renderer()
 	managementTex_	  = NULL;
 	managementSprite_ = NULL;
 	managementSS_     = NULL;
+	managementBS_	  = NULL;
 }
 
 Renderer::~Renderer()
@@ -34,6 +36,7 @@ Renderer::~Renderer()
 	SAFE_DELETE(managementTex_);
 	SAFE_DELETE(managementSprite_);
 	SAFE_DELETE(managementSS_);
+	SAFE_DELETE(managementBS_);
 
 	for( unsigned int i=0; i<m_entities.size(); i++ ) {
 		SAFE_DELETE( m_entities[i] );
@@ -69,6 +72,8 @@ void Renderer::renderSprites()
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_PS_SPRITE);
 	managementShader_->setInputLayout(devcon, ManagementShader::InputLayoutIds_VS_SPRITE);
 
+	managementBS_->setBlendState(devcon, ManagementBS::BSTypes_TRANSPARENCY);
+
 	managementCB_->vsSetCB(devcon, ManagementCB::CBTypes_SPRITE);
 	Sprite* sprite = managementSprite_->getSprite(ManagementSprite::SpriteIds_PLACEHOLDER);
 	DirectX::XMFLOAT4X4 spriteTransform = sprite->getWorldMatrix();
@@ -88,6 +93,8 @@ void Renderer::renderSprites()
 	devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	devcon->DrawIndexed(6, 0, 0);
+
+	managementBS_->setBlendState(devcon, ManagementBS::BSTypes_DEFAULT);
 }
 
 void Renderer::renderEntities()
@@ -142,6 +149,8 @@ HRESULT Renderer::init(HWND windowHandle)
 		hr = initManagementSprite(managementD3D_->getDevice());
 	if(SUCCEEDED(hr))
 		hr = initManagementSS(managementD3D_->getDevice());
+	if(SUCCEEDED(hr))
+		hr = initManagementBS(managementD3D_->getDevice());
 
 	//TEMP
 	EntityBufferInfo* cube = NULL;
@@ -196,6 +205,13 @@ HRESULT Renderer::initManagementSS(ID3D11Device* device)
 	HRESULT hr = S_OK;
 	managementSS_ = new ManagementSS();
 	managementSS_->init(device);
+	return hr;
+}
+HRESULT Renderer::initManagementBS(ID3D11Device* device)
+{
+	HRESULT hr = S_OK;
+	managementBS_ = new ManagementBS();
+	managementBS_->init(device);
 	return hr;
 }
 

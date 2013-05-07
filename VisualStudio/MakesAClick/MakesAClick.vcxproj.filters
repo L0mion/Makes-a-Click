@@ -59,6 +59,9 @@
     <ClCompile Include="..\..\Source\EntityBufferInfo.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\managementBS.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h">
@@ -131,6 +134,9 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CubeFactory.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\managementBS.h">
       <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>

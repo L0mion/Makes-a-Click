@@ -19,6 +19,7 @@
     <ClCompile Include="..\..\Source\HeightMap.cpp" />
     <ClCompile Include="..\..\Source\InputHelper.cpp" />
     <ClCompile Include="..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\Source\managementBS.cpp" />
     <ClCompile Include="..\..\Source\managementCB.cpp" />
     <ClCompile Include="..\..\Source\managementD3D.cpp" />
     <ClCompile Include="..\..\Source\managementShader.cpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="..\..\Source\inputDesc.h" />
     <ClInclude Include="..\..\Source\InputHelper.h" />
     <ClInclude Include="..\..\Source\keyCodes.h" />
+    <ClInclude Include="..\..\Source\managementBS.h" />
     <ClInclude Include="..\..\Source\managementCB.h" />
     <ClInclude Include="..\..\Source\managementD3D.h" />
     <ClInclude Include="..\..\Source\managementShader.h" />
