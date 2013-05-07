@@ -2,7 +2,6 @@
 
 #include <DirectXMath.h>
 
-#include "CubeFactory.h"
 #include "DebugGUI.h"
 #include "EntityBufferInfo.h"
 #include "managementBS.h"
@@ -151,11 +150,6 @@ HRESULT Renderer::init(HWND windowHandle)
 		hr = initManagementSS(managementD3D_->getDevice());
 	if(SUCCEEDED(hr))
 		hr = initManagementBS(managementD3D_->getDevice());
-
-	//TEMP
-	EntityBufferInfo* cube = NULL;
-	CubeFactory::createCube( managementD3D_, &cube );
-	addEntity( cube );
 
 	return hr;
 }

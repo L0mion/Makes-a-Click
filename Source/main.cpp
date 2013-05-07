@@ -17,8 +17,10 @@
 #include "renderer.h"
 #include "utility.h"
 #include "window.h"
+#include "CubeFactory.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
+void initDebugGui( float* p_dt, float* p_fps );
 void handleInput(InputDesc inputDesc, float dt);
 void clean();
 
@@ -34,30 +36,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 #endif
 
 	AllocConsole();
-
 	HRESULT hr = S_OK;
-
 	hr = initialize(hInstance, cmdShow);
-	
-	DebugGUI::getInstance()->init( renderer->getD3DManagement(), window->getWindowHandle() );
-
+	DebugGUI::getInstance()->init( renderer->getD3DManagement(),
+		window->getWindowHandle() );
 	XInputFetcher* xinput = new XInputFetcher();
 
-	int answerToLifeTheUniverseAndEverything = 42;
-	DebugGUI::getInstance()->addVar( "Main", DebugGUI::Types_INT,
-		DebugGUI::Permissions_READ_ONLY,
-		"Answer to life, the universe and everything",
-		&answerToLifeTheUniverseAndEverything, "");
+	HeightMap* heightMap = new HeightMap( renderer->getD3DManagement() );
 
 	float dt = 0.0f;
-	DebugGUI::getInstance()->addVar( "Main", DebugGUI::Types_FLOAT,
-		DebugGUI::Permissions_READ_ONLY, "dt", &dt, "");
-
 	float fps = 0.0f;
-	DebugGUI::getInstance()->addVar( "Main", DebugGUI::Types_FLOAT,
-		DebugGUI::Permissions_READ_ONLY, "fps", &fps, "");
+	initDebugGui( &dt, &fps );
 
-	HeightMap* heightMap = new HeightMap( renderer->getD3DManagement() );
+	EntityBufferInfo* cube = NULL;
+	CubeFactory::createCube( renderer->getD3DManagement(), &cube );
+	renderer->addEntity( cube );
 
 	if(SUCCEEDED(hr))
 	{
@@ -122,6 +115,22 @@ HRESULT initialize(HINSTANCE hInstance, int cmdShow)
 
 	return hr;
 }
+
+void initDebugGui( float* p_dt, float* p_fps )
+{
+	int answerToLifeTheUniverseAndEverything = 42;
+	DebugGUI::getInstance()->addVar( "Main", DebugGUI::Types_INT,
+		DebugGUI::Permissions_READ_ONLY,
+		"Answer to life, the universe and everything",
+		&answerToLifeTheUniverseAndEverything, "");
+
+	DebugGUI::getInstance()->addVar( "Main", DebugGUI::Types_FLOAT,
+		DebugGUI::Permissions_READ_ONLY, "dt", p_dt, "");
+
+	DebugGUI::getInstance()->addVar( "Main", DebugGUI::Types_FLOAT,
+		DebugGUI::Permissions_READ_ONLY, "fps", p_fps, "");
+}
+
 void handleInput(InputDesc inputDesc, float dt)
 {
 	float distance = 10.0f * dt;
@@ -141,6 +150,7 @@ void handleInput(InputDesc inputDesc, float dt)
 	camera->yaw(inputDesc.mouseDeltaX_ * dt);
 	camera->pitch(inputDesc.mouseDeltaY_ * dt);
 }
+
 void clean()
 {
 	SAFE_DELETE(window);
