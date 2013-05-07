@@ -136,7 +136,7 @@ HRESULT ManagementShader::initInputLayouts(ID3D11Device* device)
 	if( SUCCEEDED(hr) ) {
 		hr = initVSSpriteInputLayout( device );
 	} if( SUCCEEDED(hr) ) {
-		hr = initVSHeightmapInputLayout( device );
+		//hr = initVSHeightmapInputLayout( device );
 	}
 	return hr; 
 }
@@ -191,8 +191,11 @@ HRESULT ManagementShader::initVSHeightmapInputLayout( ID3D11Device* device )
 	int elementCnt = sizeof(layoutDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC);
 
 	HRESULT hr = S_OK;
-	hr = device->CreateInputLayout( layoutDesc, 3, vsDefaultBlob_->GetBufferPointer(),
-		vsDefaultBlob_->GetBufferSize(), &vsDefaultIL_ );
+	hr = device->CreateInputLayout( layoutDesc, elementCnt,
+		vsDefaultBlob_->GetBufferPointer(),
+		vsDefaultBlob_->GetBufferSize(),
+		&vsDefaultIL_ );
+
 	if(FAILED(hr))
 		MessageBox(NULL, L"ManagementShader::initVSDefaultInputLayout() | device->CreateInputLayout() | Failed", L"vsDefaultIL", MB_OK | MB_ICONEXCLAMATION);
 
