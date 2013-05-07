@@ -56,10 +56,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	HeightMap* heightMap = new HeightMap( renderer->getD3DManagement() );
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
 	renderer->addEntity( heightMapBuffers );
-
-	EntityBufferInfo* cube = NULL;
-	CubeFactory::createCube( renderer->getD3DManagement(), &cube );
-	renderer->addEntity( cube );
+	 
 
 	if(SUCCEEDED(hr))
 	{

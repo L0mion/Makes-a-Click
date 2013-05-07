@@ -10,7 +10,21 @@ struct VSIn
 struct VSOut
 {
 	float4 position : SV_POSITION;
-	float4 color : COLOR;
+	float4 color	: COLOR;
+};
+
+struct VSHeightMapIn
+{
+	float3 normal	: NORMAL;
+	float3 position : POSITION;
+	float2 texCoord	: TEXCOORD;
+};
+
+struct VSHeightMapOut
+{
+	float4 normal	: NORMAL;
+	float4 position : SV_POSITION;
+	float2 texCoord	: TEXCOORD;
 };
 
 struct VSSpriteIn

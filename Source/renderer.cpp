@@ -47,14 +47,13 @@ void Renderer::beginRender()
 	FLOAT colorBlack[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
 	managementD3D_->clearBackBuffer();
-	devcon->ClearDepthStencilView(managementD3D_->getDSVDepthBuffer(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+	devcon->ClearDepthStencilView(managementD3D_->getDSVDepthBuffer(),
+		D3D11_CLEAR_DEPTH, 1.0f, 0);
 
 	managementD3D_->setBackBuffer();
 
-	managementShader_->setShader(devcon, ManagementShader::ShaderIds_DEFAULT);
-	/*managementShader_->setShader(devcon, ManagementShader::ShaderIds_PS_DEFAULT);
-	managementShader_->setInputLayout(devcon, ManagementShader::ShaderIds_DEFAULT);*/
-
+	managementShader_->setShader(devcon, ManagementShader::ShaderIds_HEIGHTMAP);
+	//managementShader_->setShader(devcon, ManagementShader::ShaderIds_DEFAULT);
 }
 
 void Renderer::renderHeightMap( HeightMap* p_heightMap )
@@ -68,8 +67,6 @@ void Renderer::renderSprites()
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
 
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_SPRITE);
-	/*managementShader_->setShader(devcon, ManagementShader::ShaderIds_PS_SPRITE);
-	managementShader_->setInputLayout(devcon, ManagementShader::ShaderIds_SPRITE);*/
 
 	managementBS_->setBlendState(devcon, ManagementBS::BSTypes_TRANSPARENCY);
 

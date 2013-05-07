@@ -25,6 +25,7 @@ HRESULT EntityBufferInfo::setVertexBuffer( const int p_vertexSize, const int p_v
 	const void* p_vertices, const ManagementD3D* p_managementD3D )
 {
 	m_verticesCnt = p_verticesCnt;
+	m_stride = p_vertexSize;
 
 	D3D11_BUFFER_DESC vbd;
 	vbd.Usage = D3D11_USAGE_DYNAMIC;
