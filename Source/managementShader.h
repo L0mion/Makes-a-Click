@@ -5,6 +5,17 @@
 #include <d3dcompiler.h>
 #include <string>
 
+struct ShaderSet
+{
+	ID3D11VertexShader* m_vs;
+	ID3D11PixelShader*	m_ps;
+
+	ID3DBlob* m_vsBlob;
+	ID3DBlob* m_psBlob;
+
+	ID3D11InputLayout* m_inputLayout;
+};
+
 class ManagementShader
 {
 public:
@@ -15,14 +26,17 @@ public:
 	{
 		ShaderIds_VS_DEFAULT,
 		ShaderIds_VS_SPRITE,
+		ShaderIds_VS_HEIGHTMAP,
 		ShaderIds_PS_DEFAULT,
-		ShaderIds_PS_SPRITE
+		ShaderIds_PS_SPRITE,
+		ShaderIds_PS_HEIGHTMAP
 	};
 	
 	enum InputLayoutIds
 	{
-		InputLayoutIds_VS_DEFAULT,
-		InputLayoutIds_VS_SPRITE
+		InputLayoutIds_DEFAULT,
+		InputLayoutIds_SPRITE,
+		InputLayoutIds_HEIGHTMAP
 	};
 
 	void setShader(ID3D11DeviceContext* devcon, ShaderIds shaderId);
@@ -37,6 +51,7 @@ private:
 	HRESULT initInputLayouts(ID3D11Device* device);
 	HRESULT initVSDefaultInputLayout(ID3D11Device* device);
 	HRESULT initVSSpriteInputLayout(ID3D11Device* device);
+	HRESULT initVSHeightmapInputLayout(ID3D11Device* device);
 
 	std::wstring decideFilePath();
 

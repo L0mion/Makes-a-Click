@@ -54,10 +54,10 @@ void ManagementShader::setInputLayout(ID3D11DeviceContext* devcon, InputLayoutId
 {
 	switch(inputLayoutId)
 	{
-	case InputLayoutIds_VS_DEFAULT:
+	case InputLayoutIds_DEFAULT:
 		devcon->IASetInputLayout(vsDefaultIL_);
 		break;
-	case InputLayoutIds_VS_SPRITE:
+	case InputLayoutIds_SPRITE:
 		devcon->IASetInputLayout(vsSpriteIL_);
 		break;
 	default:
@@ -132,20 +132,25 @@ HRESULT ManagementShader::initInputLayouts(ID3D11Device* device)
 {
 	HRESULT hr = S_OK;
 
-	hr = initVSDefaultInputLayout(device);
-	if(SUCCEEDED(hr))
-		hr = initVSSpriteInputLayout(device);
-
+	hr = initVSDefaultInputLayout( device );
+	if( SUCCEEDED(hr) ) {
+		hr = initVSSpriteInputLayout( device );
+	} if( SUCCEEDED(hr) ) {
+		hr = initVSHeightmapInputLayout( device );
+	}
 	return hr; 
 }
+
 HRESULT ManagementShader::initVSDefaultInputLayout(ID3D11Device* device)
 {
 	HRESULT hr = S_OK;
 
 	D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
+		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
 	hr = device->CreateInputLayout(ied, 2, vsDefaultBlob_->GetBufferPointer(), vsDefaultBlob_->GetBufferSize(), &vsDefaultIL_);
@@ -154,6 +159,7 @@ HRESULT ManagementShader::initVSDefaultInputLayout(ID3D11Device* device)
 
 	return hr;
 }
+
 HRESULT ManagementShader::initVSSpriteInputLayout(ID3D11Device* device)
 {
 	HRESULT hr = S_OK;
@@ -167,6 +173,28 @@ HRESULT ManagementShader::initVSSpriteInputLayout(ID3D11Device* device)
 	hr = device->CreateInputLayout(ied, 2, vsSpriteBlob_->GetBufferPointer(), vsSpriteBlob_->GetBufferSize(), &vsSpriteIL_);
 	if(FAILED(hr))
 		MessageBox(NULL, L"ManagementShader::initVSSpriteInputLayout() | device->CreateInputLayout() | Failed", L"vsSpritetIL", MB_OK | MB_ICONEXCLAMATION);
+
+	return hr;
+}
+
+HRESULT ManagementShader::initVSHeightmapInputLayout( ID3D11Device* device )
+{
+	D3D11_INPUT_ELEMENT_DESC layoutDesc[] =
+	{
+		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
+		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+	int elementCnt = sizeof(layoutDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC);
+
+	HRESULT hr = S_OK;
+	hr = device->CreateInputLayout( layoutDesc, 3, vsDefaultBlob_->GetBufferPointer(),
+		vsDefaultBlob_->GetBufferSize(), &vsDefaultIL_ );
+	if(FAILED(hr))
+		MessageBox(NULL, L"ManagementShader::initVSDefaultInputLayout() | device->CreateInputLayout() | Failed", L"vsDefaultIL", MB_OK | MB_ICONEXCLAMATION);
 
 	return hr;
 }

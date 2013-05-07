@@ -40,13 +40,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	hr = initialize(hInstance, cmdShow);
 	DebugGUI::getInstance()->init( renderer->getD3DManagement(),
 		window->getWindowHandle() );
-	XInputFetcher* xinput = new XInputFetcher();
-
-	HeightMap* heightMap = new HeightMap( renderer->getD3DManagement() );
 
 	float dt = 0.0f;
 	float fps = 0.0f;
 	initDebugGui( &dt, &fps );
+	XInputFetcher* xinput = new XInputFetcher();
+
+	HeightMap* heightMap = new HeightMap( renderer->getD3DManagement() );
+	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
+	renderer->addEntity( heightMapBuffers );
 
 	EntityBufferInfo* cube = NULL;
 	CubeFactory::createCube( renderer->getD3DManagement(), &cube );

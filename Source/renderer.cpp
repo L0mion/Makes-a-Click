@@ -53,7 +53,7 @@ void Renderer::beginRender()
 
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_VS_DEFAULT);
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_PS_DEFAULT);
-	managementShader_->setInputLayout(devcon, ManagementShader::InputLayoutIds_VS_DEFAULT);
+	managementShader_->setInputLayout(devcon, ManagementShader::InputLayoutIds_DEFAULT);
 
 }
 
@@ -69,7 +69,7 @@ void Renderer::renderSprites()
 
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_VS_SPRITE);
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_PS_SPRITE);
-	managementShader_->setInputLayout(devcon, ManagementShader::InputLayoutIds_VS_SPRITE);
+	managementShader_->setInputLayout(devcon, ManagementShader::InputLayoutIds_SPRITE);
 
 	managementBS_->setBlendState(devcon, ManagementBS::BSTypes_TRANSPARENCY);
 

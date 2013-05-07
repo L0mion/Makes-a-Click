@@ -24,7 +24,8 @@ HeightMap::HeightMap( ManagementD3D* p_managementD3D )
 
 HeightMap::~HeightMap()
 {
-	delete m_bufferInfo;
+	// This is done by the renderer 
+	//delete m_bufferInfo;
 }
 
 //vector<Model> HeightMap::createModels(/*int pTechNr, int pPassNr, */int maxSize)
