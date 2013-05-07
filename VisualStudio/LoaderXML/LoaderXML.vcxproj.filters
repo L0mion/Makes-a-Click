@@ -2,12 +2,28 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Source\LoaderXML.cpp" />
-    <ClCompile Include="Source\WinDetective.cpp" />
-    <ClCompile Include="Source\UtilString.cpp" />
+    <ClCompile Include="Source\UtilString.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WinDetective.cpp">
+      <Filter>WinDetective</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\LoaderXML.h" />
-    <ClInclude Include="Source\WinDetective.h" />
-    <ClInclude Include="Source\UtilString.h" />
+    <ClInclude Include="Source\UtilString.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WinDetective.h">
+      <Filter>WinDetective</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Util">
+      <UniqueIdentifier>{030035e1-2756-4010-b355-effe9d6a938b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinDetective">
+      <UniqueIdentifier>{78778736-f7ad-4f20-b300-0c1ec31234bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
