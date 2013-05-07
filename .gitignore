@@ -72,8 +72,6 @@ settings.input
 
 *.agl
 *.fbx
-*.png
-*.dds
 *.tga
 *.jpg
 *.jpeg
@@ -91,4 +89,7 @@ settings.input
 
 ### ADD EXPCETIONS TO RULES ABOVE!!!
 # Exceptions
-!External/
+!External/*
+!external/*
+!External/*/*
+!external/*/*

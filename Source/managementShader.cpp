@@ -4,42 +4,61 @@
 ManagementShader::ManagementShader()
 {
 	vsDefault_ = NULL;
+	vsSprite_  = NULL;
 	psDefault_ = NULL;
+	psSprite_  = NULL;
 
 	vsDefaultBlob_ = NULL;
+	vsSpriteBlob_  = NULL;
 	psDefaultBlob_ = NULL;
+	psSpriteBlob_  = NULL;
 
 	vsDefaultIL_ = NULL;
+	vsSpriteIL_	 = NULL;
 }
 ManagementShader::~ManagementShader()
 {
 	SAFE_RELEASE(vsDefault_);
+	SAFE_RELEASE(vsSprite_);
 	SAFE_RELEASE(psDefault_);
+	SAFE_RELEASE(psSprite_);
 
 	SAFE_RELEASE(vsDefaultBlob_);
+	SAFE_RELEASE(vsSpriteBlob_);
 	SAFE_RELEASE(psDefaultBlob_);
+	SAFE_RELEASE(psSpriteBlob_);
 
 	SAFE_RELEASE(vsDefaultIL_);
+	SAFE_RELEASE(vsSpriteIL_);
 }
 
-void ManagementShader::setShader(ID3D11DeviceContext* devcon, ShaderId shaderId)
+void ManagementShader::setShader(ID3D11DeviceContext* devcon, ShaderIds shaderId)
 {
 	switch(shaderId)
 	{
-	case SHADER_ID_VS_DEFAULT:
+	case ShaderIds_VS_DEFAULT:
 		devcon->VSSetShader(vsDefault_, NULL, 0);
 		break;
-	case SHADER_ID_PS_DEFAULT:
+	case ShaderIds_VS_SPRITE:
+		devcon->VSSetShader(vsSprite_, NULL, 0);
+		break;
+	case ShaderIds_PS_DEFAULT:
 		devcon->PSSetShader(psDefault_, NULL, 0);
+		break;
+	case ShaderIds_PS_SPRITE:
+		devcon->PSSetShader(psSprite_, NULL, 0);
 		break;
 	}
 }
-void ManagementShader::setInputLayout(ID3D11DeviceContext* devcon, InputLayoutId inputLayoutId)
+void ManagementShader::setInputLayout(ID3D11DeviceContext* devcon, InputLayoutIds inputLayoutId)
 {
 	switch(inputLayoutId)
 	{
-	case INPUT_LAYOUT_ID_VS_DEFAULT:
+	case InputLayoutIds_VS_DEFAULT:
 		devcon->IASetInputLayout(vsDefaultIL_);
+		break;
+	case InputLayoutIds_VS_SPRITE:
+		devcon->IASetInputLayout(vsSpriteIL_);
 		break;
 	default:
 		devcon->IASetInputLayout(NULL);
@@ -64,8 +83,12 @@ HRESULT ManagementShader::initShaders(ID3D11Device* device)
 
 	hr = initVertexShader(device, filePath, L"vsDefault.cso", &vsDefault_, &vsDefaultBlob_);
 	if(SUCCEEDED(hr))
+		hr = initVertexShader(device, filePath, L"vsSprite.cso", &vsSprite_, &vsSpriteBlob_);
+	if(SUCCEEDED(hr))
 		hr = initPixelShader(device, filePath, L"psDefault.cso", &psDefault_, &psDefaultBlob_);
-	
+	if(SUCCEEDED(hr))
+		hr = initPixelShader(device, filePath, L"psSprite.cso", &psSprite_, &psSpriteBlob_);
+
 	return hr;
 }
 HRESULT ManagementShader::initVertexShader(ID3D11Device* device, std::wstring filePath, std::wstring fileName, ID3D11VertexShader** shader, ID3DBlob** blob)
@@ -110,6 +133,8 @@ HRESULT ManagementShader::initInputLayouts(ID3D11Device* device)
 	HRESULT hr = S_OK;
 
 	hr = initVSDefaultInputLayout(device);
+	if(SUCCEEDED(hr))
+		hr = initVSSpriteInputLayout(device);
 
 	return hr; 
 }
@@ -126,6 +151,22 @@ HRESULT ManagementShader::initVSDefaultInputLayout(ID3D11Device* device)
 	hr = device->CreateInputLayout(ied, 2, vsDefaultBlob_->GetBufferPointer(), vsDefaultBlob_->GetBufferSize(), &vsDefaultIL_);
 	if(FAILED(hr))
 		MessageBox(NULL, L"ManagementShader::initVSDefaultInputLayout() | device->CreateInputLayout() | Failed", L"vsDefaultIL", MB_OK | MB_ICONEXCLAMATION);
+
+	return hr;
+}
+HRESULT ManagementShader::initVSSpriteInputLayout(ID3D11Device* device)
+{
+	HRESULT hr = S_OK;
+
+	D3D11_INPUT_ELEMENT_DESC ied[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+
+	hr = device->CreateInputLayout(ied, 2, vsSpriteBlob_->GetBufferPointer(), vsSpriteBlob_->GetBufferSize(), &vsSpriteIL_);
+	if(FAILED(hr))
+		MessageBox(NULL, L"ManagementShader::initVSSpriteInputLayout() | device->CreateInputLayout() | Failed", L"vsSpritetIL", MB_OK | MB_ICONEXCLAMATION);
 
 	return hr;
 }

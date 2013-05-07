@@ -26,11 +26,41 @@
     <ClCompile Include="..\..\Source\DebugGUI.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\sprite.cpp">
+      <Filter>Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\DDSTextureLoader.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\managementTex.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\managementSprite.cpp">
+      <Filter>Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\managementSS.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\XInputFetcher.cpp">
       <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\InputHelper.cpp">
       <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Vertex.cpp">
+      <Filter>Utilties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\HeightMap.cpp">
+      <Filter>Utilties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CubeFactory.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\EntityBufferInfo.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\managementBS.cpp">
+      <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,11 +103,41 @@
     <ClInclude Include="..\..\Source\DebugGUI.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\sprite.h">
+      <Filter>Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\DDSTextureLoader.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\managementTex.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\textureIds.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\managementSprite.h">
+      <Filter>Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\managementSS.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\XInputFetcher.h">
       <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\InputHelper.h">
       <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\HeightMap.h">
+      <Filter>Utilties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\EntityBufferInfo.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CubeFactory.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\managementBS.h">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +155,9 @@
     </Filter>
     <Filter Include="ManagmentCB">
       <UniqueIdentifier>{bd5b333e-f29f-468a-8e53-dded6132f526}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sprite">
+      <UniqueIdentifier>{c74b0c5d-ce1d-4581-801c-c0212d161123}</UniqueIdentifier>
     </Filter>
     <Filter Include="Input">
       <UniqueIdentifier>{7cd705d2-8727-43f9-8220-8e351798052b}</UniqueIdentifier>
@@ -114,6 +177,12 @@
       <Filter>Shaders</Filter>
     </FxCompile>
     <FxCompile Include="..\..\Shaders\structs.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\psSprite.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\vsSprite.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

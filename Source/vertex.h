@@ -3,6 +3,12 @@
 
 #include <DirectXMath.h>
 
+struct Coords 
+{
+	enum{ X, Y, Z, XYZ_CNT };
+	enum{ U, V, UV_CNT };
+};
+
 struct Vertex
 {
 	DirectX::XMFLOAT3 position_;
@@ -18,6 +24,36 @@ struct Vertex
 		position_	= position;
 		color_		= color;
 	}
+};
+
+struct SpriteVertex
+{
+	DirectX::XMFLOAT3 m_position;
+	DirectX::XMFLOAT2 m_texCoords;
+
+	SpriteVertex()
+	{
+		m_position  = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+		m_texCoords = DirectX::XMFLOAT2(0.0f, 0.0f);
+	}
+	SpriteVertex(DirectX::XMFLOAT3 p_position, DirectX::XMFLOAT2 p_texCoords)
+	{
+		m_position = p_position;
+		m_texCoords  = p_texCoords;
+	}
+};
+
+struct HeightMapVertex
+{
+	float normal[Coords::XYZ_CNT];
+	float position[Coords::XYZ_CNT];
+	float texCoord[Coords::UV_CNT];
+
+	HeightMapVertex();
+	HeightMapVertex( 
+		float p_posX,	float p_posY,	float p_posZ,
+		float p_normX,	float p_normY,	float p_normZ, 
+		float p_texU,	float p_texV );
 };
 
 #endif //VERTEX_H

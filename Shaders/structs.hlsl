@@ -13,4 +13,15 @@ struct VSOut
 	float4 color : COLOR;
 };
 
+struct VSSpriteIn
+{
+	float3 position  : POSITION;
+	float2 texCoords : TEXCOORD;
+};
+struct VSSpriteOut
+{
+	float4 position  : SV_POSITION;
+	float2 texCoords : TEXCOORD; 
+};
+
 #endif //STRUCTS_HLSL

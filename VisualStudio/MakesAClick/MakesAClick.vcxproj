@@ -12,29 +12,49 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\camera.cpp" />
+    <ClCompile Include="..\..\Source\DDSTextureLoader.cpp" />
+    <ClCompile Include="..\..\Source\CubeFactory.cpp" />
     <ClCompile Include="..\..\Source\DebugGUI.cpp" />
+    <ClCompile Include="..\..\Source\EntityBufferInfo.cpp" />
+    <ClCompile Include="..\..\Source\HeightMap.cpp" />
     <ClCompile Include="..\..\Source\InputHelper.cpp" />
     <ClCompile Include="..\..\Source\main.cpp" />
+    <ClCompile Include="..\..\Source\managementBS.cpp" />
     <ClCompile Include="..\..\Source\managementCB.cpp" />
     <ClCompile Include="..\..\Source\managementD3D.cpp" />
     <ClCompile Include="..\..\Source\managementShader.cpp" />
+    <ClCompile Include="..\..\Source\managementSprite.cpp" />
+    <ClCompile Include="..\..\Source\managementSS.cpp" />
+    <ClCompile Include="..\..\Source\managementTex.cpp" />
     <ClCompile Include="..\..\Source\mathHelper.cpp" />
     <ClCompile Include="..\..\Source\renderer.cpp" />
+    <ClCompile Include="..\..\Source\sprite.cpp" />
+    <ClCompile Include="..\..\Source\Vertex.cpp" />
     <ClCompile Include="..\..\Source\window.cpp" />
     <ClCompile Include="..\..\Source\XInputFetcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h" />
     <ClInclude Include="..\..\Source\cbDesc.h" />
+    <ClInclude Include="..\..\Source\DDSTextureLoader.h" />
+    <ClInclude Include="..\..\Source\CubeFactory.h" />
     <ClInclude Include="..\..\Source\DebugGUI.h" />
+    <ClInclude Include="..\..\Source\EntityBufferInfo.h" />
+    <ClInclude Include="..\..\Source\HeightMap.h" />
     <ClInclude Include="..\..\Source\inputDesc.h" />
     <ClInclude Include="..\..\Source\InputHelper.h" />
     <ClInclude Include="..\..\Source\keyCodes.h" />
+    <ClInclude Include="..\..\Source\managementBS.h" />
     <ClInclude Include="..\..\Source\managementCB.h" />
     <ClInclude Include="..\..\Source\managementD3D.h" />
     <ClInclude Include="..\..\Source\managementShader.h" />
+    <ClInclude Include="..\..\Source\managementSprite.h" />
+    <ClInclude Include="..\..\Source\managementSS.h" />
+    <ClInclude Include="..\..\Source\managementTex.h" />
     <ClInclude Include="..\..\Source\mathHelper.h" />
     <ClInclude Include="..\..\Source\renderer.h" />
+    <ClInclude Include="..\..\Source\sprite.h" />
+    <ClInclude Include="..\..\Source\textureIds.h" />
     <ClInclude Include="..\..\Source\utility.h" />
     <ClInclude Include="..\..\Source\vertex.h" />
     <ClInclude Include="..\..\Source\window.h" />
@@ -55,6 +75,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="..\..\Shaders\psSprite.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">psSprite</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">psSprite</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
     <FxCompile Include="..\..\Shaders\structs.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
@@ -68,6 +96,14 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vsDefault</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\..\Shaders\vsSprite.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">vsSprite</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">vsSprite</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -120,7 +156,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>xinput.lib;AntTweakBar.lib;LoaderXML.lib;ParserXML.lib;D3dcompiler.lib;d3d11.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LoaderXML.lib;xinput_9_1.lib;AntTweakBar.lib;Parser.lib;D3dcompiler.lib;d3d11.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,7 +174,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>D3dcompiler.lib;d3d11.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;AntTweakBar.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xinput9_1_0.lib;AntTweakBar.lib;Parser.lib;D3dcompiler.lib;d3d11.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
