@@ -1,69 +1,53 @@
 #include "managementShader.h"
 #include "utility.h"
 
+ShaderSet::ShaderSet()
+{
+	setNull();
+}
+
+void ShaderSet::setNull()
+{
+	m_vs			= NULL;
+	m_ps			= NULL;
+	m_vsBlob		= NULL;
+	m_psBlob		= NULL;
+	m_inputLayout	= NULL;
+}
+
+void ShaderSet::safeRelease()
+{
+	SAFE_RELEASE( m_vs );
+	SAFE_RELEASE( m_ps );
+	SAFE_RELEASE( m_vsBlob );
+	SAFE_RELEASE( m_psBlob );
+	SAFE_RELEASE( m_inputLayout );
+}
+
+void ShaderSet::set( ID3D11DeviceContext* p_devcon )
+{
+	p_devcon->VSSetShader( m_vs, NULL, 0 );
+	p_devcon->PSSetShader( m_ps, NULL, 0 );
+	p_devcon->IASetInputLayout( m_inputLayout );
+}
+
 ManagementShader::ManagementShader()
 {
-	vsDefault_ = NULL;
-	vsSprite_  = NULL;
-	psDefault_ = NULL;
-	psSprite_  = NULL;
-
-	vsDefaultBlob_ = NULL;
-	vsSpriteBlob_  = NULL;
-	psDefaultBlob_ = NULL;
-	psSpriteBlob_  = NULL;
-
-	vsDefaultIL_ = NULL;
-	vsSpriteIL_	 = NULL;
+	for( int i=0; i < ShaderIds_CNT; i++ ) {
+		m_shaders[i].setNull();
+	}
 }
 ManagementShader::~ManagementShader()
 {
-	SAFE_RELEASE(vsDefault_);
-	SAFE_RELEASE(vsSprite_);
-	SAFE_RELEASE(psDefault_);
-	SAFE_RELEASE(psSprite_);
-
-	SAFE_RELEASE(vsDefaultBlob_);
-	SAFE_RELEASE(vsSpriteBlob_);
-	SAFE_RELEASE(psDefaultBlob_);
-	SAFE_RELEASE(psSpriteBlob_);
-
-	SAFE_RELEASE(vsDefaultIL_);
-	SAFE_RELEASE(vsSpriteIL_);
-}
-
-void ManagementShader::setShader(ID3D11DeviceContext* devcon, ShaderIds shaderId)
-{
-	switch(shaderId)
-	{
-	case ShaderIds_VS_DEFAULT:
-		devcon->VSSetShader(vsDefault_, NULL, 0);
-		break;
-	case ShaderIds_VS_SPRITE:
-		devcon->VSSetShader(vsSprite_, NULL, 0);
-		break;
-	case ShaderIds_PS_DEFAULT:
-		devcon->PSSetShader(psDefault_, NULL, 0);
-		break;
-	case ShaderIds_PS_SPRITE:
-		devcon->PSSetShader(psSprite_, NULL, 0);
-		break;
+	for( int i=0; i < ShaderIds_CNT; i++ ) {
+		m_shaders[i].safeRelease();
 	}
 }
-void ManagementShader::setInputLayout(ID3D11DeviceContext* devcon, InputLayoutIds inputLayoutId)
+
+void ManagementShader::setShader(ID3D11DeviceContext* p_devcon,
+	ShaderIds p_shaderId)
 {
-	switch(inputLayoutId)
-	{
-	case InputLayoutIds_DEFAULT:
-		devcon->IASetInputLayout(vsDefaultIL_);
-		break;
-	case InputLayoutIds_SPRITE:
-		devcon->IASetInputLayout(vsSpriteIL_);
-		break;
-	default:
-		devcon->IASetInputLayout(NULL);
-		break;
-	}
+	m_shaders[p_shaderId].set( p_devcon );
 }
 
 HRESULT ManagementShader::init(ID3D11Device* device)
@@ -81,13 +65,21 @@ HRESULT ManagementShader::initShaders(ID3D11Device* device)
 	HRESULT hr = S_OK;
 	std::wstring filePath = decideFilePath();
 
-	hr = initVertexShader(device, filePath, L"vsDefault.cso", &vsDefault_, &vsDefaultBlob_);
+	hr = initVertexShader(device, filePath, L"vsDefault.cso",
+		&m_shaders[ShaderIds_DEFAULT].m_vs,
+		&m_shaders[ShaderIds_DEFAULT].m_vsBlob);
 	if(SUCCEEDED(hr))
-		hr = initVertexShader(device, filePath, L"vsSprite.cso", &vsSprite_, &vsSpriteBlob_);
+		hr = initVertexShader(device, filePath, L"vsSprite.cso",
+		&m_shaders[ShaderIds_SPRITE].m_vs,
+		&m_shaders[ShaderIds_SPRITE].m_vsBlob);
 	if(SUCCEEDED(hr))
-		hr = initPixelShader(device, filePath, L"psDefault.cso", &psDefault_, &psDefaultBlob_);
+		hr = initPixelShader(device, filePath, L"psDefault.cso",
+		&m_shaders[ShaderIds_DEFAULT].m_ps,
+		&m_shaders[ShaderIds_DEFAULT].m_psBlob);
 	if(SUCCEEDED(hr))
-		hr = initPixelShader(device, filePath, L"psSprite.cso", &psSprite_, &psSpriteBlob_);
+		hr = initPixelShader(device, filePath, L"psSprite.cso",
+		&m_shaders[ShaderIds_SPRITE].m_ps,
+		&m_shaders[ShaderIds_SPRITE].m_psBlob);
 
 	return hr;
 }
@@ -152,8 +144,12 @@ HRESULT ManagementShader::initVSDefaultInputLayout(ID3D11Device* device)
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0,
 		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
+	int elementCnt = sizeof(ied) / sizeof(D3D11_INPUT_ELEMENT_DESC);
 
-	hr = device->CreateInputLayout(ied, 2, vsDefaultBlob_->GetBufferPointer(), vsDefaultBlob_->GetBufferSize(), &vsDefaultIL_);
+	hr = device->CreateInputLayout( ied, elementCnt,
+		m_shaders[ShaderIds_DEFAULT].m_vsBlob->GetBufferPointer(),
+		m_shaders[ShaderIds_DEFAULT].m_vsBlob->GetBufferSize(),
+		&m_shaders[ShaderIds_DEFAULT].m_inputLayout );
 	if(FAILED(hr))
 		MessageBox(NULL, L"ManagementShader::initVSDefaultInputLayout() | device->CreateInputLayout() | Failed", L"vsDefaultIL", MB_OK | MB_ICONEXCLAMATION);
 
@@ -169,8 +165,13 @@ HRESULT ManagementShader::initVSSpriteInputLayout(ID3D11Device* device)
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
+	int elementCnt = sizeof(ied) / sizeof(D3D11_INPUT_ELEMENT_DESC);
 
-	hr = device->CreateInputLayout(ied, 2, vsSpriteBlob_->GetBufferPointer(), vsSpriteBlob_->GetBufferSize(), &vsSpriteIL_);
+	hr = device->CreateInputLayout( ied, elementCnt,
+		m_shaders[ShaderIds_SPRITE].m_vsBlob->GetBufferPointer(),
+		m_shaders[ShaderIds_SPRITE].m_vsBlob->GetBufferSize(),
+		&m_shaders[ShaderIds_SPRITE].m_inputLayout );
+
 	if(FAILED(hr))
 		MessageBox(NULL, L"ManagementShader::initVSSpriteInputLayout() | device->CreateInputLayout() | Failed", L"vsSpritetIL", MB_OK | MB_ICONEXCLAMATION);
 
@@ -179,7 +180,7 @@ HRESULT ManagementShader::initVSSpriteInputLayout(ID3D11Device* device)
 
 HRESULT ManagementShader::initVSHeightmapInputLayout( ID3D11Device* device )
 {
-	D3D11_INPUT_ELEMENT_DESC layoutDesc[] =
+	D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
 		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -188,13 +189,13 @@ HRESULT ManagementShader::initVSHeightmapInputLayout( ID3D11Device* device )
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
 		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
-	int elementCnt = sizeof(layoutDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC);
+	int elementCnt = sizeof(ied) / sizeof(D3D11_INPUT_ELEMENT_DESC);
 
 	HRESULT hr = S_OK;
-	hr = device->CreateInputLayout( layoutDesc, elementCnt,
-		vsDefaultBlob_->GetBufferPointer(),
-		vsDefaultBlob_->GetBufferSize(),
-		&vsDefaultIL_ );
+	hr = device->CreateInputLayout( ied, elementCnt,
+		m_shaders[ShaderIds_HEIGHTMAP].m_vsBlob->GetBufferPointer(),
+		m_shaders[ShaderIds_HEIGHTMAP].m_vsBlob->GetBufferSize(),
+		&m_shaders[ShaderIds_HEIGHTMAP].m_inputLayout );
 
 	if(FAILED(hr))
 		MessageBox(NULL, L"ManagementShader::initVSDefaultInputLayout() | device->CreateInputLayout() | Failed", L"vsDefaultIL", MB_OK | MB_ICONEXCLAMATION);
