@@ -10,31 +10,19 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\Parser.cpp" />
-    <ClCompile Include="Source\Rdr.cpp" />
-    <ClCompile Include="Source\ParserXML.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\Parser.h" />
-    <ClInclude Include="Source\RapidXML.h" />
-    <ClInclude Include="Source\Rdr.h" />
-    <ClInclude Include="Source\ParserXML.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{604BDA89-BBBA-4C55-8F8D-F61029B60C26}</ProjectGuid>
-    <RootNamespace>Parser</RootNamespace>
-    <ProjectName>ParserXML</ProjectName>
+    <ProjectGuid>{00B24FFF-CD86-47FE-9015-018AC1C4F658}</ProjectGuid>
+    <RootNamespace>LoaderXML</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -50,10 +38,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)\..\External\rapidxml-1.13\;$(IncludePath)</IncludePath>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -78,6 +63,16 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\LoaderXML.cpp" />
+    <ClCompile Include="Source\UtilString.cpp" />
+    <ClCompile Include="Source\WinDetective.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\LoaderXML.h" />
+    <ClInclude Include="Source\UtilString.h" />
+    <ClInclude Include="Source\WinDetective.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

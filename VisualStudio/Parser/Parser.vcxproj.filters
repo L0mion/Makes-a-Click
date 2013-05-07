@@ -6,7 +6,7 @@
       <Filter>Rdr</Filter>
     </ClCompile>
     <ClCompile Include="Source\ParserXML.cpp">
-      <Filter>XMLer</Filter>
+      <Filter>ParserXML</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -16,14 +16,14 @@
       <Filter>Rdr</Filter>
     </ClInclude>
     <ClInclude Include="Source\ParserXML.h">
-      <Filter>XMLer</Filter>
+      <Filter>ParserXML</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Rdr">
       <UniqueIdentifier>{f46e5125-ebc0-42e3-a4e5-ec1dc4447957}</UniqueIdentifier>
     </Filter>
-    <Filter Include="XMLer">
+    <Filter Include="ParserXML">
       <UniqueIdentifier>{d3d6a177-ce70-47f9-88cd-2b9650d31e37}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
