@@ -101,8 +101,8 @@ void Renderer::renderEntities()
 {
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
 
-	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_PLACEHOLDER, 0);
-	managementSS_->setSS(devcon, ManagementSS::SSTypes_DEFAULT, 0);
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_HEIGHTMAP, 0);
+	managementSS_->setSS(devcon, ManagementSS::SSTypes_WRAP, 0);
 
 	for( unsigned int i=0; i<m_entities.size(); i++ ) {
 		renderEntityBufferInfo( m_entities[i] );

@@ -8,6 +8,7 @@ struct TextureIds
 		TextureIds_PLACEHOLDER,
 		TextureIds_CIRCLE_BACKGROUND,
 		TextureIds_CIRCLE_HIGHLIGHT,
+		TextureIds_HEIGHTMAP,
 		TextureIds_COUNT
 	};
 };

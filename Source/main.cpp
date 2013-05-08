@@ -161,18 +161,22 @@ void initDebugGui( float* p_dt, float* p_fps )
 
 void handleInput(XInputFetcher* xinput, float dt)
 {
-	float leftAnalogSens  = 8.0f;
-	float rightAnalogSens = 1.0f;
+	float leftAnalogSens  = 64.0f;
+	float rightAnalogSens = 2.0f;
 
-	double walkDistance	  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE);
-	double strafeDistance = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE);
-	double yawAngle		  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE);
-	double pitchAngle	  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);
+	double walkDistance		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE);
+	double strafeDistance	= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE);
+	double yawAngle			= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE);
+	double pitchAngle		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);
+	walkDistance			*= fabs( walkDistance );
+	strafeDistance			*= fabs( strafeDistance );
+	yawAngle				*= fabs( yawAngle );
+	pitchAngle				*= fabs( pitchAngle );
 
-	float walk	 = static_cast<float>(walkDistance) * leftAnalogSens * dt;
-	float strafe = static_cast<float>(strafeDistance) * leftAnalogSens * dt;
-	float yaw	 = static_cast<float>(yawAngle) * rightAnalogSens * dt;
-	float pitch  = static_cast<float>(pitchAngle) * rightAnalogSens * dt * -1;
+	float walk	 = static_cast<float>(walkDistance)		* leftAnalogSens * dt;
+	float strafe = static_cast<float>(strafeDistance)	* leftAnalogSens * dt;
+	float yaw	 = static_cast<float>(yawAngle)			* rightAnalogSens * dt;
+	float pitch  = static_cast<float>(pitchAngle)		* rightAnalogSens * dt * -1;
 
 	camera->walk(walk);
 	camera->strafe(strafe);
