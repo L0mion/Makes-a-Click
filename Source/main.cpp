@@ -37,8 +37,9 @@ ManagementSprite* managementSprite;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int cmdShow)
 {
 	//Temp: Using whilst testing XML-Loader.
-	//LoaderXML* loaderXML = new LoaderXML();
+	//Loader_XML::LoaderXML* loaderXML = new Loader_XML::LoaderXML();
 	//loaderXML->init();
+	//delete loaderXML;
 
 #if defined( DEBUG ) || defined( _DEBUG )
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
