@@ -65,6 +65,9 @@
     <ClCompile Include="..\..\Source\ManagementDebug.cpp">
       <Filter>Utilties</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\InputHandler.cpp">
+      <Filter>Utilties</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h">
@@ -143,6 +146,9 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ManagementDebug.h">
+      <Filter>Utilties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\InputHandler.h">
       <Filter>Utilties</Filter>
     </ClInclude>
   </ItemGroup>

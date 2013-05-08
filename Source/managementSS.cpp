@@ -3,11 +3,9 @@
 
 ManagementSS::ManagementSS()
 {
-	//m_ssDefault = NULL;
 }
 ManagementSS::~ManagementSS()
 {
-	//SAFE_RELEASE(m_ssDefault);
 	for( unsigned int i=0; i<m_samplerStates.size(); i++ ) {
 		SAFE_RELEASE( m_samplerStates[i] );
 	}
