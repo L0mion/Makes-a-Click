@@ -16,6 +16,7 @@
 #include "keyCodes.h"
 #include "mathHelper.h"
 #include "managementSprite.h"
+#include "managementMenu.h"
 #include "renderer.h"
 #include "utility.h"
 #include "window.h"
@@ -29,7 +30,7 @@ void clean();
 Window* window;
 Renderer* renderer;
 Camera* camera;
-ManagementSprite* managementSprite;
+ManagementMenu* managementMenu;
 
 //Temp: Using whilst testing XML-Loader.
 //#include <LoaderXML.h>
@@ -90,7 +91,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			renderer->beginRender();
 			renderer->renderEntities();
 			renderer->renderHeightMap( heightMap );
-			renderer->renderSprites(managementSprite);
+			renderer->renderSprites(managementMenu->getManagementSprite());
 			renderer->endRender();
 
 			old.QuadPart = current.QuadPart;
@@ -127,8 +128,8 @@ HRESULT initialize(HINSTANCE hInstance, int cmdShow)
 	}
 	if(SUCCEEDED(hr))
 	{
-		managementSprite = new ManagementSprite();
-		hr = managementSprite->init(renderer->getD3DManagement()->getDevice());
+		managementMenu = new ManagementMenu();
+		hr = managementMenu->init(renderer->getD3DManagement()->getDevice());
 	}
 
 	return hr;
@@ -159,21 +160,29 @@ void handleInput(XInputFetcher* xinput, float dt)
 	double yawAngle		  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE);
 	double pitchAngle	  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);
 
-	float walk	 = static_cast<float>(walkDistance) * leftAnalogSens * dt;
-	float strafe = static_cast<float>(strafeDistance) * leftAnalogSens * dt;
-	float yaw	 = static_cast<float>(yawAngle) * rightAnalogSens * dt;
-	float pitch  = static_cast<float>(pitchAngle) * rightAnalogSens * dt * -1;
-
-	camera->walk(walk);
-	camera->strafe(strafe);
-	camera->yaw(yaw);
-	camera->pitch(pitch);
-
+	
+	bool menuIsActive = false;
 	if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) > 0)
-		managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TEXT_MENU);
+	{
+		menuIsActive = true;
+		managementMenu->setMenu(ManagementSprite::SpriteCollectionIds_TEXT_MENU);
+		managementMenu->moveHighlighter(strafeDistance, walkDistance);
+	}
 	else
-		managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_NONE);
+		managementMenu->setMenu(ManagementSprite::SpriteCollectionIds_NONE);
 
+	if(!menuIsActive)
+	{
+		float walk	 = static_cast<float>(walkDistance) * leftAnalogSens * dt;
+		float strafe = static_cast<float>(strafeDistance) * leftAnalogSens * dt;
+		float yaw	 = static_cast<float>(yawAngle) * rightAnalogSens * dt;
+		float pitch  = static_cast<float>(pitchAngle) * rightAnalogSens * dt * -1;
+
+		camera->walk(walk);
+		camera->strafe(strafe);
+		camera->yaw(yaw);
+		camera->pitch(pitch);
+	}
 }
 
 void clean()
@@ -181,5 +190,5 @@ void clean()
 	SAFE_DELETE(window);
 	SAFE_DELETE(renderer);
 	SAFE_DELETE(camera);
-	SAFE_DELETE(managementSprite);
+	SAFE_DELETE(managementMenu);
 }

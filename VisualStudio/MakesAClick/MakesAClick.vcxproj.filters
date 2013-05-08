@@ -62,6 +62,9 @@
     <ClCompile Include="..\..\Source\managementBS.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\managementMenu.cpp">
+      <Filter>ManagementMenu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h">
@@ -139,6 +142,9 @@
     <ClInclude Include="..\..\Source\managementBS.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\managementMenu.h">
+      <Filter>ManagementMenu</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -164,6 +170,9 @@
     </Filter>
     <Filter Include="Renderer">
       <UniqueIdentifier>{5e2a92b0-aad9-4736-8cd9-8ee6ddbc386c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ManagementMenu">
+      <UniqueIdentifier>{db340f81-ae62-4a2b-a7ad-4f7e7af580f1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
