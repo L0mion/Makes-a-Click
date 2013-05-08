@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ParserXML", "ParserXML\Pars
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Util", "Util\Util.vcxproj", "{427472AE-8F3F-4DB8-88ED-0905C852FD6B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WriterXML", "WriterXML\WriterXML.vcxproj", "{28500F17-1971-4A14-BA20-4EA57ED85452}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -61,6 +63,14 @@ Global
 		{427472AE-8F3F-4DB8-88ED-0905C852FD6B}.Release|Win32.ActiveCfg = Release|Win32
 		{427472AE-8F3F-4DB8-88ED-0905C852FD6B}.Release|Win32.Build.0 = Release|Win32
 		{427472AE-8F3F-4DB8-88ED-0905C852FD6B}.Release|x64.ActiveCfg = Release|Win32
+		{28500F17-1971-4A14-BA20-4EA57ED85452}.Debug|ARM.ActiveCfg = Debug|Win32
+		{28500F17-1971-4A14-BA20-4EA57ED85452}.Debug|Win32.ActiveCfg = Debug|Win32
+		{28500F17-1971-4A14-BA20-4EA57ED85452}.Debug|Win32.Build.0 = Debug|Win32
+		{28500F17-1971-4A14-BA20-4EA57ED85452}.Debug|x64.ActiveCfg = Debug|Win32
+		{28500F17-1971-4A14-BA20-4EA57ED85452}.Release|ARM.ActiveCfg = Release|Win32
+		{28500F17-1971-4A14-BA20-4EA57ED85452}.Release|Win32.ActiveCfg = Release|Win32
+		{28500F17-1971-4A14-BA20-4EA57ED85452}.Release|Win32.Build.0 = Release|Win32
+		{28500F17-1971-4A14-BA20-4EA57ED85452}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
