@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\ParserXML\Source\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\..\External\rapidxml-1.13\;$(IncludePath);$(SolutionDir)\Util\Source\;$(SolutionDir)\ParserXML\Source\</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -67,12 +67,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\LoaderXML.cpp" />
-    <ClCompile Include="Source\UtilString.cpp" />
     <ClCompile Include="Source\WinDetective.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\LoaderXML.h" />
-    <ClInclude Include="Source\UtilString.h" />
     <ClInclude Include="Source\WinDetective.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

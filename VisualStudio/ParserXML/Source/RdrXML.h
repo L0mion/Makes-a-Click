@@ -2,18 +2,19 @@
 
 typedef char ParserXMLCharType;
 
-#include <string>
+namespace Parser_XML {
+	class DocXML;
+}
 
-#include "RapidXML.h"
+namespace Parser_XML {
+	class RdrXML {
+	public:
+		RdrXML(DocXML* inout_docXML);
+		~RdrXML();
 
-class RdrXML {
-public:
-	RdrXML(std::string xmlRaw);
-	~RdrXML();
-
-	bool init();
-protected:
-private:
-	std::string m_xmlRaw;
-	rapidxml::xml_document<>* m_xmlDoc;
-};
+		bool init();
+	protected:
+	private:
+		Parser_XML::DocXML* m_inout_docXML;
+	};
+}

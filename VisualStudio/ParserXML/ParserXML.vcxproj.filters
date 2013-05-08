@@ -4,27 +4,35 @@
     <ClCompile Include="Source\Rdr.cpp">
       <Filter>Rdr</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ParserXML.cpp">
-      <Filter>ParserXML</Filter>
+    <ClCompile Include="Source\RdrXML.cpp">
+      <Filter>RdrXML</Filter>
     </ClCompile>
-    <ClCompile Include="Source\RdrXML.cpp" />
+    <ClCompile Include="Source\ParserXML.cpp" />
+    <ClCompile Include="Source\DocXML.cpp">
+      <Filter>DocXML</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\RapidXML.h" />
     <ClInclude Include="Source\Rdr.h">
       <Filter>Rdr</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ParserXML.h">
-      <Filter>ParserXML</Filter>
+    <ClInclude Include="Source\RdrXML.h">
+      <Filter>RdrXML</Filter>
     </ClInclude>
-    <ClInclude Include="Source\RdrXML.h" />
+    <ClInclude Include="Source\ParserXML.h" />
+    <ClInclude Include="Source\DocXML.h">
+      <Filter>DocXML</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Rdr">
       <UniqueIdentifier>{f46e5125-ebc0-42e3-a4e5-ec1dc4447957}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ParserXML">
-      <UniqueIdentifier>{d3d6a177-ce70-47f9-88cd-2b9650d31e37}</UniqueIdentifier>
+    <Filter Include="RdrXML">
+      <UniqueIdentifier>{f4f8f104-2405-4283-90b3-1d4e14c7a8a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DocXML">
+      <UniqueIdentifier>{0460365f-4c9d-44c9-8b13-7f8cf4f773e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

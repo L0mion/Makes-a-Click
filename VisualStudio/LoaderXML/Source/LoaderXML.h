@@ -1,6 +1,8 @@
 #pragma once
 
-class WinDetective;
+namespace Loader_XML {
+	class WinDetective;
+}
 
 #include <string>
 
@@ -14,19 +16,21 @@ static const bool			g_recursiveSearch	= true					;
 /*				root is:					*/
 /*	Makes-A-Click/VisualStudio/MakesAClick/	*/
 /*------------------------------------------*/
-class LoaderXML {
-public:
-	LoaderXML();
-	~LoaderXML();
+namespace Loader_XML {
+	class LoaderXML {
+	public:
+		LoaderXML();
+		~LoaderXML();
 
-	bool init();
-protected:
-private:
-	bool parse();
-	bool parseXML(
-		const std::wstring filePath, 
-		const std::wstring fileName, 
-		const std::wstring fileEnding);
+		bool init();
+	protected:
+	private:
+		bool parse();
+		bool parseXML(
+			const std::wstring filePath, 
+			const std::wstring fileName, 
+			const std::wstring fileEnding);
 
-	WinDetective* m_winDetective;
-};
+		Loader_XML::WinDetective* m_winDetective;
+	};
+}
