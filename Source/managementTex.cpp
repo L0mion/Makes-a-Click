@@ -16,10 +16,24 @@ void ManagementTex::psSetTexture(ID3D11DeviceContext* p_devcon, TextureIds::Id p
 	switch(p_textureId)
 	{
 	case TextureIds::TextureIds_PLACEHOLDER:
-		p_devcon->PSSetShaderResources(p_shaderRegister, 1, &m_srvTextures[TextureIds::TextureIds_PLACEHOLDER]);
+		p_devcon->PSSetShaderResources(p_shaderRegister,
+			1,
+			&m_srvTextures[TextureIds::TextureIds_PLACEHOLDER]);
+		break;
+	case TextureIds::TextureIds_CIRCLE_BACKGROUND:
+		p_devcon->PSSetShaderResources(p_shaderRegister,
+			1,
+			&m_srvTextures[TextureIds::TextureIds_CIRCLE_BACKGROUND]);
+		break;
+	case TextureIds::TextureIds_CIRCLE_HIGHLIGHT:
+		p_devcon->PSSetShaderResources(p_shaderRegister,
+			1,
+			&m_srvTextures[TextureIds::TextureIds_CIRCLE_HIGHLIGHT]);
 		break;
 	default:
-		p_devcon->PSSetShaderResources(p_shaderRegister, 1, &m_srvTextures[TextureIds::TextureIds_PLACEHOLDER]);
+		p_devcon->PSSetShaderResources(p_shaderRegister,
+			1,
+			&m_srvTextures[TextureIds::TextureIds_PLACEHOLDER]);
 		break;
 	}
 }
@@ -30,6 +44,10 @@ HRESULT ManagementTex::init(ID3D11Device* p_device)
 	m_srvTextures.resize(TextureIds::TextureIds_COUNT, NULL);
 
 	hr = loadTexture(p_device, L"../../Textures/placeholderTex.dds", TextureIds::TextureIds_PLACEHOLDER);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/circleBackground.dds", TextureIds::TextureIds_CIRCLE_BACKGROUND);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/circleHighlight.dds", TextureIds::TextureIds_CIRCLE_HIGHLIGHT);
 
 	return hr;
 }

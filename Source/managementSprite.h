@@ -19,11 +19,22 @@ public:
 	enum SpriteIds
 	{
 		SpriteIds_PLACEHOLDER,
+		SpriteIds_CIRCLE_BACKGROUND,
+		SpriteIds_CIRCLE_HIGHLIGHT,
 		SpriteIds_COUNT
 	};
+	enum SpriteCollectionIds
+	{
+		SpriteCollectionIds_NONE,
+		SpriteCollectionIds_TEXT_MENU
+	};
+
+	void setSpriteCollection(SpriteCollectionIds spriteCollection);
 
 	std::vector<Sprite*>* getSprites();
+	std::vector<Sprite*>* getSpriteCollection();
 	Sprite* getSprite(SpriteIds p_spriteId);
+
 
 	ID3D11Buffer* getVertexBuffer();
 	ID3D11Buffer* getIndexBuffer();
@@ -35,11 +46,16 @@ private:
 	HRESULT initIndexBuffer(ID3D11Device* p_device);
 
 	void initSprites();
+	void initSpriteCollection();
 
 	std::vector<SpriteVertex> createVertices();
 	std::vector<DWORD> createIndices();
+	
+	void setSpriteCollectionTextMenu();
+	void setSpriteCollectionNone();
 
 	std::vector<Sprite*>* m_sprites;
+	std::vector<Sprite*>* m_spriteCollection;
 
 	ID3D11Buffer* m_vertexBuffer;
 	ID3D11Buffer* m_indexBuffer;

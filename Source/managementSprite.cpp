@@ -8,7 +8,8 @@ ManagementSprite::ManagementSprite()
 	m_vertexBuffer = NULL;
 	m_indexBuffer  = NULL;
 
-	m_sprites = NULL;
+	m_sprites		   = NULL;
+	m_spriteCollection = NULL;
 }
 ManagementSprite::~ManagementSprite()
 {
@@ -18,11 +19,29 @@ ManagementSprite::~ManagementSprite()
 	for(unsigned int i=0; i<m_sprites->size(); i++)
 		SAFE_DELETE(m_sprites->at(i));
 	SAFE_DELETE(m_sprites);
+	SAFE_DELETE(m_spriteCollection);
+}
+
+void ManagementSprite::setSpriteCollection(SpriteCollectionIds spriteCollection)
+{
+	switch(spriteCollection)
+	{
+	case SpriteCollectionIds_TEXT_MENU:
+		setSpriteCollectionTextMenu();
+		break;
+	default:
+		setSpriteCollectionNone();
+		break;
+	}
 }
 
 std::vector<Sprite*>* ManagementSprite::getSprites()
 {
 	return m_sprites;
+}
+std::vector<Sprite*>* ManagementSprite::getSpriteCollection()
+{
+	return m_spriteCollection;
 }
 Sprite* ManagementSprite::getSprite(SpriteIds p_spriteId)
 {
@@ -53,11 +72,12 @@ HRESULT ManagementSprite::init(ID3D11Device* p_device)
 {
 	HRESULT hr = S_OK;
 
+	initSprites();
+	initSpriteCollection();
+
 	hr = initVertexBuffer(p_device);
 	if(SUCCEEDED(hr))
 		hr = initIndexBuffer(p_device);
-	if(SUCCEEDED(hr))
-		initSprites();
 
 	return hr;
 }
@@ -108,10 +128,18 @@ HRESULT ManagementSprite::initIndexBuffer(ID3D11Device* p_device)
 
 void ManagementSprite::initSprites()
 {
+	float aspectRatio = static_cast<float>(SCREEN_WIDTH)/static_cast<float>(SCREEN_HEIGHT);
+
 	m_sprites = new std::vector<Sprite*>();
 	m_sprites->resize(SpriteIds_COUNT, NULL);
 
 	m_sprites->at(SpriteIds_PLACEHOLDER) = new Sprite(0.75f, 0.75f, 0.0f, 0.0f, 0.20f, 0.20f, TextureIds::TextureIds_PLACEHOLDER);
+	m_sprites->at(SpriteIds_CIRCLE_BACKGROUND) = new Sprite(0.0f, 0.0f, 0.0f, 0.0f, 1.0f/aspectRatio, 1.0f, TextureIds::TextureIds_CIRCLE_BACKGROUND);
+	m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT) = new Sprite(0.0f, 0.0f, 0.0f, 0.0f, 0.2f/aspectRatio, 0.2f, TextureIds::TextureIds_CIRCLE_HIGHLIGHT);
+}
+void ManagementSprite::initSpriteCollection()
+{
+	m_spriteCollection = new std::vector<Sprite*>();
 }
 
 std::vector<SpriteVertex> ManagementSprite::createVertices()
@@ -137,4 +165,17 @@ std::vector<DWORD> ManagementSprite::createIndices()
 	indices.push_back(1);
 
 	return indices;
+}
+
+void ManagementSprite::setSpriteCollectionTextMenu()
+{
+	m_spriteCollection->clear();
+	
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_BACKGROUND));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_PLACEHOLDER));
+}
+void ManagementSprite::setSpriteCollectionNone()
+{
+	m_spriteCollection->clear();
 }
