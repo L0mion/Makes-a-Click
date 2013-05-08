@@ -11,19 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Parser.cpp" />
+    <ClCompile Include="Source\DocXML.cpp" />
     <ClCompile Include="Source\Rdr.cpp" />
     <ClCompile Include="Source\ParserXML.cpp" />
+    <ClCompile Include="Source\RdrXML.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Parser.h" />
-    <ClInclude Include="Source\RapidXML.h" />
+    <ClInclude Include="Source\DocXML.h" />
     <ClInclude Include="Source\Rdr.h" />
     <ClInclude Include="Source\ParserXML.h" />
+    <ClInclude Include="Source\RdrXML.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{604BDA89-BBBA-4C55-8F8D-F61029B60C26}</ProjectGuid>
-    <RootNamespace>Parser</RootNamespace>
+    <ProjectGuid>{87C00FD3-863E-480E-A49E-051E0BB2F07E}</ProjectGuid>
+    <RootNamespace>ParserXML</RootNamespace>
     <ProjectName>ParserXML</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -52,7 +53,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
-    <IncludePath>$(SolutionDir)\..\External\rapidxml-1.13\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Util\Source\;$(SolutionDir)\..\External\rapidxml-1.13\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)\..\External\rapidxml-1.13\;$(IncludePath)</IncludePath>
