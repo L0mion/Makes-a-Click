@@ -6,6 +6,8 @@
 cbuffer cbFrame : register (b0)
 {
 	row_major float4x4 finalMatrix;
+	float3 cameraPos;
+	float pad;
 };
 
 cbuffer cbSprite : register (b1)

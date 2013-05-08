@@ -44,11 +44,12 @@ void ManagementCB::psSetCB(ID3D11DeviceContext* devcon, CBTypes cbType)
 	}
 }
 
-void ManagementCB::updateCBFrame(ID3D11DeviceContext* devcon, DirectX::XMFLOAT4X4 finalMatrix)
+void ManagementCB::updateCBFrame( ID3D11DeviceContext* devcon,
+	DirectX::XMFLOAT4X4 p_finalMatrix, DirectX::XMFLOAT3 p_cameraPos )
 {
 	CBFrame cBuffer;
-	cBuffer.finalMatrix_ = finalMatrix;
-
+	cBuffer.m_finalMatrix = p_finalMatrix;
+	cBuffer.m_cameraPos = p_cameraPos;
 	devcon->UpdateSubresource(cbFrame_, 0, 0, &cBuffer, 0, 0);
 }
 void ManagementCB::updateCBSprite(ID3D11DeviceContext* devcon, DirectX::XMFLOAT4X4 transformMatrix)

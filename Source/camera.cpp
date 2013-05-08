@@ -3,7 +3,7 @@
 
 Camera::Camera()
 {
-	position_ = DirectX::XMFLOAT3(0.0f, 0.0f, -10.0f);
+	position_ = DirectX::XMFLOAT3(0.0f, 10.0f, -10.0f);
 	right_	  = DirectX::XMFLOAT3(1.0f, 0.0f, 0.0f);
 	look_	  = DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f);
 	up_		  = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);

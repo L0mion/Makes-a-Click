@@ -95,6 +95,11 @@ void Renderer::renderSprites()
 
 void Renderer::renderEntities()
 {
+	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
+
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_PLACEHOLDER, 0);
+	managementSS_->setSS(devcon, ManagementSS::SSTypes_DEFAULT, 0);
+
 	for( unsigned int i=0; i<m_entities.size(); i++ ) {
 		renderEntityBufferInfo( m_entities[i] );
 	}
@@ -123,11 +128,12 @@ void Renderer::endRender()
 	managementD3D_->present();
 }
 
-void Renderer::update(DirectX::XMFLOAT4X4 finalMatrix)
+void Renderer::update( DirectX::XMFLOAT4X4 p_finalMatrix,
+	DirectX::XMFLOAT3 p_cameraPos )
 {
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
 	managementCB_->vsSetCB(devcon, ManagementCB::CBTypes_FRAME);
-	managementCB_->updateCBFrame(devcon, finalMatrix);
+	managementCB_->updateCBFrame( devcon, p_finalMatrix, p_cameraPos );
 }
 
 HRESULT Renderer::init(HWND windowHandle)

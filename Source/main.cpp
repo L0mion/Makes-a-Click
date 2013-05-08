@@ -19,6 +19,7 @@
 #include "utility.h"
 #include "window.h"
 #include "CubeFactory.h"
+#include "ManagementDebug.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void initDebugGui( float* p_dt, float* p_fps );
@@ -80,11 +81,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			DirectX::XMFLOAT4X4 finalMatrix = MathHelper::multiplyMatrix(camera->getViewMatrix(), camera->getProjectionMatrix());
 
-			renderer->update(finalMatrix);
+			renderer->update( finalMatrix, camera->getPosition() );
 			renderer->beginRender();
 			renderer->renderEntities();
-			renderer->renderHeightMap( heightMap );
-			renderer->renderSprites();
+			//renderer->renderHeightMap( heightMap );
+			//renderer->renderSprites();
 			renderer->endRender();
 
 			old.QuadPart = current.QuadPart;
@@ -97,8 +98,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	delete xinput;
 
 	DebugGUI::getInstance()->terminate();
+	
+
+//#define DEBUG_D3D
+#ifdef DEBUG_D3D
+	ManagementDebug md;
+	md.init(renderer->getD3DManagement()->getDevice());
+#endif // DEBUG_D3D
 
 	clean();
+
+#ifdef DEBUG_D3D
+	md.reportLiveObjects();
+#endif // !DEBUG_D3D
+
 	return 0;
 }
 

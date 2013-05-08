@@ -145,7 +145,7 @@ void HeightMap::loadHeightMap( int p_vertexCnt )
 
 	vector<unsigned char> in(p_vertexCnt);
 	ifstream inFile;
-	inFile.open("assets/heightmaps/korb.raw",  std::ios_base::binary);
+	inFile.open("../../resources/korb.raw",  std::ios_base::binary);
 
 	if(inFile)
 	{

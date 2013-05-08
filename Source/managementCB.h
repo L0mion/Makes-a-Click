@@ -16,11 +16,12 @@ public:
 		CBTypes_SPRITE
 	};
 
-	void vsSetCB(ID3D11DeviceContext* devcon, CBTypes cbType);
-	void psSetCB(ID3D11DeviceContext* devcon, CBTypes cbType);
+	void vsSetCB(ID3D11DeviceContext* p_devcon, CBTypes p_cbType);
+	void psSetCB(ID3D11DeviceContext* p_devcon, CBTypes p_cbType);
 
-	void updateCBFrame(ID3D11DeviceContext* devcon, DirectX::XMFLOAT4X4 finalMatrix);
-	void updateCBSprite(ID3D11DeviceContext* devcon, DirectX::XMFLOAT4X4 transformMatrix);
+	void updateCBFrame(ID3D11DeviceContext* p_devcon,
+		DirectX::XMFLOAT4X4 p_finalMatrix, DirectX::XMFLOAT3 p_cameraPos );
+	void updateCBSprite(ID3D11DeviceContext* p_devcon, DirectX::XMFLOAT4X4 transformMatrix);
 
 	HRESULT init(ID3D11Device* device);
 private:

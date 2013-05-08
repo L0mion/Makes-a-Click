@@ -45,8 +45,8 @@ struct SpriteVertex
 
 struct HeightMapVertex
 {
-	float normal[Coords::XYZ_CNT];
 	float position[Coords::XYZ_CNT];
+	float normal[Coords::XYZ_CNT];
 	float texCoord[Coords::UV_CNT];
 
 	HeightMapVertex();
