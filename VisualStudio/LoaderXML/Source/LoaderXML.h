@@ -3,6 +3,9 @@
 namespace Loader_XML {
 	class WinDetective;
 }
+namespace Parser_XML {
+	class DocXML;
+}
 
 #include <string>
 
@@ -30,6 +33,7 @@ namespace Loader_XML {
 			const std::wstring filePath, 
 			const std::wstring fileName, 
 			const std::wstring fileEnding);
+		void loadXML(Parser_XML::DocXML* docXML);
 
 		Loader_XML::WinDetective* m_winDetective;
 	};
