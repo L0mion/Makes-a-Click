@@ -14,7 +14,7 @@ namespace Parser_XML {
 
 		bool init();
 
-		void getDocXML(DocXML* inout_docXML);
+		void getDocXML(DocXML** inout_docXML);
 	protected:
 	private:
 		bool parse(std::string p_txtToParse);
