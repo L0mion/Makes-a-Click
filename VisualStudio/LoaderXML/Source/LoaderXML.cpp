@@ -1,3 +1,5 @@
+#include <rapidxml.hpp>
+
 //Parser_XML
 #include <ParserXML.h>
 #include <DocXML.h>
@@ -68,11 +70,41 @@ namespace Loader_XML {
 
 			if(sucessfulParse == true) {
 				Parser_XML::DocXML* docXML = nullptr;
-				parserXML.getDocXML(docXML);
-
-				delete docXML; //Temp
+				parserXML.getDocXML(&docXML);
+				loadXML(docXML);
+				if( docXML != nullptr ) {
+					delete docXML;
+				}
 			}
 
 			return sucessfulParse;
+	}
+
+	void LoaderXML::loadXML(Parser_XML::DocXML* docXML) {
+		/*
+		std::string firstNode = docXML->getXML()->first_node()->name();
+		
+		std::string xmlshit = "";
+		for(auto node = docXML->getXML()->first_node();
+			node;
+			node = node->next_sibling()) {
+				xmlshit += node->name();
+		}
+		
+		//std::string firstVal = docXML->getXML()->first_node()->value();
+
+		//std::string xmlshit = "";
+		//
+		//rapidxml::xml_node<>* node = docXML->getXML()->first_node();
+		//for (
+		//	rapidxml::xml_attribute<>* attr = node->first_attribute();
+		//	attr; 
+		//	attr = attr->next_attribute() ) {
+		//	xmlshit += attr->name();
+		//	xmlshit += attr->value();
+		//}
+
+		std::string derp;
+		*/
 	}
 }
