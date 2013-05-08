@@ -25,7 +25,7 @@ public:
 
 	void beginRender();
 	void renderHeightMap( HeightMap* p_heightMap );
-	void renderSprites();
+	void renderSprites(ManagementSprite* p_managementSprite);
 	void renderEntities();
 	void renderEntityBufferInfo( EntityBufferInfo* p_info );
 	void endRender();
@@ -44,7 +44,6 @@ private:
 	HRESULT initManagementShader(ID3D11Device* device);
 	HRESULT initManagementCB(ID3D11Device* device);
 	HRESULT initManagementTex(ID3D11Device* device);
-	HRESULT initManagementSprite(ID3D11Device* device);
 	HRESULT initManagementSS(ID3D11Device* device);
 	HRESULT initManagementBS(ID3D11Device* device);
 
@@ -52,7 +51,6 @@ private:
 	ManagementShader* managementShader_;
 	ManagementCB*	  managementCB_;
 	ManagementTex*	  managementTex_;
-	ManagementSprite* managementSprite_;
 	ManagementSS*	  managementSS_;
 	ManagementBS*	  managementBS_;
 

@@ -28,7 +28,7 @@ float3 parallelLight(SurfaceInfo surface, LightInfo light, float3 eyePos, float3
 	float3 lightVec = -light.dir;
 
 	// Add the ambient term.
-	litColor += surface.diffuse * light.ambient;	
+	litColor += surface.diffuse.rgb * light.ambient.rgb;	
 
 	// Add diffuse and specular term, provided the surface is in 
 	// the line of site of the light.
@@ -43,8 +43,8 @@ float3 parallelLight(SurfaceInfo surface, LightInfo light, float3 eyePos, float3
 		float specFactor = pow(max(dot(R, toEye), 0.0f), specPower);
 
 		// diffuse and specular terms
-		litColor += diffuseFactor * surface.diffuse * light.diffuse;
-		litColor += specFactor * surface.spec * light.spec;
+		litColor += diffuseFactor * surface.diffuse.rgb * light.diffuse.rgb;
+		litColor += specFactor * surface.spec.rgb * light.spec.rgb;
 	}
 
 	return litColor;
@@ -67,7 +67,7 @@ float3 pointLight(SurfaceInfo surface, LightInfo light, float3 eyePos, float3 no
 	lightVec /= d; 
 
 	// Add the ambient light term.
-	litColor += surface.diffuse * light.ambient;	
+	litColor += surface.diffuse.rgb * light.ambient.rgb;
 
 	// Add diffuse and specular term, provided the surface is in 
 	// the line of site of the light.
@@ -82,8 +82,8 @@ float3 pointLight(SurfaceInfo surface, LightInfo light, float3 eyePos, float3 no
 		float specFactor = pow(max(dot(R, toEye), 0.0f), specPower);
 
 		// diffuse and specular terms
-		litColor += diffuseFactor * surface.diffuse * light.diffuse.rgb;
-		litColor += specFactor * surface.spec * light.spec;
+		litColor += diffuseFactor * surface.diffuse.rgb * light.diffuse.rgb;
+		litColor += specFactor * surface.spec.rgb * light.spec.rgb;
 	}
 
 	// attenuate

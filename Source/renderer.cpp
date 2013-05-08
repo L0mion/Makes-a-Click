@@ -22,7 +22,6 @@ Renderer::Renderer()
 	managementShader_ = NULL;
 	managementCB_	  = NULL;
 	managementTex_	  = NULL;
-	managementSprite_ = NULL;
 	managementSS_     = NULL;
 	managementBS_	  = NULL;
 }
@@ -33,7 +32,6 @@ Renderer::~Renderer()
 	SAFE_DELETE(managementShader_);
 	SAFE_DELETE(managementCB_);
 	SAFE_DELETE(managementTex_);
-	SAFE_DELETE(managementSprite_);
 	SAFE_DELETE(managementSS_);
 	SAFE_DELETE(managementBS_);
 
@@ -62,33 +60,39 @@ void Renderer::renderHeightMap( HeightMap* p_heightMap )
 	//info = p_heightMap->getEntityBufferInfo();
 }
 
-void Renderer::renderSprites()
+void Renderer::renderSprites(ManagementSprite* managementSprite)
 {
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
 
+	managementD3D_->setBackBufferNoDepth();
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_SPRITE);
-
 	managementBS_->setBlendState(devcon, ManagementBS::BSTypes_TRANSPARENCY);
-
 	managementCB_->vsSetCB(devcon, ManagementCB::CBTypes_SPRITE);
-	Sprite* sprite = managementSprite_->getSprite(ManagementSprite::SpriteIds_PLACEHOLDER);
-	DirectX::XMFLOAT4X4 spriteTransform = sprite->getWorldMatrix();
-	managementCB_->updateCBSprite(devcon, spriteTransform);
-
-	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_PLACEHOLDER, 0);
-	managementSS_->setSS(devcon, ManagementSS::SSTypes_DEFAULT, 0);
-
+	
 	UINT stride = sizeof(SpriteVertex);
 	UINT offset = 0;
-
-	ID3D11Buffer* vertexBuffer = managementSprite_->getVertexBuffer();
-	ID3D11Buffer* indexBuffer = managementSprite_->getIndexBuffer();
-
+	
+	ID3D11Buffer* vertexBuffer = managementSprite->getVertexBuffer();
+	ID3D11Buffer* indexBuffer = managementSprite->getIndexBuffer();
+	
 	devcon->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	devcon->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	devcon->DrawIndexed(6, 0, 0);
+
+	std::vector<Sprite*>* sprites = managementSprite->getSpriteCollection();
+	for(unsigned int spriteIndex=0; spriteIndex<sprites->size(); spriteIndex++)
+	{
+		Sprite* sprite = sprites->at(spriteIndex);
+		DirectX::XMFLOAT4X4 spriteTransform = sprite->getWorldMatrix();
+		managementCB_->updateCBSprite(devcon, spriteTransform);
+		
+		managementTex_->psSetTexture(devcon, sprite->getTextureId(), 0);
+		managementSS_->setSS(devcon, ManagementSS::SSTypes_DEFAULT, 0);
+		
+		devcon->DrawIndexed(6, 0, 0);
+	}
+	
 
 	managementBS_->setBlendState(devcon, ManagementBS::BSTypes_DEFAULT);
 }
@@ -148,8 +152,6 @@ HRESULT Renderer::init(HWND windowHandle)
 	if(SUCCEEDED(hr))
 		hr = initManagementTex(managementD3D_->getDevice());
 	if(SUCCEEDED(hr))
-		hr = initManagementSprite(managementD3D_->getDevice());
-	if(SUCCEEDED(hr))
 		hr = initManagementSS(managementD3D_->getDevice());
 	if(SUCCEEDED(hr))
 		hr = initManagementBS(managementD3D_->getDevice());
@@ -188,13 +190,6 @@ HRESULT Renderer::initManagementTex(ID3D11Device* device)
 	HRESULT hr = S_OK;
 	managementTex_ = new ManagementTex();
 	managementTex_->init(device);
-	return hr;
-}
-HRESULT Renderer::initManagementSprite(ID3D11Device* device)
-{
-	HRESULT hr = S_OK;
-	managementSprite_ = new ManagementSprite();
-	managementSprite_->init(device);
 	return hr;
 }
 HRESULT Renderer::initManagementSS(ID3D11Device* device)

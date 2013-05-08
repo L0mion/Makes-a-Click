@@ -30,6 +30,10 @@ void ManagementD3D::setBackBuffer()
 {
 	devcon_->OMSetRenderTargets(1, &rtvBackBuffer_, dsvDepthBuffer_);
 }
+void ManagementD3D::setBackBufferNoDepth()
+{
+	devcon_->OMSetRenderTargets(1, &rtvBackBuffer_, NULL);
+}
 void ManagementD3D::clearBackBuffer()
 {
 	FLOAT clearColor[4] = {0.0f, 0.0f, 0.0f, 0.0f};

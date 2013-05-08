@@ -18,6 +18,7 @@ public:
 	void present();
 	
 	void setBackBuffer();
+	void setBackBufferNoDepth();
 	void clearBackBuffer();
 
 

@@ -15,6 +15,7 @@
 #include "inputDesc.h"
 #include "keyCodes.h"
 #include "mathHelper.h"
+#include "managementSprite.h"
 #include "renderer.h"
 #include "utility.h"
 #include "window.h"
@@ -29,6 +30,7 @@ void clean();
 Window* window;
 Renderer* renderer;
 Camera* camera;
+ManagementSprite* managementSprite;
 
 //Temp: Using whilst testing XML-Loader.
 //#include <LoaderXML.h>
@@ -36,8 +38,9 @@ Camera* camera;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int cmdShow)
 {
 	//Temp: Using whilst testing XML-Loader.
-	//LoaderXML* loaderXML = new LoaderXML();
+	//Loader_XML::LoaderXML* loaderXML = new Loader_XML::LoaderXML();
 	//loaderXML->init();
+	//delete loaderXML;
 
 #if defined( DEBUG ) || defined( _DEBUG )
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
@@ -85,7 +88,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			renderer->beginRender();
 			renderer->renderEntities();
 			//renderer->renderHeightMap( heightMap );
-			//renderer->renderSprites();
+			renderer->renderSprites(managementSprite);
 			renderer->endRender();
 
 			old.QuadPart = current.QuadPart;
@@ -129,8 +132,13 @@ HRESULT initialize(HINSTANCE hInstance, int cmdShow)
 	if(SUCCEEDED(hr))
 	{
 		camera = new Camera();
-		camera->setLens(DirectX::XM_PIDIV4, static_cast<float>(SCREEN_WIDTH)/static_cast<float>(SCREEN_HEIGHT), 1.0f, 100.0f);
+		camera->setLens(DirectX::XM_PIDIV4, static_cast<float>(SCREEN_WIDTH)/static_cast<float>(SCREEN_HEIGHT), 1.0f, 1000.0f);
 		camera->rebuildView();
+	}
+	if(SUCCEEDED(hr))
+	{
+		managementSprite = new ManagementSprite();
+		hr = managementSprite->init(renderer->getD3DManagement()->getDevice());
 	}
 
 	return hr;
@@ -170,6 +178,12 @@ void handleInput(XInputFetcher* xinput, float dt)
 	camera->strafe(strafe);
 	camera->yaw(yaw);
 	camera->pitch(pitch);
+
+	if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) > 0)
+		managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TEXT_MENU);
+	else
+		managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_NONE);
+
 }
 
 void clean()
@@ -177,4 +191,5 @@ void clean()
 	SAFE_DELETE(window);
 	SAFE_DELETE(renderer);
 	SAFE_DELETE(camera);
+	SAFE_DELETE(managementSprite);
 }

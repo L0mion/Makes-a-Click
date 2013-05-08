@@ -9,6 +9,8 @@ float4 ps( VSHeightMapOut psIn ) : SV_TARGET
 {
 	//return float4(1,1,1,1);
 
+	//psIn.normal = normalize(psIn.normal);
+
 	SurfaceInfo surface;
 	surface.diffuse = float4( 0.5f, 0.5f, 0.5f, 0.0f );
 	surface.spec = float4( 0.0f, 0.0f, 0.0f, 0.0f );
@@ -33,5 +35,6 @@ float4 ps( VSHeightMapOut psIn ) : SV_TARGET
 
 	float4 finalCol = float4( color*lightOut, 1.0f ); 
 
+	//return psIn.normal;
 	return finalCol;
 }

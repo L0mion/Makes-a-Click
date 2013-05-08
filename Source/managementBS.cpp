@@ -3,10 +3,12 @@
 
 ManagementBS::ManagementBS()
 {
+	m_bsDefault		 = NULL;
 	m_bsTransparency = NULL;
 }
 ManagementBS::~ManagementBS()
 {
+	SAFE_RELEASE(m_bsDefault);
 	SAFE_RELEASE(m_bsTransparency);
 }
 
