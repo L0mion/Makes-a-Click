@@ -6,6 +6,8 @@ struct TextureIds
 	enum Id
 	{
 		TextureIds_PLACEHOLDER,
+		TextureIds_CIRCLE_BACKGROUND,
+		TextureIds_CIRCLE_HIGHLIGHT,
 		TextureIds_COUNT
 	};
 };
