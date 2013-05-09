@@ -30,6 +30,12 @@ void ManagementMenu::useToolsMenu(double p_analogStickX, double p_analogStickY)
 
 	moveHighlighter(p_analogStickX, p_analogStickY);
 }
+void ManagementMenu::useToolPropertiesMenu(double p_analogStickX, double p_analogStickY)
+{
+	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TOOL_PROPERTIES_MENU);
+
+	moveHighlighter(p_analogStickX, p_analogStickY);
+}
 void ManagementMenu::useNoMenu()
 {
 	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_NONE);

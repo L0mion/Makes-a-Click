@@ -29,6 +29,7 @@ public:
 	{
 		SpriteCollectionIds_NONE,
 		SpriteCollectionIds_TOOLS_MENU,
+		SpriteCollectionIds_TOOL_PROPERTIES_MENU,
 		SpriteCollectionIds_TEXT_MENU
 	};
 
@@ -54,7 +55,8 @@ private:
 	std::vector<SpriteVertex> createVertices();
 	std::vector<DWORD> createIndices();
 	
-	void setSpriteCollectionTextMenu();
+	void setSpriteCollectionToolsMenu();
+	void setSpriteCollectionToolPropertiesMenu();
 	void setSpriteCollectionNone();
 
 	std::vector<Sprite*>* m_sprites;

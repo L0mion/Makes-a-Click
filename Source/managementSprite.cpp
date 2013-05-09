@@ -27,7 +27,10 @@ void ManagementSprite::setSpriteCollection(SpriteCollectionIds spriteCollection)
 	switch(spriteCollection)
 	{
 	case SpriteCollectionIds_TOOLS_MENU:
-		setSpriteCollectionTextMenu();
+		setSpriteCollectionToolsMenu();
+		break;
+	case SpriteCollectionIds_TOOL_PROPERTIES_MENU:
+		setSpriteCollectionToolPropertiesMenu();
 		break;
 	default:
 		setSpriteCollectionNone();
@@ -184,7 +187,7 @@ std::vector<DWORD> ManagementSprite::createIndices()
 	return indices;
 }
 
-void ManagementSprite::setSpriteCollectionTextMenu()
+void ManagementSprite::setSpriteCollectionToolsMenu()
 {
 	m_spriteCollection->clear();
 	
@@ -192,6 +195,13 @@ void ManagementSprite::setSpriteCollectionTextMenu()
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_SAND_BUCKET));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT));
+}
+void ManagementSprite::setSpriteCollectionToolPropertiesMenu()
+{
+	m_spriteCollection->clear();
+
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_BACKGROUND));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
 }
 void ManagementSprite::setSpriteCollectionNone()
 {

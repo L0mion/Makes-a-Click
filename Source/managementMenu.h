@@ -24,6 +24,7 @@ public:
 	};
 
 	void useToolsMenu(double p_analogStickX, double p_analogStickY);
+	void useToolPropertiesMenu(double p_analogStickX, double p_analogStickY);
 	void useNoMenu();
 
 	void setSelectedTool();

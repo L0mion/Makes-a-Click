@@ -178,6 +178,11 @@ void handleInput(XInputFetcher* xinput, float dt)
 		menuIsActive = true;
 		managementMenu->useToolsMenu(strafeDistance, walkDistance);
 	}
+	else if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_R) > 0)
+	{
+		menuIsActive = true;
+		managementMenu->useToolPropertiesMenu(strafeDistance, walkDistance);
+	}
 	else
 		managementMenu->useNoMenu();
 	
