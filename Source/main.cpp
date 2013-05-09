@@ -159,7 +159,6 @@ void handleInput(XInputFetcher* xinput, float dt)
 	double strafeDistance = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE);
 	double yawAngle		  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE);
 	double pitchAngle	  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);
-
 	
 	bool menuIsActive = false;
 	if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) > 0)

@@ -46,15 +46,10 @@ std::vector<Sprite*>* ManagementSprite::getSpriteCollection()
 Sprite* ManagementSprite::getSprite(SpriteIds p_spriteId)
 {
 	Sprite* sprite = NULL;
-	switch( p_spriteId)
-	{
-	case SpriteIds_PLACEHOLDER:
+	if(p_spriteId >= 0 && p_spriteId < SpriteIds_COUNT)
+		sprite = m_sprites->at(p_spriteId);
+	else
 		sprite = m_sprites->at(SpriteIds_PLACEHOLDER);
-		break;
-	default:
-		sprite = m_sprites->at(SpriteIds_PLACEHOLDER);
-		break;
-	}
 
 	return sprite;
 }
