@@ -5,9 +5,11 @@
 
 struct CBFrame
 {
-	DirectX::XMFLOAT4X4 finalMatrix_;
+	DirectX::XMFLOAT4X4 m_finalMatrix;
+	DirectX::XMFLOAT3 m_cameraPos;
+	float pad;
 };
-static const unsigned int CB_FRAME_SIZE = 64;
+static const unsigned int CB_FRAME_SIZE = 80;
 static const unsigned int CB_FRAME_REGISTER = 0;
 
 struct CBSprite

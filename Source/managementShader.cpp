@@ -65,25 +65,35 @@ HRESULT ManagementShader::initShaders(ID3D11Device* device)
 	HRESULT hr = S_OK;
 	std::wstring filePath = decideFilePath();
 
-	hr = initVertexShader(device, filePath, L"vsDefault.cso",
+	hr = initVertexShader( device, filePath, L"vsDefault.cso",
 		&m_shaders[ShaderIds_DEFAULT].m_vs,
-		&m_shaders[ShaderIds_DEFAULT].m_vsBlob);
+		&m_shaders[ShaderIds_DEFAULT].m_vsBlob );
 	if(SUCCEEDED(hr))
-		hr = initVertexShader(device, filePath, L"vsSprite.cso",
-		&m_shaders[ShaderIds_SPRITE].m_vs,
-		&m_shaders[ShaderIds_SPRITE].m_vsBlob);
+		hr = initVertexShader( device, filePath, L"vsSprite.cso",
+			&m_shaders[ShaderIds_SPRITE].m_vs,
+			&m_shaders[ShaderIds_SPRITE].m_vsBlob );
 	if(SUCCEEDED(hr))
-		hr = initPixelShader(device, filePath, L"psDefault.cso",
-		&m_shaders[ShaderIds_DEFAULT].m_ps,
-		&m_shaders[ShaderIds_DEFAULT].m_psBlob);
+		hr = initVertexShader( device, filePath, L"vsHeightMap.cso",
+			&m_shaders[ShaderIds_HEIGHTMAP].m_vs,
+			&m_shaders[ShaderIds_HEIGHTMAP].m_vsBlob );
 	if(SUCCEEDED(hr))
-		hr = initPixelShader(device, filePath, L"psSprite.cso",
-		&m_shaders[ShaderIds_SPRITE].m_ps,
-		&m_shaders[ShaderIds_SPRITE].m_psBlob);
+		hr = initPixelShader( device, filePath, L"psDefault.cso",
+			&m_shaders[ShaderIds_DEFAULT].m_ps,
+			&m_shaders[ShaderIds_DEFAULT].m_psBlob );
+	if(SUCCEEDED(hr))
+		hr = initPixelShader( device, filePath, L"psSprite.cso",
+			&m_shaders[ShaderIds_SPRITE].m_ps,
+			&m_shaders[ShaderIds_SPRITE].m_psBlob );
+	if(SUCCEEDED(hr))
+		hr = initPixelShader( device, filePath, L"psHeightMap.cso",
+			&m_shaders[ShaderIds_HEIGHTMAP].m_ps,
+			&m_shaders[ShaderIds_HEIGHTMAP].m_psBlob );
 
 	return hr;
 }
-HRESULT ManagementShader::initVertexShader(ID3D11Device* device, std::wstring filePath, std::wstring fileName, ID3D11VertexShader** shader, ID3DBlob** blob)
+HRESULT ManagementShader::initVertexShader( ID3D11Device* device,
+	std::wstring filePath, std::wstring fileName,
+	ID3D11VertexShader** shader, ID3DBlob** blob )
 {
 	HRESULT hr = S_OK;
 
@@ -128,7 +138,7 @@ HRESULT ManagementShader::initInputLayouts(ID3D11Device* device)
 	if( SUCCEEDED(hr) ) {
 		hr = initVSSpriteInputLayout( device );
 	} if( SUCCEEDED(hr) ) {
-		//hr = initVSHeightmapInputLayout( device );
+		hr = initVSHeightmapInputLayout( device );
 	}
 	return hr; 
 }
@@ -162,8 +172,10 @@ HRESULT ManagementShader::initVSSpriteInputLayout(ID3D11Device* device)
 
 	D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
+		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 	int elementCnt = sizeof(ied) / sizeof(D3D11_INPUT_ELEMENT_DESC);
 
@@ -182,9 +194,9 @@ HRESULT ManagementShader::initVSHeightmapInputLayout( ID3D11Device* device )
 {
 	D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
-		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
-		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
+		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0,
 		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0,
 		D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},

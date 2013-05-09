@@ -15,7 +15,7 @@ public:
 	~ManagementMenu();
 
 	void moveHighlighter(double p_analogStickX, double p_analogStickY);
-	void setMenu(ManagementSprite::SpriteCollectionIds spriteCollection);
+	void setMenuSprites(ManagementSprite::SpriteCollectionIds spriteCollection);
 
 	ManagementSprite* getManagementSprite();
 

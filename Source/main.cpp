@@ -21,6 +21,7 @@
 #include "utility.h"
 #include "window.h"
 #include "CubeFactory.h"
+#include "ManagementDebug.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void initDebugGui( float* p_dt, float* p_fps );
@@ -62,10 +63,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	HeightMap* heightMap = new HeightMap( renderer->getD3DManagement() );
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
 	renderer->addEntity( heightMapBuffers );
-
-	EntityBufferInfo* cube = NULL;
-	CubeFactory::createCube( renderer->getD3DManagement(), &cube );
-	renderer->addEntity( cube );
+	 
 
 	if(SUCCEEDED(hr))
 	{
@@ -87,10 +85,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			DirectX::XMFLOAT4X4 finalMatrix = MathHelper::multiplyMatrix(camera->getViewMatrix(), camera->getProjectionMatrix());
 
-			renderer->update(finalMatrix);
+			renderer->update( finalMatrix, camera->getPosition() );
 			renderer->beginRender();
 			renderer->renderEntities();
-			renderer->renderHeightMap( heightMap );
+			//renderer->renderHeightMap( heightMap );
 			renderer->renderSprites(managementMenu->getManagementSprite());
 			renderer->endRender();
 
@@ -104,8 +102,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	delete xinput;
 
 	DebugGUI::getInstance()->terminate();
+	
+
+//#define DEBUG_D3D
+#ifdef DEBUG_D3D
+	ManagementDebug md;
+	md.init(renderer->getD3DManagement()->getDevice());
+#endif // DEBUG_D3D
 
 	clean();
+
+#ifdef DEBUG_D3D
+	md.reportLiveObjects();
+#endif // !DEBUG_D3D
+
 	return 0;
 }
 
@@ -123,7 +133,7 @@ HRESULT initialize(HINSTANCE hInstance, int cmdShow)
 	if(SUCCEEDED(hr))
 	{
 		camera = new Camera();
-		camera->setLens(DirectX::XM_PIDIV4, static_cast<float>(SCREEN_WIDTH)/static_cast<float>(SCREEN_HEIGHT), 1.0f, 100.0f);
+		camera->setLens(DirectX::XM_PIDIV4, static_cast<float>(SCREEN_WIDTH)/static_cast<float>(SCREEN_HEIGHT), 1.0f, 1000.0f);
 		camera->rebuildView();
 	}
 	if(SUCCEEDED(hr))
@@ -152,31 +162,38 @@ void initDebugGui( float* p_dt, float* p_fps )
 
 void handleInput(XInputFetcher* xinput, float dt)
 {
-	float leftAnalogSens  = 8.0f;
-	float rightAnalogSens = 1.0f;
-
-	double walkDistance	  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE);
-	double strafeDistance = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE);
-	double yawAngle		  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE);
-	double pitchAngle	  = xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);
-	
 	bool menuIsActive = false;
+
+	float leftAnalogSens  = 64.0f;
+	float rightAnalogSens = 2.0f;
+
+	double walkDistance		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE);
+	double strafeDistance	= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE);
+	double yawAngle			= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE);
+	double pitchAngle		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);
+	
+	
 	if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) > 0)
 	{
 		menuIsActive = true;
-		managementMenu->setMenu(ManagementSprite::SpriteCollectionIds_TEXT_MENU);
+		managementMenu->setMenuSprites(ManagementSprite::SpriteCollectionIds_TEXT_MENU);
 		managementMenu->moveHighlighter(strafeDistance, walkDistance);
 	}
 	else
-		managementMenu->setMenu(ManagementSprite::SpriteCollectionIds_NONE);
-
+		managementMenu->setMenuSprites(ManagementSprite::SpriteCollectionIds_NONE);
+	
 	if(!menuIsActive)
 	{
-		float walk	 = static_cast<float>(walkDistance) * leftAnalogSens * dt;
-		float strafe = static_cast<float>(strafeDistance) * leftAnalogSens * dt;
-		float yaw	 = static_cast<float>(yawAngle) * rightAnalogSens * dt;
-		float pitch  = static_cast<float>(pitchAngle) * rightAnalogSens * dt * -1;
-
+		walkDistance			*= fabs( walkDistance );
+		strafeDistance			*= fabs( strafeDistance );
+		yawAngle				*= fabs( yawAngle );
+		pitchAngle				*= fabs( pitchAngle );
+	
+		float walk	 = static_cast<float>(walkDistance)		* leftAnalogSens * dt;
+		float strafe = static_cast<float>(strafeDistance)	* leftAnalogSens * dt;
+		float yaw	 = static_cast<float>(yawAngle)			* rightAnalogSens * dt;
+		float pitch  = static_cast<float>(pitchAngle)		* rightAnalogSens * dt * -1;
+	
 		camera->walk(walk);
 		camera->strafe(strafe);
 		camera->yaw(yaw);

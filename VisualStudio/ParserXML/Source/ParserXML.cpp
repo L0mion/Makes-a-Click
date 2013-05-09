@@ -50,8 +50,8 @@ namespace Parser_XML {
 		return sucessfulParse;
 	}
 
-	void ParserXML::getDocXML(Parser_XML::DocXML* inout_docXML) {
-		inout_docXML = m_docXML;
+	void ParserXML::getDocXML(Parser_XML::DocXML** inout_docXML) {
+		*inout_docXML = m_docXML;
 		m_memManagement = false;
 	}
 

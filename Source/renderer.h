@@ -29,7 +29,8 @@ public:
 	void renderEntities();
 	void renderEntityBufferInfo( EntityBufferInfo* p_info );
 	void endRender();
-	void update(DirectX::XMFLOAT4X4 finalMatrix);
+	void update( DirectX::XMFLOAT4X4 p_finalMatrix,
+		DirectX::XMFLOAT3 p_cameraPos );
 
 	HRESULT init(HWND windowHandle);
 

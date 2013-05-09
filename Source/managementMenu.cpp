@@ -49,7 +49,7 @@ void ManagementMenu::moveHighlighter(double p_analogStickX, double p_analogStick
 		highlighter->setPosition(0.0f, 0.0f);
 }
 
-void ManagementMenu::setMenu(ManagementSprite::SpriteCollectionIds spriteCollection)
+void ManagementMenu::setMenuSprites(ManagementSprite::SpriteCollectionIds spriteCollection)
 {
 	m_managementSprite->setSpriteCollection(spriteCollection);
 }
