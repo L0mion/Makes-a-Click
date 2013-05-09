@@ -1,4 +1,5 @@
 #include <rapidxml.hpp>
+#include <rapidxml_print.hpp>
 
 //Parser_XML
 #include <ParserXML.h>

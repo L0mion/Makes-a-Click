@@ -1,6 +1,6 @@
 #pragma once
 
-typedef char ParserXMLCharType;
+#include "SettingsParserXML.h"
 
 namespace Parser_XML {
 	class DocXML;

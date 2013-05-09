@@ -2,8 +2,32 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Source\WriterXML.cpp" />
+    <ClCompile Include="Source\DescMAC.cpp">
+      <Filter>DescMAC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Xmler.cpp">
+      <Filter>Xmler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\WriterXML.h" />
+    <ClInclude Include="Source\DescMAC.h">
+      <Filter>DescMAC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DescMACResource.h">
+      <Filter>DescMAC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Xmler.h">
+      <Filter>Xmler</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SettingsWriterXML.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="DescMAC">
+      <UniqueIdentifier>{84b993f5-9c25-4b7d-8bd7-7f2524877545}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Xmler">
+      <UniqueIdentifier>{64981b8e-e2e4-4ab8-9e4a-fea935226301}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

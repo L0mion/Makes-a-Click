@@ -67,6 +67,8 @@
     <ClCompile Include="Source\UtilString.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Util.h" />
+    <ClInclude Include="Source\UtilDefinitionMAC.h" />
     <ClInclude Include="Source\UtilString.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

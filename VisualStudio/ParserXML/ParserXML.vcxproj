@@ -21,6 +21,7 @@
     <ClInclude Include="Source\Rdr.h" />
     <ClInclude Include="Source\ParserXML.h" />
     <ClInclude Include="Source\RdrXML.h" />
+    <ClInclude Include="Source\SettingsParserXML.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{87C00FD3-863E-480E-A49E-051E0BB2F07E}</ProjectGuid>
