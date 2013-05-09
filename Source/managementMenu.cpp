@@ -6,10 +6,65 @@
 ManagementMenu::ManagementMenu()
 {
 	m_managementSprite = NULL;
+
+	m_activeTool		= ToolIds_SAND;
+	m_tempSelectedTool	= ToolIds_NONE;
 }
 ManagementMenu::~ManagementMenu()
 {
 	SAFE_DELETE(m_managementSprite);
+}
+
+void ManagementMenu::useToolsMenu(double p_analogStickX, double p_analogStickY)
+{
+	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TOOLS_MENU);
+
+	if(insideSector0(p_analogStickX, p_analogStickY))
+		m_tempSelectedTool = ToolIds_SAND;
+
+	else if(insideSector1(p_analogStickX, p_analogStickY))
+		m_tempSelectedTool = ToolIds_OBJECT_PLACEMENT;
+
+	else
+		m_tempSelectedTool = ToolIds_NONE;
+
+	moveHighlighter(p_analogStickX, p_analogStickY);
+}
+void ManagementMenu::useNoMenu()
+{
+	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_NONE);
+}
+
+void ManagementMenu::setSelectedTool()
+{
+	if(m_tempSelectedTool != ToolIds_NONE)
+		m_activeTool = m_tempSelectedTool;
+}
+
+ManagementMenu::ToolIds ManagementMenu::getActiveTool()
+{
+	return m_activeTool;
+}
+
+ManagementSprite* ManagementMenu::getManagementSprite()
+{
+	return m_managementSprite;
+}
+
+HRESULT ManagementMenu::init(ID3D11Device* p_device)
+{
+	HRESULT hr = S_OK;
+
+	hr = initManagementSprite(p_device);
+
+	return hr;
+}
+HRESULT ManagementMenu::initManagementSprite(ID3D11Device* p_device)
+{
+	HRESULT hr = S_OK;
+	m_managementSprite = new ManagementSprite();
+	m_managementSprite->init(p_device);
+	return hr;
 }
 
 void ManagementMenu::moveHighlighter(double p_analogStickX, double p_analogStickY)
@@ -47,32 +102,6 @@ void ManagementMenu::moveHighlighter(double p_analogStickX, double p_analogStick
 		
 	else
 		highlighter->setPosition(0.0f, 0.0f);
-}
-
-void ManagementMenu::setMenuSprites(ManagementSprite::SpriteCollectionIds spriteCollection)
-{
-	m_managementSprite->setSpriteCollection(spriteCollection);
-}
-
-ManagementSprite* ManagementMenu::getManagementSprite()
-{
-	return m_managementSprite;
-}
-
-HRESULT ManagementMenu::init(ID3D11Device* p_device)
-{
-	HRESULT hr = S_OK;
-
-	hr = initManagementSprite(p_device);
-
-	return hr;
-}
-HRESULT ManagementMenu::initManagementSprite(ID3D11Device* p_device)
-{
-	HRESULT hr = S_OK;
-	m_managementSprite = new ManagementSprite();
-	m_managementSprite->init(p_device);
-	return hr;
 }
 
 bool ManagementMenu::insideSector0(double p_analogX, double p_analogY)

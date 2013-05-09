@@ -39,6 +39,12 @@ HRESULT ManagementTex::init(ID3D11Device* p_device)
 	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Textures/heightmap/sand/Sand_4_Diffuse.dds",
 			TextureIds::TextureIds_HEIGHTMAP);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/sand-bucket-icon.dds",
+			TextureIds::TextureIds_SANB_BUCKET);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/object-icon.dds",
+			TextureIds::TextureIds_OBJECT);
 	return hr;
 }
 HRESULT ManagementTex::loadTexture( ID3D11Device* p_device,

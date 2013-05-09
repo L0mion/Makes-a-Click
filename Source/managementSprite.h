@@ -21,11 +21,14 @@ public:
 		SpriteIds_PLACEHOLDER,
 		SpriteIds_CIRCLE_BACKGROUND,
 		SpriteIds_CIRCLE_HIGHLIGHT,
+		SpriteIds_SAND_BUCKET,
+		SpriteIds_OBJECT,
 		SpriteIds_COUNT
 	};
 	enum SpriteCollectionIds
 	{
 		SpriteCollectionIds_NONE,
+		SpriteCollectionIds_TOOLS_MENU,
 		SpriteCollectionIds_TEXT_MENU
 	};
 

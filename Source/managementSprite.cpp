@@ -26,7 +26,7 @@ void ManagementSprite::setSpriteCollection(SpriteCollectionIds spriteCollection)
 {
 	switch(spriteCollection)
 	{
-	case SpriteCollectionIds_TEXT_MENU:
+	case SpriteCollectionIds_TOOLS_MENU:
 		setSpriteCollectionTextMenu();
 		break;
 	default:
@@ -131,6 +131,28 @@ void ManagementSprite::initSprites()
 	m_sprites->at(SpriteIds_PLACEHOLDER) = new Sprite(0.75f, 0.75f, 0.0f, 0.0f, 0.20f, 0.20f, TextureIds::TextureIds_PLACEHOLDER);
 	m_sprites->at(SpriteIds_CIRCLE_BACKGROUND) = new Sprite(0.0f, 0.0f, 0.0f, 0.0f, 1.0f/aspectRatio, 1.0f, TextureIds::TextureIds_CIRCLE_BACKGROUND);
 	m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT) = new Sprite(0.0f, 0.0f, 0.0f, 0.0f, 0.2f/aspectRatio, 0.2f, TextureIds::TextureIds_CIRCLE_HIGHLIGHT);
+
+	Sprite* circle		= m_sprites->at(ManagementSprite::SpriteIds_CIRCLE_BACKGROUND);
+	Sprite* highlighter = m_sprites->at(ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
+
+	float height = circle->getScale().y - highlighter->getScale().y;
+	float width = height / aspectRatio;
+
+	m_sprites->at(SpriteIds_SAND_BUCKET) = new Sprite(0.0f,
+		height,
+		0.0f,
+		0.0f,
+		highlighter->getScale().x,
+		highlighter->getScale().y,
+		TextureIds::TextureIds_SANB_BUCKET);
+	
+	m_sprites->at(SpriteIds_OBJECT) = new Sprite(width*sin(DirectX::XM_PIDIV4),
+		height * cos(DirectX::XM_PIDIV4),
+		0.0f,
+		0.0f,
+		highlighter->getScale().x,
+		highlighter->getScale().y,
+		TextureIds::TextureIds_OBJECT);
 }
 void ManagementSprite::initSpriteCollection()
 {
@@ -168,7 +190,8 @@ void ManagementSprite::setSpriteCollectionTextMenu()
 	
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_BACKGROUND));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
-	m_spriteCollection->push_back(m_sprites->at(SpriteIds_PLACEHOLDER));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_SAND_BUCKET));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT));
 }
 void ManagementSprite::setSpriteCollectionNone()
 {

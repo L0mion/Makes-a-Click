@@ -176,14 +176,15 @@ void handleInput(XInputFetcher* xinput, float dt)
 	if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) > 0)
 	{
 		menuIsActive = true;
-		managementMenu->setMenuSprites(ManagementSprite::SpriteCollectionIds_TEXT_MENU);
-		managementMenu->moveHighlighter(strafeDistance, walkDistance);
+		managementMenu->useToolsMenu(strafeDistance, walkDistance);
 	}
 	else
-		managementMenu->setMenuSprites(ManagementSprite::SpriteCollectionIds_NONE);
+		managementMenu->useNoMenu();
 	
 	if(!menuIsActive)
 	{
+		managementMenu->setSelectedTool();
+
 		walkDistance			*= fabs( walkDistance );
 		strafeDistance			*= fabs( strafeDistance );
 		yawAngle				*= fabs( yawAngle );

@@ -14,14 +14,28 @@ public:
 	ManagementMenu();
 	~ManagementMenu();
 
-	void moveHighlighter(double p_analogStickX, double p_analogStickY);
-	void setMenuSprites(ManagementSprite::SpriteCollectionIds spriteCollection);
+	enum ToolIds
+	{
+		ToolIds_NONE,
+		ToolIds_SAND,
+		ToolIds_ROAD,
+		ToolIds_OBJECT_PLACEMENT,
+
+	};
+
+	void useToolsMenu(double p_analogStickX, double p_analogStickY);
+	void useNoMenu();
+
+	void setSelectedTool();
+	ToolIds getActiveTool();
 
 	ManagementSprite* getManagementSprite();
 
 	HRESULT init(ID3D11Device* p_device);
 private:
 	HRESULT initManagementSprite(ID3D11Device* p_device);
+
+	void moveHighlighter(double p_analogStickX, double p_analogStickY);
 
 	bool insideSector0(double p_analogX, double p_analogY);
 	bool insideSector1(double p_analogX, double p_analogY);
@@ -42,6 +56,9 @@ private:
 	void setHighlighterSector7(Sprite* highlighter, float width, float height);
 
 	ManagementSprite* m_managementSprite;
+
+	ToolIds m_activeTool;
+	ToolIds m_tempSelectedTool;
 };
 
 #endif // MANAGEMENT_MENU_H
