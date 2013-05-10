@@ -19,16 +19,32 @@ public:
 		ToolIds_NONE,
 		ToolIds_SAND,
 		ToolIds_ROAD,
-		ToolIds_OBJECT_PLACEMENT,
+		ToolIds_OBJECT,
 
+	};
+	enum ToolPropertyIds
+	{
+		ToolPropertyIds_NONE,
+		ToolPropertyIds_PROPERTY_0,
+		ToolPropertyIds_PROPERTY_1,
+		ToolPropertyIds_PROPERTY_2,
+		ToolPropertyIds_PROPERTY_3,
+		ToolPropertyIds_PROPERTY_4,
+		ToolPropertyIds_PROPERTY_5,
+		ToolPropertyIds_PROPERTY_6,
+		ToolPropertyIds_PROPERTY_7,
 	};
 
 	void useToolsMenu(double p_analogStickX, double p_analogStickY);
-	void useToolPropertiesMenu(double p_analogStickX, double p_analogStickY);
+	void useToolPropertiesMenu(double p_analogStickX, 
+		double p_analogStickY);
+	
 	void useNoMenu();
 
 	void setSelectedTool();
+	void setSelectedProperty();
 	ToolIds getActiveTool();
+	ToolPropertyIds getActiveProperty();
 
 	ManagementSprite* getManagementSprite();
 
@@ -36,7 +52,13 @@ public:
 private:
 	HRESULT initManagementSprite(ID3D11Device* p_device);
 
+	void useSandPropertiesMenu(double p_analogStickX, 
+		double p_analogStickY);
+	void useObjectPropertiesMenu(double p_analogStickX, 
+		double p_analogStickY);
+
 	void moveHighlighter(double p_analogStickX, double p_analogStickY);
+	void setHighlighterPos(ManagementSprite::SectorIds sectorId);
 
 	bool insideSector0(double p_analogX, double p_analogY);
 	bool insideSector1(double p_analogX, double p_analogY);
@@ -47,19 +69,13 @@ private:
 	bool insideSector6(double p_analogX, double p_analogY);
 	bool insideSector7(double p_analogX, double p_analogY);
 
-	void setHighlighterSector0(Sprite* highlighter, float width, float height);
-	void setHighlighterSector1(Sprite* highlighter, float width, float height);
-	void setHighlighterSector2(Sprite* highlighter, float width, float height);
-	void setHighlighterSector3(Sprite* highlighter, float width, float height);
-	void setHighlighterSector4(Sprite* highlighter, float width, float height);
-	void setHighlighterSector5(Sprite* highlighter, float width, float height);
-	void setHighlighterSector6(Sprite* highlighter, float width, float height);
-	void setHighlighterSector7(Sprite* highlighter, float width, float height);
-
 	ManagementSprite* m_managementSprite;
 
 	ToolIds m_activeTool;
 	ToolIds m_tempSelectedTool;
+
+	ToolPropertyIds m_tempSelectedProperty;
+	ToolPropertyIds m_activeProperty;
 };
 
 #endif // MANAGEMENT_MENU_H

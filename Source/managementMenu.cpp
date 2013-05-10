@@ -20,21 +20,34 @@ void ManagementMenu::useToolsMenu(double p_analogStickX, double p_analogStickY)
 	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TOOLS_MENU);
 
 	if(insideSector0(p_analogStickX, p_analogStickY))
+	{
 		m_tempSelectedTool = ToolIds_SAND;
-
+		m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
+	}
 	else if(insideSector1(p_analogStickX, p_analogStickY))
-		m_tempSelectedTool = ToolIds_OBJECT_PLACEMENT;
-
+	{
+		m_tempSelectedTool = ToolIds_OBJECT;
+		m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
+	}
 	else
+	{
 		m_tempSelectedTool = ToolIds_NONE;
+		m_tempSelectedProperty = ToolPropertyIds_NONE;
+	}
 
 	moveHighlighter(p_analogStickX, p_analogStickY);
 }
 void ManagementMenu::useToolPropertiesMenu(double p_analogStickX, double p_analogStickY)
 {
-	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TOOL_PROPERTIES_MENU);
-
-	moveHighlighter(p_analogStickX, p_analogStickY);
+	switch(m_activeTool)
+	{
+	case ToolIds_SAND:
+		useSandPropertiesMenu(p_analogStickX, p_analogStickY);
+		break;
+	case ToolIds_OBJECT:
+		useObjectPropertiesMenu(p_analogStickX, p_analogStickY);
+		break;
+	}
 }
 void ManagementMenu::useNoMenu()
 {
@@ -46,10 +59,19 @@ void ManagementMenu::setSelectedTool()
 	if(m_tempSelectedTool != ToolIds_NONE)
 		m_activeTool = m_tempSelectedTool;
 }
+void ManagementMenu::setSelectedProperty()
+{
+	if(m_tempSelectedProperty != ToolPropertyIds_NONE)
+		m_activeProperty = m_tempSelectedProperty;
+}
 
 ManagementMenu::ToolIds ManagementMenu::getActiveTool()
 {
 	return m_activeTool;
+}
+ManagementMenu::ToolPropertyIds ManagementMenu::getActiveProperty()
+{
+	return m_activeProperty;
 }
 
 ManagementSprite* ManagementMenu::getManagementSprite()
@@ -73,41 +95,71 @@ HRESULT ManagementMenu::initManagementSprite(ID3D11Device* p_device)
 	return hr;
 }
 
+void ManagementMenu::useSandPropertiesMenu(double p_analogStickX, double p_analogStickY)
+{
+	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_SAND_PROPERTIES_MENU);
+
+	if(insideSector0(p_analogStickX, p_analogStickY))
+		m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
+	if(insideSector0(p_analogStickX, p_analogStickY))
+		m_tempSelectedProperty = ToolPropertyIds_PROPERTY_1;
+	if(insideSector0(p_analogStickX, p_analogStickY))
+		m_tempSelectedProperty = ToolPropertyIds_PROPERTY_2;
+	if(insideSector0(p_analogStickX, p_analogStickY))
+		m_tempSelectedProperty = ToolPropertyIds_PROPERTY_3;
+
+	moveHighlighter(p_analogStickX, p_analogStickY);
+}
+void ManagementMenu::useObjectPropertiesMenu(double p_analogStickX, double p_analogStickY)
+{
+	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_OBJECT_PROPERTIES_MENU);
+
+	if(insideSector0(p_analogStickX, p_analogStickY))
+		m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
+	if(insideSector0(p_analogStickX, p_analogStickY))
+		m_tempSelectedProperty = ToolPropertyIds_PROPERTY_1;
+	if(insideSector0(p_analogStickX, p_analogStickY))
+		m_tempSelectedProperty = ToolPropertyIds_PROPERTY_2;
+	if(insideSector0(p_analogStickX, p_analogStickY))
+		m_tempSelectedProperty = ToolPropertyIds_PROPERTY_3;
+
+	moveHighlighter(p_analogStickX, p_analogStickY);
+}
+
 void ManagementMenu::moveHighlighter(double p_analogStickX, double p_analogStickY)
 {
-	Sprite* circle		= m_managementSprite->getSprite(ManagementSprite::SpriteIds_CIRCLE_BACKGROUND);
-	Sprite* highlighter = m_managementSprite->getSprite(ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
-
-	float aspectRatio = static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT);
-	float height = circle->getScale().y - highlighter->getScale().y;
-	float width = height / aspectRatio;
-
 	if(insideSector0(p_analogStickX, p_analogStickY))	
-		setHighlighterSector0(highlighter, width, height);
+		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_0);
 
 	else if(insideSector1(p_analogStickX, p_analogStickY))
-		setHighlighterSector1(highlighter, width, height);
+		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_1);
 	
 	else if(insideSector2(p_analogStickX, p_analogStickY))
-		setHighlighterSector2(highlighter, width, height);
+		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_2);
 	
 	else if(insideSector3(p_analogStickX, p_analogStickY))
-		setHighlighterSector3(highlighter, width, height);	
+		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_3);
 
 	else if(insideSector4(p_analogStickX, p_analogStickY))
-		setHighlighterSector4(highlighter, width, height);
+		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_4);
 
 	else if(insideSector5(p_analogStickX, p_analogStickY))
-		setHighlighterSector5(highlighter, width, height);
+		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_5);
 
 	else if(insideSector6(p_analogStickX, p_analogStickY))
-		setHighlighterSector6(highlighter, width, height);
+		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_6);
 
 	else if(insideSector7(p_analogStickX, p_analogStickY))
-		setHighlighterSector7(highlighter, width, height);
+		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_7);
 		
 	else
-		highlighter->setPosition(0.0f, 0.0f);
+		setHighlighterPos(ManagementSprite::SectorIds_CENTER);
+}
+void ManagementMenu::setHighlighterPos(ManagementSprite::SectorIds sectorId)
+{
+	DirectX::XMFLOAT2 pos = m_managementSprite->getSectorCoords(sectorId);
+	Sprite* highlighter = m_managementSprite->getSprite(ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
+	highlighter->setPosition(pos.x, pos.y);
 }
 
 bool ManagementMenu::insideSector0(double p_analogX, double p_analogY)
@@ -173,53 +225,4 @@ bool ManagementMenu::insideSector7(double p_analogX, double p_analogY)
 		isInside = true;
 
 	return isInside;
-}
-
-void ManagementMenu::setHighlighterSector0(Sprite* highlighter, float width, float height)
-{
-	float posX = 0.0f;
-	float posY = height;
-	highlighter->setPosition(posX, posY);
-}
-void ManagementMenu::setHighlighterSector1(Sprite* highlighter, float width, float height)
-{
-	float posX = width * sin(DirectX::XM_PIDIV4);
-	float posY = height * cos(DirectX::XM_PIDIV4);
-	highlighter->setPosition(posX, posY);
-}
-void ManagementMenu::setHighlighterSector2(Sprite* highlighter, float width, float height)
-{
-	float posX = width;
-	float posY = 0.0f;
-	highlighter->setPosition(posX, posY);
-}
-void ManagementMenu::setHighlighterSector3(Sprite* highlighter, float width, float height)
-{
-	float posX = width * sin(DirectX::XM_PIDIV4);
-	float posY = -height * cos(DirectX::XM_PIDIV4);
-	highlighter->setPosition(posX, posY);
-}
-void ManagementMenu::setHighlighterSector4(Sprite* highlighter, float width, float height)
-{
-	float posX = 0.0f;
-	float posY = -height;
-	highlighter->setPosition(posX, posY);
-}
-void ManagementMenu::setHighlighterSector5(Sprite* highlighter, float width, float height)
-{
-	float posX = -width * sin(DirectX::XM_PIDIV4);
-	float posY = -height * cos(DirectX::XM_PIDIV4);
-	highlighter->setPosition(posX, posY);
-}
-void ManagementMenu::setHighlighterSector6(Sprite* highlighter, float width, float height)
-{
-	float posX = -width;
-	float posY = 0.0f;
-	highlighter->setPosition(posX, posY);
-}
-void ManagementMenu::setHighlighterSector7(Sprite* highlighter, float width, float height)
-{
-	float posX = -width * sin(DirectX::XM_PIDIV4);
-	float posY = height * cos(DirectX::XM_PIDIV4);
-	highlighter->setPosition(posX, posY);
 }
