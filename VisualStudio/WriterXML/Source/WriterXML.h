@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DescMAC.h"
+
 namespace Writer_XML {
 	class DescMAC;
 	class Xmler;

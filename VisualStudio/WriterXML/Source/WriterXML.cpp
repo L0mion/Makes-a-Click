@@ -14,7 +14,9 @@ namespace Writer_XML {
 	}
 
 	void WriterXML::init() {
-		m_xmler = new Xmler(*m_descMac);
+		std::string TEMPORARY_PATH = ""; //TMEP
+
+		m_xmler = new Xmler(TEMPORARY_PATH, *m_descMac);
 		m_xmler->init();
 	}
 }

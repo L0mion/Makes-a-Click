@@ -8,6 +8,9 @@
     <ClCompile Include="Source\Xmler.cpp">
       <Filter>Xmler</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Wtr.cpp">
+      <Filter>Wtr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\WriterXML.h" />
@@ -21,6 +24,9 @@
       <Filter>Xmler</Filter>
     </ClInclude>
     <ClInclude Include="Source\SettingsWriterXML.h" />
+    <ClInclude Include="Source\Wtr.h">
+      <Filter>Wtr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="DescMAC">
@@ -28,6 +34,9 @@
     </Filter>
     <Filter Include="Xmler">
       <UniqueIdentifier>{64981b8e-e2e4-4ab8-9e4a-fea935226301}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Wtr">
+      <UniqueIdentifier>{1cecd894-8318-46ce-9345-8ecd4ee009af}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

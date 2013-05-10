@@ -68,6 +68,7 @@
   <ItemGroup>
     <ClCompile Include="Source\DescMAC.cpp" />
     <ClCompile Include="Source\WriterXML.cpp" />
+    <ClCompile Include="Source\Wtr.cpp" />
     <ClCompile Include="Source\Xmler.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -75,6 +76,7 @@
     <ClInclude Include="Source\DescMACResource.h" />
     <ClInclude Include="Source\SettingsWriterXML.h" />
     <ClInclude Include="Source\WriterXML.h" />
+    <ClInclude Include="Source\Wtr.h" />
     <ClInclude Include="Source\Xmler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
