@@ -33,8 +33,9 @@ Renderer* renderer;
 Camera* camera;
 ManagementMenu* managementMenu;
 
-//Temp: Using whilst testing XML-Loader.
+//Temp: Using whilst testing XML-Loader unt Writer-.
 //#include <LoaderXML.h>
+//#include <WriterXML.h>
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int cmdShow)
 {
@@ -42,6 +43,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//Loader_XML::LoaderXML* loaderXML = new Loader_XML::LoaderXML();
 	//loaderXML->init();
 	//delete loaderXML;
+
+	//Writer_XML::DescMAC descMac("Testing", "Testing", 0);
+	//Writer_XML::WriterXML* writerXML 
+	//	= new Writer_XML::WriterXML(descMac);
+	//writerXML->init();
+	//delete writerXML;
 
 #if defined( DEBUG ) || defined( _DEBUG )
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );

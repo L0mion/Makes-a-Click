@@ -23,6 +23,7 @@
     <ClInclude Include="Source\DocXML.h">
       <Filter>DocXML</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SettingsParserXML.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Rdr">
