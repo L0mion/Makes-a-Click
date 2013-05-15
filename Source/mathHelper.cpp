@@ -1,5 +1,12 @@
 #include "mathHelper.h"
 
+const float MathHelper::identityMatrix[16] = 
+{   1.0f, 0.0f, 0.0f, 0.0f,
+	0.0f, 1.0f, 0.0f, 0.0f,
+	0.0f, 0.0f, 1.0f, 0.0f,
+	0.0f, 0.0f, 0.0f, 1.0f
+};
+
 DirectX::XMFLOAT3 MathHelper::multiplyFloat3Scalar(DirectX::XMFLOAT3 vector, float scalar)
 {
 	DirectX::XMVECTOR xmVector = DirectX::XMLoadFloat3(&vector);

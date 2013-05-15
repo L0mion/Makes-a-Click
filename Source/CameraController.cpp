@@ -87,6 +87,10 @@ DirectX::XMFLOAT3 CameraController::getPosition() const
 {
 	return m_position;
 }
+DirectX::XMFLOAT3 CameraController::getPivotPosition() const
+{
+	return m_pivotPoint;
+}
 
 void CameraController::movePivot( float p_x, float p_y )
 {

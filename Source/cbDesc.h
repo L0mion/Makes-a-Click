@@ -3,6 +3,13 @@
 
 #include <DirectXMath.h>
 
+enum CBTypes
+{
+	CBTypes_FRAME,
+	CBTypes_SPRITE,
+	CBTypes_OBJECT
+};
+
 struct CBFrame
 {
 	DirectX::XMFLOAT4X4 m_finalMatrix;
@@ -18,5 +25,12 @@ struct CBSprite
 };
 static const unsigned int CB_SPRITE_SIZE = 64;
 static const unsigned int CB_SPRITE_REGISTER = 1;
+
+struct CBObject
+{
+	DirectX::XMFLOAT4X4 m_world;
+};
+static const unsigned int CB_OBJECT_SIZE = 64;
+static const unsigned int CB_OBJECT_REGISTER = 2;
 
 #endif //CB_DESC_H

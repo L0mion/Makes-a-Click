@@ -35,6 +35,7 @@ public:
 
 	void update( float p_dt );
 	DirectX::XMFLOAT3 getPosition() const;
+	DirectX::XMFLOAT3 getPivotPosition() const;
 
 private:
 	void movePivot( float p_x, float p_y );

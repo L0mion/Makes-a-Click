@@ -67,7 +67,7 @@ void Renderer::renderSprites(ManagementSprite* managementSprite)
 	managementD3D_->setBackBufferNoDepth();
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_SPRITE);
 	managementBS_->setBlendState(devcon, ManagementBS::BSTypes_TRANSPARENCY);
-	managementCB_->vsSetCB(devcon, ManagementCB::CBTypes_SPRITE);
+	managementCB_->vsSetCB(devcon, CBTypes_SPRITE);
 	
 	UINT stride = sizeof(Vertex_PT);
 	UINT offset = 0;
@@ -78,7 +78,6 @@ void Renderer::renderSprites(ManagementSprite* managementSprite)
 	devcon->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	devcon->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 
 	std::vector<Sprite*>* sprites = managementSprite->getSpriteCollection();
 	for(unsigned int spriteIndex=0; spriteIndex<sprites->size(); spriteIndex++)
@@ -92,7 +91,6 @@ void Renderer::renderSprites(ManagementSprite* managementSprite)
 		
 		devcon->DrawIndexed(6, 0, 0);
 	}
-	
 
 	managementBS_->setBlendState(devcon, ManagementBS::BSTypes_DEFAULT);
 }
@@ -101,7 +99,6 @@ void Renderer::renderEntities()
 {
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
 
-	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_HEIGHTMAP, 0);
 	managementSS_->setSS(devcon, ManagementSS::SSTypes_WRAP, 0);
 
 	for( unsigned int i=0; i<m_entities.size(); i++ ) {
@@ -112,6 +109,11 @@ void Renderer::renderEntities()
 void Renderer::renderEntityBufferInfo( EntityBufferInfo* p_info )
 {
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
+
+	managementCB_->vsSetCB(devcon, CBTypes_OBJECT);
+	managementCB_->updateCBObject( devcon, p_info->m_world );
+
+	managementTex_->psSetTexture( devcon, p_info->m_textureId, 0 );
 
 	UINT stride = p_info->m_stride;
 	UINT offset = 0;
@@ -136,7 +138,7 @@ void Renderer::update( DirectX::XMFLOAT4X4 p_finalMatrix,
 	DirectX::XMFLOAT3 p_cameraPos )
 {
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
-	managementCB_->vsSetCB(devcon, ManagementCB::CBTypes_FRAME);
+	managementCB_->vsSetCB(devcon, CBTypes_FRAME);
 	managementCB_->updateCBFrame( devcon, p_finalMatrix, p_cameraPos );
 }
 

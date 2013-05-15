@@ -3,13 +3,8 @@
 
 Camera::Camera()
 {
-	float identityMatrix[] = {  1.0f, 0.0f, 0.0f, 0.0f,
-								0.0f, 1.0f, 0.0f, 0.0f,
-								0.0f, 0.0f, 1.0f, 0.0f,
-								0.0f, 0.0f, 0.0f, 1.0f};
-
-	m_viewMatrix		= DirectX::XMFLOAT4X4( identityMatrix );
-	m_projectionMatrix	= DirectX::XMFLOAT4X4( identityMatrix );
+	m_viewMatrix		= DirectX::XMFLOAT4X4( MathHelper::identityMatrix );
+	m_projectionMatrix	= DirectX::XMFLOAT4X4( MathHelper::identityMatrix );
 }
 
 Camera::~Camera()

@@ -6,11 +6,13 @@ ManagementCB::ManagementCB()
 {
 	cbFrame_  = NULL;
 	cbSprite_ = NULL;
+	m_cbObject = NULL;
 }
 ManagementCB::~ManagementCB()
 {
 	SAFE_RELEASE(cbFrame_);
 	SAFE_RELEASE(cbSprite_);
+	SAFE_RELEASE(m_cbObject);
 }
 
 void ManagementCB::vsSetCB(ID3D11DeviceContext* devcon, CBTypes cbType)
@@ -22,6 +24,9 @@ void ManagementCB::vsSetCB(ID3D11DeviceContext* devcon, CBTypes cbType)
 		break;
 	case CBTypes_SPRITE:
 		devcon->VSSetConstantBuffers(CB_SPRITE_REGISTER, 1, &cbSprite_);
+		break;
+	case CBTypes_OBJECT:
+		devcon->VSSetConstantBuffers(CB_OBJECT_REGISTER, 1, &m_cbObject);
 		break;
 	default:
 		devcon->VSSetConstantBuffers(0, 0, NULL);
@@ -37,6 +42,9 @@ void ManagementCB::psSetCB(ID3D11DeviceContext* devcon, CBTypes cbType)
 		break;
 	case CBTypes_SPRITE:
 		devcon->PSSetConstantBuffers(CB_SPRITE_REGISTER, 1, &cbSprite_);
+		break;
+	case CBTypes_OBJECT:
+		devcon->VSSetConstantBuffers(CB_OBJECT_REGISTER, 1, &m_cbObject);
 		break;
 	default:
 		devcon->PSSetConstantBuffers(0, 0, NULL);
@@ -59,6 +67,13 @@ void ManagementCB::updateCBSprite(ID3D11DeviceContext* devcon, DirectX::XMFLOAT4
 
 	devcon->UpdateSubresource(cbSprite_, 0, 0, &cBuffer, 0, 0);
 }
+void ManagementCB::updateCBObject(ID3D11DeviceContext* devcon, DirectX::XMFLOAT4X4 p_worldMat)
+{
+	CBObject cBuffer;
+	cBuffer.m_world = p_worldMat;
+
+	devcon->UpdateSubresource(m_cbObject, 0, 0, &cBuffer, 0, 0);
+}
 
 HRESULT ManagementCB::init(ID3D11Device* device)
 {
@@ -67,6 +82,9 @@ HRESULT ManagementCB::init(ID3D11Device* device)
 	hr = initConstantBuffer(device, &cbFrame_, CB_FRAME_SIZE);
 	if(SUCCEEDED(hr))
 		hr = initConstantBuffer(device, &cbSprite_, CB_SPRITE_SIZE);
+
+	if(SUCCEEDED(hr))
+		hr = initConstantBuffer(device, &m_cbObject, CB_OBJECT_SIZE);
 
 	return hr;
 }
