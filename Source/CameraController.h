@@ -25,8 +25,9 @@ public:
 		VantagePoints_MEDIUM,
 		VantagePoints_FAR,
 		VantagePoints_FARFAR,
+		VantagePoints_ONTOP,
 
-		VantagePoints_LAST = VantagePoints_FARFAR,
+		VantagePoints_LAST = VantagePoints_ONTOP,
 		VantagePoints_CNT
 	};
 
@@ -39,7 +40,8 @@ public:
 	DirectX::XMFLOAT3 getPivotPosition() const;
 
 private:
-	void movePivot( float p_x, float p_y );
+	void movePivotStatically( float p_x, float p_y );
+	void movePivotByRightAndLook( float p_x, float p_y );
 	void updateAngles( float p_x, float p_y );
 	void moveCam();
 	void updateLookAndRight();

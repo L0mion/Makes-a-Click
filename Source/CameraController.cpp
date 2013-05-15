@@ -5,12 +5,14 @@
 #include "mathHelper.h"
 #include "DebugGUI.h"
 #include "HeightMap.h"
+#include <AntTweakBar.h>
 
 const int CameraController::s_vantagePoints[VantagePoints_CNT] = {
 	5,
 	10,
 	20,
-	100
+	100,
+	350
 };
 
 CameraController::CameraController( Camera* p_camera,
@@ -34,7 +36,8 @@ CameraController::CameraController( Camera* p_camera,
 	m_pivotAngleY = 0.01f;
 
 	DebugGUI* dGui = DebugGUI::getInstance();
-
+	dGui->addVar( "Camera debug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "pivot point", &m_position.x );
+	dGui->addVar( "Camera debug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "position", &m_position.x );
 	dGui->addVar( "Camera debug", DebugGUI::Types_FLOAT, DebugGUI::Permissions_READ_WRITE, "x angle", &m_pivotAngleX );
 	dGui->addVar( "Camera debug", DebugGUI::Types_FLOAT, DebugGUI::Permissions_READ_WRITE, "y angle", &m_pivotAngleY );
 	dGui->addVar( "Camera debug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "look", &m_look.x );
@@ -74,11 +77,26 @@ void CameraController::update( float p_dt )
 	thumbRX *= m_sensitivity[Sticks_RIGHT] * p_dt;
 	thumbRY *= m_sensitivity[Sticks_RIGHT] * p_dt * -1;
 
-	movePivot( thumbLX, thumbLY );
-	updateAngles( thumbRX, thumbRY );
-	
-	moveCam();
-	updateLookAndRight();
+
+	if( m_currentVantagePoint != VantagePoints_ONTOP ) {
+		movePivotByRightAndLook( thumbLX, thumbLY );
+		updateAngles( thumbRX, thumbRY );
+		moveCam();
+		updateLookAndRight();
+	} else {
+		movePivotStatically( thumbLX, thumbLY );
+		m_position.x = 0.0f;
+		m_position.y = s_vantagePoints[VantagePoints_ONTOP];
+		m_position.z = 0.0f;
+		
+		m_look.x = 0.0f;
+		m_look.y = -1.0f;
+		m_look.z = 0.0f;
+
+		m_right.x = 1.0f;
+		m_right.y = 0.0f;
+		m_right.z = 0.0f;
+	}
 
 	m_camera->rebuildView( m_position, m_right, m_look, m_up );
 }
@@ -92,7 +110,21 @@ DirectX::XMFLOAT3 CameraController::getPivotPosition() const
 	return m_pivotPoint;
 }
 
-void CameraController::movePivot( float p_x, float p_y )
+void CameraController::movePivotStatically( float p_x, float p_y )
+{
+	XMFLOAT3 north( 0.0f, 0.0f, 1.0f );
+	XMFLOAT3 east( 1.0f, 0.0f, 0.0f );
+
+	m_pivotPoint.x += north.x * p_y;
+	m_pivotPoint.z += north.z * p_y;
+
+	m_pivotPoint.x += east.x * p_x;
+	m_pivotPoint.z += east.z * p_x;
+
+	m_pivotPoint.y = m_heightmap->getHeight( m_pivotPoint.x, m_pivotPoint.z );
+}
+
+void CameraController::movePivotByRightAndLook( float p_x, float p_y )
 {
 	m_pivotPoint.x += m_look.x * p_y;
 	m_pivotPoint.z += m_look.z * p_y;
