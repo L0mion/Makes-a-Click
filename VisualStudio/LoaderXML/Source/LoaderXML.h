@@ -10,9 +10,9 @@ namespace Parser_XML {
 #include <string>
 
 //These are fairly temporary.
-static const std::wstring	g_filePathToSearch	= L"../../Resources/"	;
-static const std::wstring	g_fileEnding		= L".xml"				;
-static const bool			g_recursiveSearch	= true					;
+static const std::wstring	g_filePathToSearch	= L"../../Resources/Levels/"	;
+static const std::wstring	g_fileEnding		= L".xml"						;
+static const bool			g_recursiveSearch	= true							;
 
 /*------------------------------------------*/
 /*			 - Note to self -				*/

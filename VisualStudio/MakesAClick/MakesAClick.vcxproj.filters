@@ -61,7 +61,7 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\managementMenu.cpp">
       <Filter>ManagementMenu</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ManagementDebug.cpp">
       <Filter>Utilties</Filter>
     </ClCompile>
@@ -73,6 +73,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ObjFileReader.cpp">
       <Filter>Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LoaderMAC.cpp">
+      <Filter>LoaderMAC</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LoaderRaw.cpp">
+      <Filter>LoaderMAC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,7 +156,7 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\managementMenu.h">
       <Filter>ManagementMenu</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ManagementDebug.h">
       <Filter>Utilties</Filter>
     </ClInclude>
@@ -162,6 +168,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ObjFileReader.h">
       <Filter>Factories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LoaderMAC.h">
+      <Filter>LoaderMAC</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LoaderRaw.h">
+      <Filter>LoaderMAC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +206,9 @@
     </Filter>
     <Filter Include="ManagementMenu">
       <UniqueIdentifier>{db340f81-ae62-4a2b-a7ad-4f7e7af580f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LoaderMAC">
+      <UniqueIdentifier>{60974b02-539b-4994-a1e5-84c8842ba6a0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

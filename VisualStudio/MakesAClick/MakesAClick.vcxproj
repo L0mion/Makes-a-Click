@@ -19,6 +19,8 @@
     <ClCompile Include="..\..\Source\HeightMap.cpp" />
     <ClCompile Include="..\..\Source\CameraController.cpp" />
     <ClCompile Include="..\..\Source\InputHelper.cpp" />
+    <ClCompile Include="..\..\Source\LoaderMAC.cpp" />
+    <ClCompile Include="..\..\Source\LoaderRaw.cpp" />
     <ClCompile Include="..\..\Source\main.cpp" />
     <ClCompile Include="..\..\Source\managementBS.cpp" />
     <ClCompile Include="..\..\Source\managementCB.cpp" />
@@ -49,6 +51,8 @@
     <ClInclude Include="..\..\Source\CameraController.h" />
     <ClInclude Include="..\..\Source\InputHelper.h" />
     <ClInclude Include="..\..\Source\keyCodes.h" />
+    <ClInclude Include="..\..\Source\LoaderMAC.h" />
+    <ClInclude Include="..\..\Source\LoaderRaw.h" />
     <ClInclude Include="..\..\Source\managementBS.h" />
     <ClInclude Include="..\..\Source\managementCB.h" />
     <ClInclude Include="..\..\Source\managementD3D.h" />

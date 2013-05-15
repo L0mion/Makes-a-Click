@@ -24,6 +24,7 @@
 #include "renderer.h"
 #include "utility.h"
 #include "window.h"
+#include "LoaderMAC.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void initDebugGui( float* p_dt, float* p_fps );
@@ -42,17 +43,6 @@ CameraController* g_cameraControl;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int cmdShow)
 {
-	//Temp: Using whilst testing XML-Loader.
-	//Loader_XML::LoaderXML* loaderXML = new Loader_XML::LoaderXML();
-	//loaderXML->init();
-	//delete loaderXML;
-
-	//Writer_XML::DescMAC descMac("Testing", "Testing", 0);
-	//Writer_XML::WriterXML* writerXML 
-	//	= new Writer_XML::WriterXML(descMac);
-	//writerXML->init();
-	//delete writerXML;
-
 #if defined( DEBUG ) || defined( _DEBUG )
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 	_CrtSetReportMode ( _CRT_ERROR, _CRTDBG_MODE_DEBUG );
@@ -69,6 +59,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	initDebugGui( &dt, &fps );
 	XInputFetcher* xinput = new XInputFetcher();
 	xinput->calibrate(0.4);
+
+	//Loading
+	LoaderMAC* loaderMAC = new LoaderMAC();
+	bool sucessfulLoad = loaderMAC->init();
 
 	HeightMap* heightMap = new HeightMap( g_renderer->getD3DManagement() );
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
