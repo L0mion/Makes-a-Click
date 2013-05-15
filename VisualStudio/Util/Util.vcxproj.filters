@@ -5,5 +5,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\UtilString.h" />
+    <ClInclude Include="Source\UtilDefinitionMAC.h" />
+    <ClInclude Include="Source\Util.h" />
   </ItemGroup>
 </Project>

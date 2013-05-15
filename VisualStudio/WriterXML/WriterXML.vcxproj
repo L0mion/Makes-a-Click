@@ -10,23 +10,9 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Source\DocXML.cpp" />
-    <ClCompile Include="Source\Rdr.cpp" />
-    <ClCompile Include="Source\ParserXML.cpp" />
-    <ClCompile Include="Source\RdrXML.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\DocXML.h" />
-    <ClInclude Include="Source\Rdr.h" />
-    <ClInclude Include="Source\ParserXML.h" />
-    <ClInclude Include="Source\RdrXML.h" />
-    <ClInclude Include="Source\SettingsParserXML.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{87C00FD3-863E-480E-A49E-051E0BB2F07E}</ProjectGuid>
-    <RootNamespace>ParserXML</RootNamespace>
-    <ProjectName>ParserXML</ProjectName>
+    <ProjectGuid>{28500F17-1971-4A14-BA20-4EA57ED85452}</ProjectGuid>
+    <RootNamespace>WriterXML</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -36,7 +22,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -53,11 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IncludePath>$(SolutionDir)\Util\Source\;$(SolutionDir)\..\External\rapidxml-1.13\;$(IncludePath)</IncludePath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\..\External\rapidxml-1.13\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -83,6 +65,20 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\DescMAC.cpp" />
+    <ClCompile Include="Source\WriterXML.cpp" />
+    <ClCompile Include="Source\Wtr.cpp" />
+    <ClCompile Include="Source\Xmler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\DescMAC.h" />
+    <ClInclude Include="Source\DescMACResource.h" />
+    <ClInclude Include="Source\SettingsWriterXML.h" />
+    <ClInclude Include="Source\WriterXML.h" />
+    <ClInclude Include="Source\Wtr.h" />
+    <ClInclude Include="Source\Xmler.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
