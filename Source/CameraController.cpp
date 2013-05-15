@@ -6,7 +6,7 @@
 #include "DebugGUI.h"
 #include "HeightMap.h"
 
-const int CameraController::s_pivotDistancePresets[VantagePoints_CNT] = {
+const int CameraController::s_vantagePoints[VantagePoints_CNT] = {
 	5,
 	10,
 	20,
@@ -22,7 +22,7 @@ CameraController::CameraController( Camera* p_camera,
 
 	m_sensitivity[Sticks_LEFT]  = 64.0f;
 	m_sensitivity[Sticks_RIGHT] = 2.0f;
-	m_currentDist = VantagePoints_MEDIUM;
+	m_currentVantagePoint = VantagePoints_MEDIUM;
 
 	m_pivotPoint	= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
 	m_position		= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
@@ -127,7 +127,7 @@ void CameraController::moveCam()
 	XMMATRIX rightRotMat = XMMatrixRotationAxis( rightRotVec, m_pivotAngleY );
 
 	// Rotate 
-	float distToVantage = s_pivotDistancePresets[m_currentDist];
+	float distToVantage = s_vantagePoints[m_currentVantagePoint];
 	XMFLOAT3 finalPos = XMFLOAT3( distToVantage , 0.0f, 0.0f );
 	XMVECTOR finalPosVec = XMLoadFloat3( &finalPos );
 	finalPosVec = XMVector3Transform( finalPosVec, yRotMat );
@@ -135,16 +135,27 @@ void CameraController::moveCam()
 
 	XMStoreFloat3( &finalPos, finalPosVec );
 	m_position.x = m_pivotPoint.x + finalPos.x;
-	m_position.y = m_pivotPoint.y + finalPos.y;
+	m_position.y = finalPos.y;
 	m_position.z = m_pivotPoint.z + finalPos.z;
+	
+	// Last zoom level has a static height
+	if( m_currentVantagePoint != VantagePoints_FARFAR ) {
+		m_position.y += m_pivotPoint.y;
+	}
 }
 
 
 void CameraController::updateLookAndRight()
 {
 	m_look.x = m_pivotPoint.x - m_position.x;
-	m_look.y = m_pivotPoint.y - m_position.y;
+	m_look.y = -m_position.y;
 	m_look.z = m_pivotPoint.z - m_position.z;
+
+	// Last zoom level has a static height
+	if( m_currentVantagePoint != VantagePoints_FARFAR ) {
+		m_look.y += m_pivotPoint.y;
+	}
+
 	XMVECTOR lookVec = XMLoadFloat3( &m_look );
 	lookVec = XMVector3Normalize( lookVec );
 
@@ -160,17 +171,17 @@ void CameraController::updateLookAndRight()
 
 void CameraController::zoomIn()
 {
-	m_currentDist--;
-	if( m_currentDist < VantagePoints_FIRST ) {
-		m_currentDist = VantagePoints_FIRST;
+	m_currentVantagePoint--;
+	if( m_currentVantagePoint < VantagePoints_FIRST ) {
+		m_currentVantagePoint = VantagePoints_FIRST;
 	}
 }
 
 void CameraController::zoomOut()
 {
-	m_currentDist++;
-	if( m_currentDist > VantagePoints_LAST ) {
-		m_currentDist = VantagePoints_LAST;
+	m_currentVantagePoint++;
+	if( m_currentVantagePoint > VantagePoints_LAST ) {
+		m_currentVantagePoint = VantagePoints_LAST;
 	}
 }
 

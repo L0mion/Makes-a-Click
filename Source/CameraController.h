@@ -30,7 +30,8 @@ public:
 		VantagePoints_CNT
 	};
 
-	CameraController( Camera* p_camera, XInputFetcher* p_xinput, HeightMap* p_heightmap );
+	CameraController( Camera* p_camera, XInputFetcher* p_xinput,
+		HeightMap* p_heightmap );
 	~CameraController();
 
 	void update( float p_dt );
@@ -68,8 +69,8 @@ private:
 	
 	DirectX::XMFLOAT3 m_pivotPoint;
 
-	static const int s_pivotDistancePresets[VantagePoints_CNT];
-	int m_currentDist;
+	static const int s_vantagePoints[VantagePoints_CNT];
+	int m_currentVantagePoint;
 	//float m_pivotDist;
 
 	float m_pivotAngleX;
