@@ -140,8 +140,10 @@ void CameraController::updateAngles( float p_x, float p_y )
 	m_pivotAngleX += p_x;
 	m_pivotAngleY += p_y;
 
-	if( m_pivotAngleY > XM_PI*0.3f ) {
-		m_pivotAngleY = XM_PI*0.3f;
+	float maxPivotAngleYFactor = 0.33;
+
+	if( m_pivotAngleY > XM_PI*maxPivotAngleYFactor ) {
+		m_pivotAngleY = XM_PI*maxPivotAngleYFactor;
 	} else if( m_pivotAngleY < 0.0f ) {
 		m_pivotAngleY = 0.0f;
 	}
