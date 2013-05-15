@@ -1,0 +1,3 @@
+sand-bucket-icon.png: CC Attribution-Share Alike 3.0 , Artist: Proycontec, URL: http://www.proycontec.es
+
+object-icon: CC Attribution 3.0, Artist: IconMoon

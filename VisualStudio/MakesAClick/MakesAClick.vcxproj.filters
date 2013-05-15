@@ -59,6 +59,9 @@
     <ClCompile Include="..\..\Source\managementBS.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\managementMenu.cpp">
+      <Filter>ManagementMenu</Filter>
+	</ClCompile>
     <ClCompile Include="..\..\Source\ManagementDebug.cpp">
       <Filter>Utilties</Filter>
     </ClCompile>
@@ -145,6 +148,9 @@
     <ClInclude Include="..\..\Source\managementBS.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\managementMenu.h">
+      <Filter>ManagementMenu</Filter>
+	</ClInclude>
     <ClInclude Include="..\..\Source\ManagementDebug.h">
       <Filter>Utilties</Filter>
     </ClInclude>
@@ -185,6 +191,9 @@
     </Filter>
     <Filter Include="Factories">
       <UniqueIdentifier>{70affaff-c64e-4759-8040-f3ceafbb68ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ManagementMenu">
+      <UniqueIdentifier>{db340f81-ae62-4a2b-a7ad-4f7e7af580f1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
