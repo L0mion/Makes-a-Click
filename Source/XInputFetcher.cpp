@@ -1,6 +1,7 @@
 #include "XInputFetcher.h"
 #include <math.h>
 #include "DebugGUI.h"
+#include "mathHelper.h"
 
 int XInputFetcher::s_btnMaskMap[InputHelper::Xbox360Digitals_CNT] = 
 {
@@ -137,6 +138,12 @@ void XInputFetcher::setControllerSensitivity( const double p_sensitivity )
 const double XInputFetcher::getControllerSensitivity() const
 {
 	return m_sensitivity;
+}
+
+double XInputFetcher::getCalibratedAnalogQuad( int p_analog )
+{
+	double val = getCalibratedAnalog( p_analog );
+	return MathHelper::signedQuad( val );
 }
 
 double XInputFetcher::getCalibratedAnalog( int p_analog )

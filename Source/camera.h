@@ -9,32 +9,17 @@ public:
 	Camera();
 	~Camera();
 
-	DirectX::XMFLOAT3 getPosition() const;
-	DirectX::XMFLOAT3 getRight() const;
-	DirectX::XMFLOAT3 getLook() const;
-	DirectX::XMFLOAT3 getUp() const;
-
 	DirectX::XMFLOAT4X4 getViewMatrix() const;
 	DirectX::XMFLOAT4X4 getProjectionMatrix() const;
 
 	void setLens(float fieldOfView, float aspectRatio, float nearPlane, float farPlane);
 
-	void strafe(float distance);
-	void walk(float distance);
-	void verticalWalk(float distance);
-
-	void pitch(float angle);
-	void yaw(float angle);
-
-	void rebuildView();
+	void rebuildView( DirectX::XMFLOAT3 p_position,
+		DirectX::XMFLOAT3 p_right, DirectX::XMFLOAT3 p_look,
+		DirectX::XMFLOAT3 p_up );
 private:
-	DirectX::XMFLOAT3 position_;
-	DirectX::XMFLOAT3 right_;
-	DirectX::XMFLOAT3 look_;
-	DirectX::XMFLOAT3 up_;
-
-	DirectX::XMFLOAT4X4 viewMatrix_;
-	DirectX::XMFLOAT4X4 projectionMatrix_;
+	DirectX::XMFLOAT4X4 m_viewMatrix;
+	DirectX::XMFLOAT4X4 m_projectionMatrix;
 };
 
 #endif //CAMERA_H

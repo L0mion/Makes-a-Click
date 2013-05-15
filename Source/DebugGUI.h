@@ -44,7 +44,7 @@ public:
 	static DebugGUI* getInstance();
 	void init( ManagementD3D* p_deviceHandler, HWND p_handle );
 	Results addVar( string p_barName, Types p_type, Permissions p_permissions,
-		string p_name, void *p_var, string p_options );
+		string p_name, void *p_var, string p_options = "" );
 
 	void setSize( string p_barName, int p_x, int p_y );
 	void setPosition( string p_barName, int p_x, int p_y);

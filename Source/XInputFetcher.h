@@ -40,6 +40,7 @@ public:
 	/// \param p_analog which analog stick/trigger to fetch input for
 	/// \return double Between 0.0 and 1.0
 	///-----------------------------------------------------------------------------------
+	virtual double getCalibratedAnalogQuad( int p_analog );
 	virtual double getCalibratedAnalog( int p_analog );
 	virtual void calibrate( double p_epsilon );
 

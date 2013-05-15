@@ -53,9 +53,6 @@
     <ClCompile Include="..\..\Source\HeightMap.cpp">
       <Filter>Utilties</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CubeFactory.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\EntityBufferInfo.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -65,8 +62,14 @@
     <ClCompile Include="..\..\Source\ManagementDebug.cpp">
       <Filter>Utilties</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\InputHandler.cpp">
+    <ClCompile Include="..\..\Source\CameraController.cpp">
       <Filter>Utilties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CubeFactory.cpp">
+      <Filter>Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ObjFileReader.cpp">
+      <Filter>Factories</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,17 +142,20 @@
     <ClInclude Include="..\..\Source\EntityBufferInfo.h">
       <Filter>Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\CubeFactory.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\managementBS.h">
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ManagementDebug.h">
       <Filter>Utilties</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\InputHandler.h">
+    <ClInclude Include="..\..\Source\CameraController.h">
       <Filter>Utilties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CubeFactory.h">
+      <Filter>Factories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ObjFileReader.h">
+      <Filter>Factories</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +182,9 @@
     </Filter>
     <Filter Include="Renderer">
       <UniqueIdentifier>{5e2a92b0-aad9-4736-8cd9-8ee6ddbc386c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Factories">
+      <UniqueIdentifier>{70affaff-c64e-4759-8040-f3ceafbb68ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

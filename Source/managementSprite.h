@@ -8,7 +8,7 @@
 
 
 class Sprite;
-struct SpriteVertex;
+struct Vertex_PT;
 
 class ManagementSprite
 {
@@ -48,7 +48,7 @@ private:
 	void initSprites();
 	void initSpriteCollection();
 
-	std::vector<SpriteVertex> createVertices();
+	std::vector<Vertex_PT> createVertices();
 	std::vector<DWORD> createIndices();
 	
 	void setSpriteCollectionTextMenu();

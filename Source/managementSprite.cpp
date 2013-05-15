@@ -85,11 +85,11 @@ HRESULT ManagementSprite::initVertexBuffer(ID3D11Device* p_device)
 {
 	HRESULT hr = S_OK;
 
-	std::vector<SpriteVertex> vertices = createVertices();
+	std::vector<Vertex_PT> vertices = createVertices();
 
 	D3D11_BUFFER_DESC vbd;
 	vbd.Usage = D3D11_USAGE_DYNAMIC;
-	vbd.ByteWidth = sizeof(Vertex) * vertices.size();
+	vbd.ByteWidth = sizeof(Vertex_CP) * vertices.size();
 	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	vbd.MiscFlags = 0;
@@ -142,14 +142,14 @@ void ManagementSprite::initSpriteCollection()
 	m_spriteCollection = new std::vector<Sprite*>();
 }
 
-std::vector<SpriteVertex> ManagementSprite::createVertices()
+std::vector<Vertex_PT> ManagementSprite::createVertices()
 {
-	std::vector<SpriteVertex> vertices;
+	std::vector<Vertex_PT> vertices;
 
-	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(-1.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(0.0f, 0.0f)));
-	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(1.0f, 0.0f)));
-	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT2(0.0f, 1.0f)));
-	vertices.push_back(SpriteVertex(DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT2(1.0f, 1.0f)));
+	vertices.push_back(Vertex_PT(DirectX::XMFLOAT3(-1.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(0.0f, 0.0f)));
+	vertices.push_back(Vertex_PT(DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(1.0f, 0.0f)));
+	vertices.push_back(Vertex_PT(DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT2(0.0f, 1.0f)));
+	vertices.push_back(Vertex_PT(DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT2(1.0f, 1.0f)));
 
 	return vertices;
 }

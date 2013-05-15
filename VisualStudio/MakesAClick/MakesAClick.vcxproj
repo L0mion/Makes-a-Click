@@ -17,7 +17,7 @@
     <ClCompile Include="..\..\Source\DebugGUI.cpp" />
     <ClCompile Include="..\..\Source\EntityBufferInfo.cpp" />
     <ClCompile Include="..\..\Source\HeightMap.cpp" />
-    <ClCompile Include="..\..\Source\InputHandler.cpp" />
+    <ClCompile Include="..\..\Source\CameraController.cpp" />
     <ClCompile Include="..\..\Source\InputHelper.cpp" />
     <ClCompile Include="..\..\Source\main.cpp" />
     <ClCompile Include="..\..\Source\managementBS.cpp" />
@@ -29,6 +29,7 @@
     <ClCompile Include="..\..\Source\managementSS.cpp" />
     <ClCompile Include="..\..\Source\managementTex.cpp" />
     <ClCompile Include="..\..\Source\mathHelper.cpp" />
+    <ClCompile Include="..\..\Source\ObjFileReader.cpp" />
     <ClCompile Include="..\..\Source\renderer.cpp" />
     <ClCompile Include="..\..\Source\sprite.cpp" />
     <ClCompile Include="..\..\Source\Vertex.cpp" />
@@ -44,7 +45,7 @@
     <ClInclude Include="..\..\Source\EntityBufferInfo.h" />
     <ClInclude Include="..\..\Source\HeightMap.h" />
     <ClInclude Include="..\..\Source\inputDesc.h" />
-    <ClInclude Include="..\..\Source\InputHandler.h" />
+    <ClInclude Include="..\..\Source\CameraController.h" />
     <ClInclude Include="..\..\Source\InputHelper.h" />
     <ClInclude Include="..\..\Source\keyCodes.h" />
     <ClInclude Include="..\..\Source\managementBS.h" />
@@ -56,6 +57,7 @@
     <ClInclude Include="..\..\Source\managementSS.h" />
     <ClInclude Include="..\..\Source\managementTex.h" />
     <ClInclude Include="..\..\Source\mathHelper.h" />
+    <ClInclude Include="..\..\Source\ObjFileReader.h" />
     <ClInclude Include="..\..\Source\renderer.h" />
     <ClInclude Include="..\..\Source\sprite.h" />
     <ClInclude Include="..\..\Source\textureIds.h" />

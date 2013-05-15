@@ -28,7 +28,7 @@ private:
 
 	// Generate EntityBufferInfo
 	void createEntityBufferInfo();
-	vector<HeightMapVertex> defineVertexBuffer( int p_vertexCnt );
+	vector<Vertex_PNT> defineVertexBuffer( int p_vertexCnt );
 	vector<int> defineIndexBuffer( int p_indexCnt );
 
 private: // Variables

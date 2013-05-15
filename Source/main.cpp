@@ -7,30 +7,32 @@
 #include <crtdbg.h>
 #endif
 
+#include "CameraController.h"
+#include "CubeFactory.h"
 #include "DebugGUI.h"
 #include "HeightMap.h"
-#include "XInputFetcher.h"
 #include "InputHelper.h"
+#include "ManagementDebug.h"
+#include "XInputFetcher.h"
 #include "camera.h"
 #include "inputDesc.h"
 #include "keyCodes.h"
-#include "mathHelper.h"
 #include "managementSprite.h"
+#include "mathHelper.h"
 #include "renderer.h"
 #include "utility.h"
 #include "window.h"
-#include "CubeFactory.h"
-#include "ManagementDebug.h"
+#include "ObjFileReader.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void initDebugGui( float* p_dt, float* p_fps );
 void handleInput(XInputFetcher* xinput, float dt);
 void clean();
 
-Window* window;
-Renderer* renderer;
-Camera* camera;
-ManagementSprite* managementSprite;
+Window* g_window;
+Renderer* g_renderer;
+Camera* g_camera;
+ManagementSprite* g_managementSprite;
 
 //Temp: Using whilst testing XML-Loader.
 //#include <LoaderXML.h>
@@ -50,8 +52,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	AllocConsole();
 	HRESULT hr = S_OK;
 	hr = initialize(hInstance, cmdShow);
-	DebugGUI::getInstance()->init( renderer->getD3DManagement(),
-		window->getWindowHandle() );
+	DebugGUI::getInstance()->init( g_renderer->getD3DManagement(),
+		g_window->getWindowHandle() );
 
 	float dt = 0.0f;
 	float fps = 0.0f;
@@ -59,10 +61,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	XInputFetcher* xinput = new XInputFetcher();
 	xinput->calibrate(0.4);
 
-	HeightMap* heightMap = new HeightMap( renderer->getD3DManagement() );
+	HeightMap* heightMap = new HeightMap( g_renderer->getD3DManagement() );
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
-	renderer->addEntity( heightMapBuffers );
-	 
+	g_renderer->addEntity( heightMapBuffers );
+
+	ObjFileReader reader;
+	EntityBufferInfo* barrel = reader.readFile( "../../resources/",
+		"plastic_barrel_scaled.obj", false, g_renderer->getD3DManagement() );
+	g_renderer->addEntity( barrel );
+	
+	CameraController* cameraControl = new CameraController( g_camera, xinput, heightMap );
 
 	if(SUCCEEDED(hr))
 	{
@@ -70,26 +78,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		QueryPerformanceFrequency (&freq);
 		QueryPerformanceCounter (&old);
 
-		while(window->isActive())
+		while(g_window->isActive())
 		{
 			QueryPerformanceCounter(&current);
 			dt = float (current.QuadPart - old.QuadPart) / float(freq.QuadPart);
 			fps = 1/dt;
 
-			window->checkMessages();
+			g_window->checkMessages();
 
 			xinput->update();
 			handleInput(xinput, dt);
-			camera->rebuildView();
+			cameraControl->update( dt );
 
-			DirectX::XMFLOAT4X4 finalMatrix = MathHelper::multiplyMatrix(camera->getViewMatrix(), camera->getProjectionMatrix());
+			DirectX::XMFLOAT4X4 finalMatrix = MathHelper::multiplyMatrix( 
+				g_camera->getViewMatrix(), g_camera->getProjectionMatrix() );
 
-			renderer->update( finalMatrix, camera->getPosition() );
-			renderer->beginRender();
-			renderer->renderEntities();
-			//renderer->renderHeightMap( heightMap );
-			renderer->renderSprites(managementSprite);
-			renderer->endRender();
+			g_renderer->update( finalMatrix, cameraControl->getPosition() );
+			g_renderer->beginRender();
+			g_renderer->renderEntities();
+			g_renderer->renderSprites(g_managementSprite);
+			g_renderer->endRender();
 
 			old.QuadPart = current.QuadPart;
 
@@ -97,6 +105,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
+	delete cameraControl;
 	delete heightMap;
 	delete xinput;
 
@@ -106,7 +115,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 //#define DEBUG_D3D
 #ifdef DEBUG_D3D
 	ManagementDebug md;
-	md.init(renderer->getD3DManagement()->getDevice());
+	md.init(g_renderer->getD3DManagement()->getDevice());
 #endif // DEBUG_D3D
 
 	clean();
@@ -122,23 +131,22 @@ HRESULT initialize(HINSTANCE hInstance, int cmdShow)
 {
 	HRESULT hr = S_OK;
 
-	window = new Window(hInstance, cmdShow);
-	hr = window->initialize();
+	g_window = new Window(hInstance, cmdShow);
+	hr = g_window->initialize();
 	if(SUCCEEDED(hr))
 	{
-		renderer = new Renderer();
-		hr = renderer->init(window->getWindowHandle());
+		g_renderer = new Renderer();
+		hr = g_renderer->init(g_window->getWindowHandle());
 	}
 	if(SUCCEEDED(hr))
 	{
-		camera = new Camera();
-		camera->setLens(DirectX::XM_PIDIV4, static_cast<float>(SCREEN_WIDTH)/static_cast<float>(SCREEN_HEIGHT), 1.0f, 1000.0f);
-		camera->rebuildView();
+		g_camera = new Camera();
+		g_camera->setLens(DirectX::XM_PIDIV4, static_cast<float>(SCREEN_WIDTH)/static_cast<float>(SCREEN_HEIGHT), 1.0f, 1000.0f);
 	}
 	if(SUCCEEDED(hr))
 	{
-		managementSprite = new ManagementSprite();
-		hr = managementSprite->init(renderer->getD3DManagement()->getDevice());
+		g_managementSprite = new ManagementSprite();
+		hr = g_managementSprite->init(g_renderer->getD3DManagement()->getDevice());
 	}
 
 	return hr;
@@ -161,39 +169,16 @@ void initDebugGui( float* p_dt, float* p_fps )
 
 void handleInput(XInputFetcher* xinput, float dt)
 {
-	float leftAnalogSens  = 64.0f;
-	float rightAnalogSens = 2.0f;
-
-	double walkDistance		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE);
-	double strafeDistance	= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE);
-	double yawAngle			= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE);
-	double pitchAngle		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);
-	walkDistance			*= fabs( walkDistance );
-	strafeDistance			*= fabs( strafeDistance );
-	yawAngle				*= fabs( yawAngle );
-	pitchAngle				*= fabs( pitchAngle );
-
-	float walk	 = static_cast<float>(walkDistance)		* leftAnalogSens * dt;
-	float strafe = static_cast<float>(strafeDistance)	* leftAnalogSens * dt;
-	float yaw	 = static_cast<float>(yawAngle)			* rightAnalogSens * dt;
-	float pitch  = static_cast<float>(pitchAngle)		* rightAnalogSens * dt * -1;
-
-	camera->walk(walk);
-	camera->strafe(strafe);
-	camera->yaw(yaw);
-	camera->pitch(pitch);
-
 	if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) > 0)
-		managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TEXT_MENU);
+		g_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TEXT_MENU);
 	else
-		managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_NONE);
-
+		g_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_NONE);
 }
 
 void clean()
 {
-	SAFE_DELETE(window);
-	SAFE_DELETE(renderer);
-	SAFE_DELETE(camera);
-	SAFE_DELETE(managementSprite);
+	SAFE_DELETE(g_window);
+	SAFE_DELETE(g_renderer);
+	SAFE_DELETE(g_camera);
+	SAFE_DELETE(g_managementSprite);
 }

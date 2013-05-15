@@ -201,22 +201,22 @@ void HeightMap::createEntityBufferInfo()
 	int numVertices = m_rowCnt*m_colCnt;
 	int numIndices = m_faceCnt*3;
 	
-	vector<HeightMapVertex> vertices = defineVertexBuffer(numVertices);
+	vector<Vertex_PNT> vertices = defineVertexBuffer(numVertices);
 	vector<int> indices = defineIndexBuffer(numIndices);
 
 	m_bufferInfo = new EntityBufferInfo();
-	m_bufferInfo->setVertexBuffer( sizeof(HeightMapVertex), numVertices,
+	m_bufferInfo->setVertexBuffer( sizeof(Vertex_PNT), numVertices,
 		&vertices[0], m_managementD3D );
 	m_bufferInfo->setIndexBuffer( numIndices, &indices[0], m_managementD3D );
 }
 
-vector<HeightMapVertex> HeightMap::defineVertexBuffer( int p_vertexCnt )
+vector<Vertex_PNT> HeightMap::defineVertexBuffer( int p_vertexCnt )
 {
 	int pos;
 	float x, y, z;
 
 	//create geometry
-	vector<HeightMapVertex> vertices( p_vertexCnt );
+	vector<Vertex_PNT> vertices( p_vertexCnt );
 	float halfWidth = (m_colCnt-1)*m_cellSize*0.5f;
 	float halfDepth = (m_rowCnt-1)*m_cellSize*0.5f;
 

@@ -1,7 +1,7 @@
 #include "Vertex.h"
 
 
-HeightMapVertex::HeightMapVertex()
+Vertex_PNT::Vertex_PNT()
 {
 	// Set default values which are easily identifiable
 	position[Coords::X]	= 1.23f;
@@ -14,7 +14,7 @@ HeightMapVertex::HeightMapVertex()
 	texCoord[Coords::V]	= 8.90f;
 }
 
-HeightMapVertex::HeightMapVertex( float p_posX, float p_posY, float p_posZ, float p_normX, float p_normY, float p_normZ, float p_texU, float p_texV )
+Vertex_PNT::Vertex_PNT( float p_posX, float p_posY, float p_posZ, float p_normX, float p_normY, float p_normZ, float p_texU, float p_texV )
 {
 	position[Coords::X]	= p_posX;
 	position[Coords::Y]	= p_posY;

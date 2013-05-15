@@ -87,9 +87,7 @@ settings.input
 
 [Ll]oc[Mm]etrics*.*
 
-### ADD EXPCETIONS TO RULES ABOVE!!!
+### ADD EXCEPTIONS TO RULES ABOVE!!!
 # Exceptions
 !External/*
-!external/*
-!External/*/*
-!external/*/*
+!Resources/*

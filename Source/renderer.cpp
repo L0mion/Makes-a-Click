@@ -69,7 +69,7 @@ void Renderer::renderSprites(ManagementSprite* managementSprite)
 	managementBS_->setBlendState(devcon, ManagementBS::BSTypes_TRANSPARENCY);
 	managementCB_->vsSetCB(devcon, ManagementCB::CBTypes_SPRITE);
 	
-	UINT stride = sizeof(SpriteVertex);
+	UINT stride = sizeof(Vertex_PT);
 	UINT offset = 0;
 	
 	ID3D11Buffer* vertexBuffer = managementSprite->getVertexBuffer();
