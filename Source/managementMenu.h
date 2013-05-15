@@ -8,6 +8,8 @@
 static const int XBOX_360_GAMEPAD_ANALOG_STICK_MAX = 32767;
 static const int XBOX_360_GAMEPAD_ANALOG_STICK_MIN = -32768;
 
+class ManagementWrite;
+
 class ManagementMenu
 {
 public:
@@ -47,10 +49,12 @@ public:
 	ToolPropertyIds getActiveProperty();
 
 	ManagementSprite* getManagementSprite();
+	ManagementWrite* getManagementWrite();
 
-	HRESULT init(ID3D11Device* p_device);
+	HRESULT init(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon);
 private:
 	HRESULT initManagementSprite(ID3D11Device* p_device);
+	void initManagementWrite(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon);
 
 	void useSandPropertiesMenu(double p_analogStickX, 
 		double p_analogStickY);
@@ -70,6 +74,7 @@ private:
 	bool insideSector7(double p_analogX, double p_analogY);
 
 	ManagementSprite* m_managementSprite;
+	ManagementWrite* m_managementWrite;
 
 	ToolIds m_activeTool;
 	ToolIds m_tempSelectedTool;

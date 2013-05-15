@@ -1,11 +1,12 @@
 #include "managementMenu.h"
-
+#include "managementWrite.h"
 #include "sprite.h"
 #include "utility.h"
 
 ManagementMenu::ManagementMenu()
 {
 	m_managementSprite = NULL;
+	m_managementWrite = NULL;
 
 	m_activeTool		= ToolIds_SAND;
 	m_tempSelectedTool	= ToolIds_NONE;
@@ -13,11 +14,14 @@ ManagementMenu::ManagementMenu()
 ManagementMenu::~ManagementMenu()
 {
 	SAFE_DELETE(m_managementSprite);
+	SAFE_DELETE(m_managementWrite);
 }
 
 void ManagementMenu::useToolsMenu(double p_analogStickX, double p_analogStickY)
 {
 	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TOOLS_MENU);
+
+	m_managementWrite->renderText();
 
 	if(insideSector0(p_analogStickX, p_analogStickY))
 	{
@@ -79,11 +83,18 @@ ManagementSprite* ManagementMenu::getManagementSprite()
 	return m_managementSprite;
 }
 
-HRESULT ManagementMenu::init(ID3D11Device* p_device)
+ManagementWrite* ManagementMenu::getManagementWrite()
+{
+	return m_managementWrite;
+}
+
+HRESULT ManagementMenu::init(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon)
 {
 	HRESULT hr = S_OK;
 
 	hr = initManagementSprite(p_device);
+	if(SUCCEEDED(hr))
+		initManagementWrite(p_device, p_devcon);
 
 	return hr;
 }
@@ -93,6 +104,11 @@ HRESULT ManagementMenu::initManagementSprite(ID3D11Device* p_device)
 	m_managementSprite = new ManagementSprite();
 	m_managementSprite->init(p_device);
 	return hr;
+}
+void ManagementMenu::initManagementWrite(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon)
+{
+	m_managementWrite = new ManagementWrite();
+	m_managementWrite->init(p_device, p_devcon);
 }
 
 void ManagementMenu::useSandPropertiesMenu(double p_analogStickX, double p_analogStickY)
