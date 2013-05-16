@@ -107,7 +107,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			g_renderer->renderEntities();
 			g_renderer->renderSprites(g_managementMenu->getManagementSprite());
 			
-			//g_managementMenu->getManagementWrite()->renderText();
+			g_managementMenu->getManagementWrite()->renderText();
 			g_renderer->endRender();
 
 			old.QuadPart = current.QuadPart;
