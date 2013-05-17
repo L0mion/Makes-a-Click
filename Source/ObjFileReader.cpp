@@ -197,6 +197,7 @@ EntityBufferInfo* ObjFileReader::readFile( string pFolder, string pFileName,
 	bufferInfo->setVertexBuffer( sizeof(Vertex_PNT), m_vertices.size(),
 		&m_vertices[0], p_d3d );
 	bufferInfo->setIndexBuffer( numIndices, &m_indices[0], p_d3d );
+	bufferInfo->m_textureId = TextureIds::TextureIds_CIRCLE_HIGHLIGHT;
 
 	return bufferInfo;
 }

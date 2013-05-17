@@ -3,14 +3,19 @@
 
 #include <DirectXMath.h>
 
-namespace MathHelper
+class MathHelper
 {
-	DirectX::XMFLOAT3 multiplyFloat3Scalar(DirectX::XMFLOAT3 vector, float scalar);
-	DirectX::XMFLOAT4X4 multiplyMatrix(DirectX::XMFLOAT4X4 matrix1, DirectX::XMFLOAT4X4 matrix2);
+public:
+	static const float identityMatrix[16];
+
+	static DirectX::XMFLOAT3 multiplyFloat3Scalar(DirectX::XMFLOAT3 vector, float scalar);
+	static DirectX::XMFLOAT4X4 multiplyMatrix(DirectX::XMFLOAT4X4 matrix1, DirectX::XMFLOAT4X4 matrix2);
+	
 	template<typename T>
-	void signedFastQuad( T &p_val );
+	static void signedFastQuad( T &p_val );
+	
 	template<typename T>
-	T signedQuad( T p_val );
+	static T signedQuad( T p_val );
 };
 
 template<typename T>

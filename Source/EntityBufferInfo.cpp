@@ -1,5 +1,6 @@
 #include "EntityBufferInfo.h"
 #include "managementD3D.h"
+#include "mathHelper.h"
 
 EntityBufferInfo::~EntityBufferInfo()
 {
@@ -13,6 +14,8 @@ EntityBufferInfo::~EntityBufferInfo()
 
 EntityBufferInfo::EntityBufferInfo()
 {
+	m_world = DirectX::XMFLOAT4X4( MathHelper::identityMatrix );
+
 	m_verticesCnt = -1;
 	m_indicesCnt = -1;
 	m_stride = -1;

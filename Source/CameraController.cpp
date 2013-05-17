@@ -5,12 +5,14 @@
 #include "mathHelper.h"
 #include "DebugGUI.h"
 #include "HeightMap.h"
+#include <AntTweakBar.h>
 
-const int CameraController::s_pivotDistancePresets[VantagePoints_CNT] = {
+const int CameraController::s_vantagePoints[VantagePoints_CNT] = {
 	5,
 	10,
 	20,
-	100
+	100,
+	350
 };
 
 CameraController::CameraController( Camera* p_camera,
@@ -22,7 +24,7 @@ CameraController::CameraController( Camera* p_camera,
 
 	m_sensitivity[Sticks_LEFT]  = 64.0f;
 	m_sensitivity[Sticks_RIGHT] = 2.0f;
-	m_currentDist = VantagePoints_MEDIUM;
+	m_currentVantagePoint = VantagePoints_MEDIUM;
 
 	m_pivotPoint	= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
 	m_position		= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
@@ -34,7 +36,8 @@ CameraController::CameraController( Camera* p_camera,
 	m_pivotAngleY = 0.01f;
 
 	DebugGUI* dGui = DebugGUI::getInstance();
-
+	dGui->addVar( "Camera debug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "pivot point", &m_position.x );
+	dGui->addVar( "Camera debug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "position", &m_position.x );
 	dGui->addVar( "Camera debug", DebugGUI::Types_FLOAT, DebugGUI::Permissions_READ_WRITE, "x angle", &m_pivotAngleX );
 	dGui->addVar( "Camera debug", DebugGUI::Types_FLOAT, DebugGUI::Permissions_READ_WRITE, "y angle", &m_pivotAngleY );
 	dGui->addVar( "Camera debug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "look", &m_look.x );
@@ -74,11 +77,26 @@ void CameraController::update( float p_dt )
 	thumbRX *= m_sensitivity[Sticks_RIGHT] * p_dt;
 	thumbRY *= m_sensitivity[Sticks_RIGHT] * p_dt * -1;
 
-	movePivot( thumbLX, thumbLY );
-	updateAngles( thumbRX, thumbRY );
-	
-	moveCam();
-	updateLookAndRight();
+
+	if( m_currentVantagePoint != VantagePoints_ONTOP ) {
+		movePivotByRightAndLook( thumbLX, thumbLY );
+		updateAngles( thumbRX, thumbRY );
+		moveCam();
+		updateLookAndRight();
+	} else {
+		movePivotStatically( thumbLX, thumbLY );
+		m_position.x = 0.0f;
+		m_position.y = s_vantagePoints[VantagePoints_ONTOP];
+		m_position.z = 0.0f;
+		
+		m_look.x = 0.0f;
+		m_look.y = -1.0f;
+		m_look.z = 0.0f;
+
+		m_right.x = 1.0f;
+		m_right.y = 0.0f;
+		m_right.z = 0.0f;
+	}
 
 	m_camera->rebuildView( m_position, m_right, m_look, m_up );
 }
@@ -87,8 +105,26 @@ DirectX::XMFLOAT3 CameraController::getPosition() const
 {
 	return m_position;
 }
+DirectX::XMFLOAT3 CameraController::getPivotPosition() const
+{
+	return m_pivotPoint;
+}
 
-void CameraController::movePivot( float p_x, float p_y )
+void CameraController::movePivotStatically( float p_x, float p_y )
+{
+	XMFLOAT3 north( 0.0f, 0.0f, 1.0f );
+	XMFLOAT3 east( 1.0f, 0.0f, 0.0f );
+
+	m_pivotPoint.x += north.x * p_y;
+	m_pivotPoint.z += north.z * p_y;
+
+	m_pivotPoint.x += east.x * p_x;
+	m_pivotPoint.z += east.z * p_x;
+
+	m_pivotPoint.y = m_heightmap->getHeight( m_pivotPoint.x, m_pivotPoint.z );
+}
+
+void CameraController::movePivotByRightAndLook( float p_x, float p_y )
 {
 	m_pivotPoint.x += m_look.x * p_y;
 	m_pivotPoint.z += m_look.z * p_y;
@@ -104,8 +140,10 @@ void CameraController::updateAngles( float p_x, float p_y )
 	m_pivotAngleX += p_x;
 	m_pivotAngleY += p_y;
 
-	if( m_pivotAngleY > XM_PI*0.3f ) {
-		m_pivotAngleY = XM_PI*0.3f;
+	float maxPivotAngleYFactor = 0.33;
+
+	if( m_pivotAngleY > XM_PI*maxPivotAngleYFactor ) {
+		m_pivotAngleY = XM_PI*maxPivotAngleYFactor;
 	} else if( m_pivotAngleY < 0.0f ) {
 		m_pivotAngleY = 0.0f;
 	}
@@ -123,7 +161,7 @@ void CameraController::moveCam()
 	XMMATRIX rightRotMat = XMMatrixRotationAxis( rightRotVec, m_pivotAngleY );
 
 	// Rotate 
-	float distToVantage = s_pivotDistancePresets[m_currentDist];
+	float distToVantage = s_vantagePoints[m_currentVantagePoint];
 	XMFLOAT3 finalPos = XMFLOAT3( distToVantage , 0.0f, 0.0f );
 	XMVECTOR finalPosVec = XMLoadFloat3( &finalPos );
 	finalPosVec = XMVector3Transform( finalPosVec, yRotMat );
@@ -131,16 +169,27 @@ void CameraController::moveCam()
 
 	XMStoreFloat3( &finalPos, finalPosVec );
 	m_position.x = m_pivotPoint.x + finalPos.x;
-	m_position.y = m_pivotPoint.y + finalPos.y;
+	m_position.y = finalPos.y;
 	m_position.z = m_pivotPoint.z + finalPos.z;
+	
+	// Last zoom level has a static height
+	if( m_currentVantagePoint != VantagePoints_FARFAR ) {
+		m_position.y += m_pivotPoint.y;
+	}
 }
 
 
 void CameraController::updateLookAndRight()
 {
 	m_look.x = m_pivotPoint.x - m_position.x;
-	m_look.y = m_pivotPoint.y - m_position.y;
+	m_look.y = -m_position.y;
 	m_look.z = m_pivotPoint.z - m_position.z;
+
+	// Last zoom level has a static height
+	if( m_currentVantagePoint != VantagePoints_FARFAR ) {
+		m_look.y += m_pivotPoint.y;
+	}
+
 	XMVECTOR lookVec = XMLoadFloat3( &m_look );
 	lookVec = XMVector3Normalize( lookVec );
 
@@ -156,17 +205,17 @@ void CameraController::updateLookAndRight()
 
 void CameraController::zoomIn()
 {
-	m_currentDist--;
-	if( m_currentDist < VantagePoints_FIRST ) {
-		m_currentDist = VantagePoints_FIRST;
+	m_currentVantagePoint--;
+	if( m_currentVantagePoint < VantagePoints_FIRST ) {
+		m_currentVantagePoint = VantagePoints_FIRST;
 	}
 }
 
 void CameraController::zoomOut()
 {
-	m_currentDist++;
-	if( m_currentDist > VantagePoints_LAST ) {
-		m_currentDist = VantagePoints_LAST;
+	m_currentVantagePoint++;
+	if( m_currentVantagePoint > VantagePoints_LAST ) {
+		m_currentVantagePoint = VantagePoints_LAST;
 	}
 }
 
