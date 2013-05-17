@@ -25,6 +25,7 @@
 #include "utility.h"
 #include "window.h"
 #include "LoaderMAC.h"
+#include "EntityBufferInfo.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void initDebugGui( float* p_dt, float* p_fps );
@@ -70,7 +71,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	ObjFileReader reader;
 	EntityBufferInfo* barrel = reader.readFile( "../../resources/",
-		"plastic_barrel_scaled.obj", false, g_renderer->getD3DManagement() );
+		"sphere.obj", false, g_renderer->getD3DManagement() );
 	g_renderer->addEntity( barrel );
 	
 	g_cameraControl = new CameraController( g_camera, xinput, heightMap );
@@ -91,6 +92,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			xinput->update();
 			handleInput(xinput, dt);
+
+			DirectX::XMFLOAT3 pivotPos = g_cameraControl->getPivotPosition();
+			barrel->m_world._41 = pivotPos.x;
+			barrel->m_world._42 = pivotPos.y;
+			barrel->m_world._43 = pivotPos.z;
 
 			DirectX::XMFLOAT4X4 finalMatrix = MathHelper::multiplyMatrix( 
 				g_camera->getViewMatrix(), g_camera->getProjectionMatrix() );

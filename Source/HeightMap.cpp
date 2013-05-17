@@ -208,6 +208,7 @@ void HeightMap::createEntityBufferInfo()
 	m_bufferInfo->setVertexBuffer( sizeof(Vertex_PNT), numVertices,
 		&vertices[0], m_managementD3D );
 	m_bufferInfo->setIndexBuffer( numIndices, &indices[0], m_managementD3D );
+	m_bufferInfo->m_textureId = TextureIds::TextureIds_HEIGHTMAP;
 }
 
 vector<Vertex_PNT> HeightMap::defineVertexBuffer( int p_vertexCnt )

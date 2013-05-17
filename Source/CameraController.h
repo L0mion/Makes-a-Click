@@ -25,19 +25,23 @@ public:
 		VantagePoints_MEDIUM,
 		VantagePoints_FAR,
 		VantagePoints_FARFAR,
+		VantagePoints_ONTOP,
 
-		VantagePoints_LAST = VantagePoints_FARFAR,
+		VantagePoints_LAST = VantagePoints_ONTOP,
 		VantagePoints_CNT
 	};
 
-	CameraController( Camera* p_camera, XInputFetcher* p_xinput, HeightMap* p_heightmap );
+	CameraController( Camera* p_camera, XInputFetcher* p_xinput,
+		HeightMap* p_heightmap );
 	~CameraController();
 
 	void update( float p_dt );
 	DirectX::XMFLOAT3 getPosition() const;
+	DirectX::XMFLOAT3 getPivotPosition() const;
 
 private:
-	void movePivot( float p_x, float p_y );
+	void movePivotStatically( float p_x, float p_y );
+	void movePivotByRightAndLook( float p_x, float p_y );
 	void updateAngles( float p_x, float p_y );
 	void moveCam();
 	void updateLookAndRight();
@@ -67,8 +71,8 @@ private:
 	
 	DirectX::XMFLOAT3 m_pivotPoint;
 
-	static const int s_pivotDistancePresets[VantagePoints_CNT];
-	int m_currentDist;
+	static const int s_vantagePoints[VantagePoints_CNT];
+	int m_currentVantagePoint;
 	//float m_pivotDist;
 
 	float m_pivotAngleX;
