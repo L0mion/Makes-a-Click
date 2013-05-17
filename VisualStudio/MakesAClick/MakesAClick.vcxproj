@@ -62,6 +62,7 @@
     <ClInclude Include="..\..\Source\ObjFileReader.h" />
     <ClInclude Include="..\..\Source\renderer.h" />
     <ClInclude Include="..\..\Source\sprite.h" />
+    <ClInclude Include="..\..\Source\text.h" />
     <ClInclude Include="..\..\Source\textureIds.h" />
     <ClInclude Include="..\..\Source\utility.h" />
     <ClInclude Include="..\..\Source\vertex.h" />

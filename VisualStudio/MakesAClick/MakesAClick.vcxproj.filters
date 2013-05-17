@@ -163,6 +163,9 @@
     <ClInclude Include="..\..\Source\managementWrite.h">
       <Filter>ManagementWrite</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\text.h">
+      <Filter>ManagementWrite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">

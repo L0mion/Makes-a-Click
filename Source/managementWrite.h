@@ -6,13 +6,15 @@
 #include <SpriteBatch.h>
 #include <SpriteFont.h>
 
+struct Text;
+
 class ManagementWrite
 {
 public:
 	ManagementWrite();
 	~ManagementWrite();
 
-	void renderText();
+	void renderText(Text* p_text);
 
 	void init(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon);
 private:

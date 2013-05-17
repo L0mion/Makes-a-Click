@@ -1,5 +1,6 @@
 #include "managementWrite.h"
 
+#include "text.h"
 #include "utility.h"
 
 ManagementWrite::ManagementWrite()
@@ -13,12 +14,12 @@ ManagementWrite::~ManagementWrite()
 	SAFE_DELETE(m_spriteFont);
 }
 
-void ManagementWrite::renderText()
+void ManagementWrite::renderText(Text* p_text)
 {
 	m_spriteBatch->Begin();
 
-	DirectX::FXMVECTOR xmColor = DirectX::XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
-	m_spriteFont->DrawString(m_spriteBatch, L"Hello World!", DirectX::XMFLOAT2(50, 50), xmColor);
+	DirectX::FXMVECTOR xmColor = DirectX::XMLoadFloat4(&p_text->m_color);
+	m_spriteFont->DrawString(m_spriteBatch, p_text->m_text.c_str(), p_text->m_position, xmColor);
 
 	m_spriteBatch->End();
 }
