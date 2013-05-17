@@ -1,0 +1,12 @@
+<MAC Name = "TestLvl">
+	<Resource>
+		<Heightmap Name = "TestLvl">
+			<Ending> raw  </Ending>
+			<CntCol> 257  </CntCol>
+			<CntRow> 257  </CntRow>
+			<CellSize> 1.0  </CellSize>
+			<Scale>  0.1  </Scale>
+			<Offset> 0.0  </Offset>
+		</Heightmap>
+	</Resource>
+</MAC>

@@ -30,6 +30,8 @@ bool LoaderHeightmap::init( std::vector<float>& io_heightmap ) {
 	if( sucessfulLoad == true ) {
 		scaleHeightmap( io_heightmap, raw );
 	}
+
+	return sucessfulLoad;
 }
 
 void LoaderHeightmap::scaleHeightmap( std::vector<float>& io_heightmap, std::vector<unsigned char>& p_raw ) {

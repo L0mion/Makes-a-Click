@@ -1,5 +1,9 @@
 #pragma once
 
+namespace Loader_XML {
+	class LoaderXML;
+}
+
 class LoaderMAC {
 public:
 	LoaderMAC();
@@ -8,4 +12,5 @@ public:
 	bool init();
 protected:
 private:
+	Loader_XML::LoaderXML* m_loaderXML;
 };
