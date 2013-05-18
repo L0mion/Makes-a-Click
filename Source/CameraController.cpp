@@ -32,6 +32,9 @@ CameraController::CameraController( Camera* p_camera,
 	m_look			= DirectX::XMFLOAT3( 0.0f, 0.0f, 1.0f );
 	m_up			= DirectX::XMFLOAT3( 0.0f, 1.0f, 0.0f );
 
+	m_north = XMFLOAT3( 0.0f, 0.0f, 1.0f );
+	m_east = XMFLOAT3( 1.0f, 0.0f, 0.0f );
+
 	m_pivotAngleX = 0.01f;
 	m_pivotAngleY = 0.01f;
 
@@ -79,8 +82,9 @@ void CameraController::update( float p_dt )
 
 
 	if( m_currentVantagePoint != VantagePoints_ONTOP ) {
-		movePivotByRightAndLook( thumbLX, thumbLY );
 		updateAngles( thumbRX, thumbRY );
+		updateVecsAndMats();
+		//movePivotByRightAndLook( thumbLX, thumbLY );
 		moveCam();
 		updateLookAndRight();
 	} else {
@@ -126,11 +130,13 @@ void CameraController::movePivotStatically( float p_x, float p_y )
 
 void CameraController::movePivotByRightAndLook( float p_x, float p_y )
 {
-	m_pivotPoint.x += m_look.x * p_y;
-	m_pivotPoint.z += m_look.z * p_y;
+	
 
-	m_pivotPoint.x += m_right.x * p_x;
-	m_pivotPoint.z += m_right.z * p_x;
+	m_pivotPoint.x += m_north.x * p_y;
+	m_pivotPoint.z += m_north.z * p_y;
+
+	m_pivotPoint.x += m_east.x * p_x;
+	m_pivotPoint.z += m_east.z * p_x;
 
 	m_pivotPoint.y = m_heightmap->getHeight( m_pivotPoint.x, m_pivotPoint.z );
 }
@@ -149,22 +155,38 @@ void CameraController::updateAngles( float p_x, float p_y )
 	}
 }
 
+void CameraController::updateVecsAndMats()
+{
+	// Set up rotation in xz-plane (turning).
+	XMVECTOR upRotVec = XMLoadFloat3( &m_up );
+	XMMATRIX upRotMat = XMMatrixRotationAxis( upRotVec, m_pivotAngleX );
+	XMStoreFloat4x4( &m_upRot, upRotMat );
+
+	XMVECTOR northVec = XMLoadFloat3( &m_north );
+	XMVECTOR forwardVec = XMVector3Transform( northVec, upRotMat );
+	XMStoreFloat3( &m_forward, forwardVec );
+
+	XMVECTOR eastVec = XMLoadFloat3( &m_east );
+	XMVECTOR rightVec = XMVector3Transform( eastVec, upRotMat );
+	XMStoreFloat3( &m_right, rightVec );
+
+	XMMATRIX rightRotMat = XMMatrixRotationAxis( rightVec, m_pivotAngleY );
+	XMStoreFloat4x4( &m_upRot, upRotMat );
+}
+
 void CameraController::moveCam()
 {
-	// Set up rotation matrix for x,z-plane rotation (turning)
-	XMFLOAT3 yRot = XMFLOAT3( 0.0f, 1.0f, 0.0f );
-	XMVECTOR yRotVec = XMLoadFloat3( &yRot );
-	XMMATRIX yRotMat = XMMatrixRotationAxis( yRotVec, m_pivotAngleX );
+	// Set up rotation in xz-plane (turning).
+	XMMATRIX upRotMat = XMLoadFloat4x4( &m_upRot );
 
 	// Load right for z,y-plane rotation (pitch)
-	XMVECTOR rightRotVec = XMLoadFloat3( &m_right );
-	XMMATRIX rightRotMat = XMMatrixRotationAxis( rightRotVec, m_pivotAngleY );
+	XMMATRIX rightRotMat = XMLoadFloat4x4( &m_rightRot );
 
 	// Rotate 
 	float distToVantage = s_vantagePoints[m_currentVantagePoint];
 	XMFLOAT3 finalPos = XMFLOAT3( distToVantage , 0.0f, 0.0f );
 	XMVECTOR finalPosVec = XMLoadFloat3( &finalPos );
-	finalPosVec = XMVector3Transform( finalPosVec, yRotMat );
+	finalPosVec = XMVector3Transform( finalPosVec, upRotMat );
 	finalPosVec = XMVector3Transform( finalPosVec, rightRotMat );
 
 	XMStoreFloat3( &finalPos, finalPosVec );

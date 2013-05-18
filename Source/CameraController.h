@@ -43,6 +43,7 @@ private:
 	void movePivotStatically( float p_x, float p_y );
 	void movePivotByRightAndLook( float p_x, float p_y );
 	void updateAngles( float p_x, float p_y );
+	void updateVecsAndMats();
 	void moveCam();
 	void updateLookAndRight();
 
@@ -62,11 +63,21 @@ private:
 	XInputFetcher* m_xinput;
 	HeightMap* m_heightmap;
 
-	DirectX::XMFLOAT3 m_position;
-	DirectX::XMFLOAT3 m_right;
-	DirectX::XMFLOAT3 m_look;
-	DirectX::XMFLOAT3 m_up;
+	// Overall
+	XMFLOAT3 m_position;
+	XMFLOAT3 m_forward;
+	XMFLOAT3 m_right;
+	XMFLOAT4X4 m_upRot;
+	XMFLOAT4X4 m_rightRot;
+
+	// Camera
+	XMFLOAT3 m_look;
 	
+	// Utility
+	XMFLOAT3 m_up;
+	XMFLOAT3 m_north;
+	XMFLOAT3 m_east;
+
 	double m_sensitivity[Sticks_CNT];
 	
 	DirectX::XMFLOAT3 m_pivotPoint;
