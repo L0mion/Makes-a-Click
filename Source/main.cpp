@@ -20,6 +20,7 @@
 #include "keyCodes.h"
 #include "managementMenu.h"
 #include "managementSprite.h"
+#include "managementWrite.h"
 #include "mathHelper.h"
 #include "renderer.h"
 #include "utility.h"
@@ -111,7 +112,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			g_renderer->beginRender();
 			g_renderer->renderEntities();
 			g_renderer->renderSprites(g_managementMenu->getManagementSprite());
+			g_renderer->renderText(g_managementMenu->getTextStrings());
 			g_renderer->endRender();
+
+			g_managementMenu->clearTextStrings();
 
 			old.QuadPart = current.QuadPart;
 
@@ -160,7 +164,8 @@ HRESULT initialize(HINSTANCE hInstance, int cmdShow)
 	if(SUCCEEDED(hr))
 	{
 		g_managementMenu = new ManagementMenu();
-		hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice());
+		hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
+			g_renderer->getD3DManagement()->getDeviceContext());
 	}
 
 	return hr;

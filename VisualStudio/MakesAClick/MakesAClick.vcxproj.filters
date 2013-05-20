@@ -29,9 +29,6 @@
     <ClCompile Include="..\..\Source\sprite.cpp">
       <Filter>Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\DDSTextureLoader.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\managementTex.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -61,7 +58,7 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\managementMenu.cpp">
       <Filter>ManagementMenu</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ManagementDebug.cpp">
       <Filter>Utilties</Filter>
     </ClCompile>
@@ -73,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ObjFileReader.cpp">
       <Filter>Factories</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\managementWrite.cpp">
+      <Filter>ManagementWrite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,9 +118,6 @@
     <ClInclude Include="..\..\Source\sprite.h">
       <Filter>Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\DDSTextureLoader.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\managementTex.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -150,7 +147,7 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\managementMenu.h">
       <Filter>ManagementMenu</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ManagementDebug.h">
       <Filter>Utilties</Filter>
     </ClInclude>
@@ -162,6 +159,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ObjFileReader.h">
       <Filter>Factories</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\managementWrite.h">
+      <Filter>ManagementWrite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\text.h">
+      <Filter>ManagementWrite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +197,9 @@
     </Filter>
     <Filter Include="ManagementMenu">
       <UniqueIdentifier>{db340f81-ae62-4a2b-a7ad-4f7e7af580f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ManagementWrite">
+      <UniqueIdentifier>{159754c5-aa90-4aeb-98c1-0068b427e516}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

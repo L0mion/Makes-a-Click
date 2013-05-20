@@ -14,8 +14,10 @@ class ManagementTex;
 class ManagementSprite;
 class ManagementSS;
 class ManagementBS;
+class ManagementWrite;
 
 struct EntityBufferInfo;
+struct Text;
 
 class Renderer
 {
@@ -28,6 +30,7 @@ public:
 	void renderSprites(ManagementSprite* p_managementSprite);
 	void renderEntities();
 	void renderEntityBufferInfo( EntityBufferInfo* p_info );
+	void renderText(std::vector<Text*> p_textStrings);
 	void endRender();
 	void update( DirectX::XMFLOAT4X4 p_finalMatrix,
 		DirectX::XMFLOAT3 p_cameraPos );
@@ -46,6 +49,7 @@ private:
 	HRESULT initManagementTex(ID3D11Device* device);
 	HRESULT initManagementSS(ID3D11Device* device);
 	HRESULT initManagementBS(ID3D11Device* device);
+	void	initManagementWrite(ID3D11Device* device, ID3D11DeviceContext* devcon);
 
 	ManagementD3D*	  managementD3D_;
 	ManagementShader* managementShader_;
@@ -53,6 +57,7 @@ private:
 	ManagementTex*	  managementTex_;
 	ManagementSS*	  managementSS_;
 	ManagementBS*	  managementBS_;
+	ManagementWrite*  managementWrite_;
 
 	//EntityBufferInfo* m_cube;
 

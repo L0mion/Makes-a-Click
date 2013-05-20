@@ -11,6 +11,8 @@
 #include "managementTex.h"
 #include "managementSprite.h"
 #include "managementSS.h"
+#include "managementWrite.h"
+#include "text.h"
 #include "sprite.h"
 #include "renderer.h"
 #include "utility.h"
@@ -24,6 +26,7 @@ Renderer::Renderer()
 	managementTex_	  = NULL;
 	managementSS_     = NULL;
 	managementBS_	  = NULL;
+	managementWrite_  = NULL;
 }
 
 Renderer::~Renderer()
@@ -34,6 +37,7 @@ Renderer::~Renderer()
 	SAFE_DELETE(managementTex_);
 	SAFE_DELETE(managementSS_);
 	SAFE_DELETE(managementBS_);
+	SAFE_DELETE(managementWrite_);
 
 	for( unsigned int i=0; i<m_entities.size(); i++ ) {
 		SAFE_DELETE( m_entities[i] );
@@ -127,6 +131,12 @@ void Renderer::renderEntityBufferInfo( EntityBufferInfo* p_info )
 	devcon->DrawIndexed(p_info->m_indicesCnt, 0, 0);
 }
 
+void Renderer::renderText(std::vector<Text*> p_textStrings)
+{
+	for(unsigned int i=0; i<p_textStrings.size(); i++)
+		managementWrite_->renderText(p_textStrings[i]);
+}
+
 void Renderer::endRender()
 {
 	DebugGUI::getInstance()->draw();
@@ -157,6 +167,8 @@ HRESULT Renderer::init(HWND windowHandle)
 		hr = initManagementSS(managementD3D_->getDevice());
 	if(SUCCEEDED(hr))
 		hr = initManagementBS(managementD3D_->getDevice());
+	if(SUCCEEDED(hr))
+		initManagementWrite(managementD3D_->getDevice(), managementD3D_->getDeviceContext());
 
 	return hr;
 }
@@ -207,6 +219,11 @@ HRESULT Renderer::initManagementBS(ID3D11Device* device)
 	managementBS_ = new ManagementBS();
 	managementBS_->init(device);
 	return hr;
+}
+void Renderer::initManagementWrite(ID3D11Device* device, ID3D11DeviceContext* devcon)
+{
+	managementWrite_ = new ManagementWrite();
+	managementWrite_->init(device, devcon);
 }
 
 void Renderer::addEntity( EntityBufferInfo* p_entity )
