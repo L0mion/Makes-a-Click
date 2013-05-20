@@ -1,21 +1,20 @@
 #ifndef MANAGEMENT_MENU_H
 #define MANAGEMENT_MENU_H
 
+#include <string>
 #include <vector>
 #include <d3d11.h>
 
 #include "managementSprite.h"
 
-static const int XBOX_360_GAMEPAD_ANALOG_STICK_MAX = 32767;
-static const int XBOX_360_GAMEPAD_ANALOG_STICK_MIN = -32768;
-
 class ManagementWrite;
+class XInputFetcher;
 struct Text;
 
 class ManagementMenu
 {
 public:
-	ManagementMenu();
+	ManagementMenu(XInputFetcher* p_xinput);
 	~ManagementMenu();
 
 	enum ToolIds
@@ -23,8 +22,7 @@ public:
 		ToolIds_NONE,
 		ToolIds_SAND,
 		ToolIds_ROAD,
-		ToolIds_OBJECT,
-
+		ToolIds_OBJECT
 	};
 	enum ToolPropertyIds
 	{
@@ -36,11 +34,18 @@ public:
 		ToolPropertyIds_PROPERTY_4,
 		ToolPropertyIds_PROPERTY_5,
 		ToolPropertyIds_PROPERTY_6,
-		ToolPropertyIds_PROPERTY_7,
+		ToolPropertyIds_PROPERTY_7
+	};
+	enum TextStates
+	{
+		TextStates_LOWER_CASE,
+		TextStates_UPPER_CASE,
+		TextStates_NUMBERS
 	};
 
-	void useToolsMenu(double p_analogStickX, double p_analogStickY);
-	void useToolPropertiesMenu(double p_analogStickX, double p_analogStickY);
+	void useTextMenu();
+	void useToolsMenu();
+	void useToolPropertiesMenu();
 	void useNoMenu();
 
 	void setSelectedTool();
@@ -57,8 +62,8 @@ public:
 private:
 	HRESULT initManagementSprite(ID3D11Device* p_device);
 
-	void moveHighlighter(double p_analogStickX, double p_analogStickY);
-	void setHighlighterPos(ManagementSprite::SectorIds sectorId);
+	void moveSpriteToSector(double p_analogStickX, double p_analogStickY, ManagementSprite::SpriteIds p_spriteId);
+	void setSpriteSector(ManagementSprite::SectorIds sectorId, ManagementSprite::SpriteIds p_spriteId);
 
 	bool insideSector0(double p_analogX, double p_analogY);
 	bool insideSector1(double p_analogX, double p_analogY);
@@ -68,6 +73,19 @@ private:
 	bool insideSector5(double p_analogX, double p_analogY);
 	bool insideSector6(double p_analogX, double p_analogY);
 	bool insideSector7(double p_analogX, double p_analogY);
+	bool insideSectorNone(double p_analogX, double p_analogY);
+
+	void textMenuSwitchHighlighter(double p_analogX, double p_analogY);
+	void textMenuSwitchCase();
+	void textMenuSector0();
+	void textMenuSector1();
+	void textMenuSector2();
+	void textMenuSector3();
+	void textMenuSector4();
+	void textMenuSector5();
+	void textMenuSector6();
+	void textMenuSector7();
+	void textMenuSectorNone();
 
 	void toolsMenuSector0();
 	void toolsMenuSector1();
@@ -102,7 +120,9 @@ private:
 	void objectPropertiesSectorNone();
 
 	DirectX::XMFLOAT2 calcTextPosForCenter(std::wstring p_text);
+	DirectX::XMFLOAT2 calcTextMenuOutPos(std::wstring p_text);
 
+	std::wstring		m_textMenuOut;
 	DirectX::XMFLOAT4	m_textColor;
 	std::vector<Text*>	m_textStrings;
 	ManagementSprite*	m_managementSprite;
@@ -110,6 +130,10 @@ private:
 	ToolIds				m_tempSelectedTool;
 	ToolPropertyIds		m_tempSelectedProperty;
 	ToolPropertyIds		m_activeProperty;
+	TextStates			m_textState;
+	XInputFetcher*		m_xinput;
+
+	double		m_analogActive;
 };
 
 #endif // MANAGEMENT_MENU_H

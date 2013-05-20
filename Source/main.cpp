@@ -83,6 +83,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 	g_cameraControl = new CameraController( g_camera, xinput, heightMap );
 
+	g_managementMenu = new ManagementMenu(xinput);
+		hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
+			g_renderer->getD3DManagement()->getDeviceContext());
+
 	if(SUCCEEDED(hr))
 	{
 		LARGE_INTEGER freq, old, current;
@@ -161,12 +165,6 @@ HRESULT initialize(HINSTANCE hInstance, int cmdShow)
 		g_camera = new Camera();
 		g_camera->setLens(DirectX::XM_PIDIV4, static_cast<float>(SCREEN_WIDTH)/static_cast<float>(SCREEN_HEIGHT), 1.0f, 1000.0f);
 	}
-	if(SUCCEEDED(hr))
-	{
-		g_managementMenu = new ManagementMenu();
-		hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
-			g_renderer->getD3DManagement()->getDeviceContext());
-	}
 
 	return hr;
 }
@@ -189,6 +187,10 @@ void initDebugGui( float* p_dt, float* p_fps )
 void handleInput(XInputFetcher* xinput, float dt)
 {
 	bool menuIsActive = false;
+	
+	static bool s_textInput		 = false;
+	static bool s_alreadyPressed = false;
+	static float s_timer		 = 0.0f;
 
 	float leftAnalogSens  = 64.0f;
 	float rightAnalogSens = 2.0f;
@@ -198,25 +200,37 @@ void handleInput(XInputFetcher* xinput, float dt)
 	double yawAngle			= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE);
 	double pitchAngle		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);
 	
-	
-	if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) > 0)
+	if(xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_BACK) == InputHelper::KeyStates_KEY_PRESSED)
 	{
-		menuIsActive = true;
-		g_managementMenu->useToolsMenu(strafeDistance, walkDistance);
+		if(!s_textInput)
+			s_textInput = true;
+		else
+			s_textInput = false;
 	}
-	else if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_R) > 0)
+
+	if(!s_textInput)
 	{
-		menuIsActive = true;
-		g_managementMenu->useToolPropertiesMenu(strafeDistance, walkDistance);
+		if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) == InputHelper::KeyStates_KEY_DOWN)
+		{
+			menuIsActive = true;
+			g_managementMenu->useToolsMenu();
+		}
+		else if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_R) == InputHelper::KeyStates_KEY_DOWN)
+		{
+			menuIsActive = true;
+			g_managementMenu->useToolPropertiesMenu();
+		}
+		else
+			g_managementMenu->useNoMenu();
+		
+		if(!menuIsActive)
+		{
+			g_managementMenu->setSelectedTool();
+			g_cameraControl->update( dt );
+		}
 	}
 	else
-		g_managementMenu->useNoMenu();
-	
-	if(!menuIsActive)
-	{
-		g_managementMenu->setSelectedTool();
-		g_cameraControl->update( dt );
-	}
+		g_managementMenu->useTextMenu();
 }
 
 void clean()

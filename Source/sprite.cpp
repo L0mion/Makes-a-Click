@@ -37,6 +37,10 @@ void Sprite::setScale(float p_scaleX, float p_scaleY)
 	m_scale.x = p_scaleX;
 	m_scale.y = p_scaleY;
 }
+void Sprite::setTextureId(TextureIds::Id p_textureId)
+{
+	m_textureId = p_textureId;
+}
 
 TextureIds::Id Sprite::getTextureId() const
 {
