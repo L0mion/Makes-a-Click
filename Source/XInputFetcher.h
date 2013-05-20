@@ -49,7 +49,7 @@ public:
 	/// \param p_leftMotor a value between 0-100 indicating motor percentage use
 	/// \param p_rightMotor a value between 0-100 indicating motor percentage use
 	///-----------------------------------------------------------------------------------
-	void vibrate(float p_leftMotor, float p_rightMotor) const;
+	void vibrate( unsigned short p_leftMotor, unsigned short p_rightMotor ) const;
 
 private:
 	void clearBuffers();
