@@ -5,22 +5,25 @@
 #include "vertex.h"
 #include "PivotPoint.h"
 
-HeightMap::HeightMap( ManagementD3D* p_managementD3D )
+HeightMap::HeightMap(
+	ManagementD3D*		p_managementD3D,
+	std::vector<float>	p_heightmap,
+	float				p_cellSize,
+	unsigned int		p_cntCol,
+	unsigned int		p_cntRow)
 {
 	m_managementD3D = p_managementD3D;
+	m_heightMap		= p_heightmap;
+	m_cellSize		= p_cellSize;
+	m_colCnt		= p_cntCol;
+	m_rowCnt		= p_cntRow;
+	m_faceCnt		= (m_rowCnt-1) * (m_colCnt-1) * 2;
+
+	int vertexCnt = m_rowCnt*m_colCnt;
 
 	//system = pSystem;
 	m_bufferInfo = NULL;
 
-	//Vars for the HeightMap
-	m_cellSize	= 1.0f;
-	m_colCnt	= 257;
-	m_rowCnt	= 257;
-	m_faceCnt	= (m_rowCnt-1) * (m_colCnt-1) * 2;
-
-	int vertexCnt = m_rowCnt*m_colCnt;
-	loadHeightMap( vertexCnt );
-	smoothHeightMap();
 	createEntityBufferInfo();
 }
 
@@ -165,62 +168,6 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot  )
 	updateVertices(memVertices, _dt);
 	vertexBuffer->Unmap();*/
 
-}
-
-void HeightMap::loadHeightMap( int p_vertexCnt )
-{
-	float scale = 0.1f;
-	float offset = 0.0f;
-
-	vector<unsigned char> in(p_vertexCnt);
-	ifstream inFile;
-	inFile.open("../../resources/korb.raw",  std::ios_base::binary);
-
-	if(inFile)
-	{
-		inFile.read((char*)&in[0], in.size());
-		inFile.close();
-	}
-
-	m_heightMap.resize(p_vertexCnt, 0);
-	for(int i=0; i<p_vertexCnt; i++) {
-		m_heightMap[i] = in[i]*scale + offset;
-	}
-}
-
-void HeightMap::smoothHeightMap()
-{
-	vector<float> dest(m_heightMap.size());
-
-	for( int rowIdx=0; rowIdx<m_rowCnt; rowIdx++ ) {
-		for( int colIdx=0; colIdx<m_colCnt; colIdx++ ) {
-			dest[m_colCnt*rowIdx + colIdx] = average(rowIdx,colIdx);
-		}
-	}
-	m_heightMap = dest;
-}
-
-float HeightMap::average(int p_posRow, int p_posCol)
-{
-	float avg = 0.0f;
-	float num = 0.0f;
-
-	for( int rowIdx = p_posRow-1; rowIdx <= p_posRow+1; rowIdx++ ) {
-		for( int colIdx = p_posCol-1; colIdx <= p_posCol+1; colIdx++ ) {
-			if(inBounds(rowIdx,colIdx)) {
-				avg += m_heightMap[rowIdx*m_colCnt + colIdx];
-				num += 1.0f;
-			}
-		}
-	}
-
-	return avg / num;
-}
-
-bool HeightMap::inBounds( int i, int j )
-{
-	return i >= 0 && i < m_rowCnt &&
-		   j >= 0 && j < m_colCnt;
 }
 
 void HeightMap::createEntityBufferInfo()

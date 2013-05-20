@@ -66,14 +66,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	XInputFetcher* xinput = new XInputFetcher();
 	xinput->calibrate(0.4);
 
-	//Loading
+	//Detta är kanske typ nästan helt och hållet lite smått temporärt.
 	Mac mac;
 	LoaderMAC* loaderMAC = new LoaderMAC();
 	bool sucessfulLoad = loaderMAC->init( mac );
+	delete loaderMAC;
 
 	PivotPoint* pivot = new PivotPoint( xinput );
 
-	HeightMap* heightMap = new HeightMap( g_renderer->getD3DManagement() );
+	HeightMap* heightMap = new HeightMap(
+		g_renderer->getD3DManagement(),
+		mac.heightmap,
+		(float)std::atof(			mac.macDesc.heightmap.cellSize.c_str()	),	//Jag ska fixa detta. Lovar.
+		(float)std::atoi(			mac.macDesc.heightmap.cntCol.c_str()	),	//Jag ska fixa detta. Lovar.
+		(unsigned int)std::atoi(	mac.macDesc.heightmap.cntRow.c_str()	));	//Jag ska fixa detta. Lovar.
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
 	g_renderer->addEntity( heightMapBuffers );
 
