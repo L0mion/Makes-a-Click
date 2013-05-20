@@ -13,7 +13,14 @@
 #include "LoaderXML.h"
 
 namespace Loader_XML {
-	LoaderXML::LoaderXML() {
+	LoaderXML::LoaderXML(
+		std::wstring	p_filePathToSearch,
+		std::wstring	p_fileEnding,
+		bool			p_recursiveSearch) {
+		m_filePathToSearch	= p_filePathToSearch;
+		m_fileEnding		= p_fileEnding;
+		m_recursiveSearch	= p_recursiveSearch;
+
 		m_winDetective = nullptr;
 	}
 	LoaderXML::~LoaderXML() {
@@ -24,9 +31,9 @@ namespace Loader_XML {
 
 	bool LoaderXML::init( Util::Mac& inout_result ) {
 		m_winDetective = new WinDetective(
-			g_filePathToSearch, 
-			g_fileEnding, 
-			g_recursiveSearch);
+			m_filePathToSearch, 
+			m_fileEnding, 
+			m_recursiveSearch);
 		bool sucessfulLoad = false;
 		sucessfulLoad = m_winDetective->init();
 

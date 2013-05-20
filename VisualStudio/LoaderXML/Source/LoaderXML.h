@@ -12,11 +12,6 @@ namespace Util {
 
 #include <string>
 
-//These are fairly temporary.
-static const std::wstring	g_filePathToSearch	= L"../../Resources/Levels/"	;
-static const std::wstring	g_fileEnding		= L".xml"						;
-static const bool			g_recursiveSearch	= true							;
-
 /*------------------------------------------*/
 /*			 - Note to self -				*/
 /*				root is:					*/
@@ -25,7 +20,10 @@ static const bool			g_recursiveSearch	= true							;
 namespace Loader_XML {
 	class LoaderXML {
 	public:
-		LoaderXML();
+		LoaderXML(
+			std::wstring	p_filePathToSearch,
+			std::wstring	p_fileEnding,
+			bool			p_recursiveSearch);
 		~LoaderXML();
 
 		bool init( Util::Mac& inout_result );
@@ -37,6 +35,10 @@ namespace Loader_XML {
 			const std::wstring fileName, 
 			const std::wstring fileEnding,
 			Util::Mac& inout_result );
+
+		std::wstring m_filePathToSearch;
+		std::wstring m_fileEnding;
+		bool m_recursiveSearch;
 
 		Loader_XML::WinDetective* m_winDetective;
 	};
