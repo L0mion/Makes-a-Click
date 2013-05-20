@@ -26,6 +26,7 @@
 #include "utility.h"
 #include "window.h"
 #include "EntityBufferInfo.h"
+#include "PivotPoint.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void initDebugGui( float* p_dt, float* p_fps );
@@ -72,16 +73,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	XInputFetcher* xinput = new XInputFetcher();
 	xinput->calibrate(0.4);
 
+	PivotPoint* pivot = new PivotPoint( xinput );
+
 	HeightMap* heightMap = new HeightMap( g_renderer->getD3DManagement() );
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
 	g_renderer->addEntity( heightMapBuffers );
 
 	ObjFileReader reader;
-	EntityBufferInfo* barrel = reader.readFile( "../../resources/",
+	EntityBufferInfo* blueberry = reader.readFile( "../../resources/",
 		"sphere.obj", false, g_renderer->getD3DManagement() );
-	g_renderer->addEntity( barrel );
+	g_renderer->addEntity( blueberry );
 	
-	g_cameraControl = new CameraController( g_camera, xinput, heightMap );
+	g_cameraControl = new CameraController( g_camera, xinput, heightMap, pivot );
 
 	if(SUCCEEDED(hr))
 	{
@@ -100,10 +103,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			xinput->update();
 			handleInput(xinput, dt);
 
-			DirectX::XMFLOAT3 pivotPos = g_cameraControl->getPivotPosition();
-			barrel->m_world._41 = pivotPos.x;
-			barrel->m_world._42 = pivotPos.y;
-			barrel->m_world._43 = pivotPos.z;
+			heightMap->update( g_renderer->getD3DManagement() );
+
+			DirectX::XMFLOAT3 pivotPos = pivot->m_position;
+			blueberry->m_world._41 = pivotPos.x;
+			blueberry->m_world._42 = pivotPos.y;
+			blueberry->m_world._43 = pivotPos.z;
 
 			DirectX::XMFLOAT4X4 finalMatrix = MathHelper::multiplyMatrix( 
 				g_camera->getViewMatrix(), g_camera->getProjectionMatrix() );
@@ -119,13 +124,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			old.QuadPart = current.QuadPart;
 
-			Sleep(8);
+			//Sleep(8);
 		}
 	}
 
 	delete g_cameraControl;
 	delete heightMap;
 	delete xinput;
+	delete pivot;
 
 	DebugGUI::getInstance()->terminate();
 	

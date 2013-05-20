@@ -2,6 +2,8 @@
 
 #include "EntityBufferInfo.h"
 #include "managementD3D.h"
+#include "vertex.h"
+#include "PivotPoint.h"
 
 HeightMap::HeightMap( ManagementD3D* p_managementD3D )
 {
@@ -138,6 +140,33 @@ EntityBufferInfo* HeightMap::getEntityBufferInfo()
 	return m_bufferInfo;
 }
 
+void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot  )
+{
+	static int t = 0;
+	m_vertices[t].position[Coords::Y] = 1.0f;
+
+	t++;
+	t %= m_vertexCnt;
+
+	ID3D11DeviceContext* devcon = p_managementD3D->getDeviceContext();
+	D3D11_MAPPED_SUBRESOURCE resource;
+	ZeroMemory( &resource, sizeof(D3D11_MAPPED_SUBRESOURCE) );
+	HRESULT hResult = devcon->Map( m_bufferInfo->m_vertexBuffer, 0,
+		D3D11_MAP_WRITE_DISCARD, 0, &resource);
+
+	memcpy( resource.pData,& m_vertices[0], sizeof(Vertex_PNT)*m_vertexCnt );
+
+	devcon->Unmap( m_bufferInfo->m_vertexBuffer, 0 );
+
+	//update vertbuffer
+	/*Vertex_PNT* memVertices = 0;
+	HR(vertexBuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&memVertices));
+	ZeroMemory(memVertices, sizeof(VertexType)*numVertices);
+	updateVertices(memVertices, _dt);
+	vertexBuffer->Unmap();*/
+
+}
+
 void HeightMap::loadHeightMap( int p_vertexCnt )
 {
 	float scale = 0.1f;
@@ -194,20 +223,18 @@ bool HeightMap::inBounds( int i, int j )
 		   j >= 0 && j < m_colCnt;
 }
 
-
-
 void HeightMap::createEntityBufferInfo()
 {
-	int numVertices = m_rowCnt*m_colCnt;
-	int numIndices = m_faceCnt*3;
+	m_vertexCnt = m_rowCnt*m_colCnt;
+	m_indecCnt = m_faceCnt*3;
 	
-	vector<Vertex_PNT> vertices = defineVertexBuffer(numVertices);
-	vector<int> indices = defineIndexBuffer(numIndices);
+	m_vertices = defineVertexBuffer(m_vertexCnt);
+	m_indices = defineIndexBuffer(m_indecCnt);
 
 	m_bufferInfo = new EntityBufferInfo();
-	m_bufferInfo->setVertexBuffer( sizeof(Vertex_PNT), numVertices,
-		&vertices[0], m_managementD3D );
-	m_bufferInfo->setIndexBuffer( numIndices, &indices[0], m_managementD3D );
+	m_bufferInfo->setVertexBuffer( sizeof(Vertex_PNT), m_vertexCnt,
+		&m_vertices[0], m_managementD3D );
+	m_bufferInfo->setIndexBuffer( m_indecCnt, &m_indices[0], m_managementD3D );
 	m_bufferInfo->m_textureId = TextureIds::TextureIds_HEIGHTMAP;
 }
 

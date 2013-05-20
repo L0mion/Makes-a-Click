@@ -5,6 +5,7 @@ using namespace DirectX;
 
 class Camera;
 class HeightMap;
+class PivotPoint;
 class XInputFetcher;
 
 class CameraController
@@ -32,11 +33,11 @@ public:
 	};
 
 	CameraController( Camera* p_camera, XInputFetcher* p_xinput,
-		HeightMap* p_heightmap );
+		HeightMap* p_heightmap, PivotPoint* pivot );
 	~CameraController();
 
 	DirectX::XMFLOAT3 getPosition() const;
-	DirectX::XMFLOAT3 getPivotPosition() const;
+	//DirectX::XMFLOAT3 getPivotPosition() const;
 	void update( float p_dt );
 
 private:
@@ -80,9 +81,10 @@ private:
 	float m_zoomPressedTime;
 	float m_vibbedTime;
 
-
 	// Overall
-	XMFLOAT3 m_pivotPoint;
+	//XMFLOAT3 m_pivotPoint;
+	PivotPoint* m_pivot;
+	
 	XMFLOAT3 m_position;
 	XMFLOAT3 m_forward;
 	XMFLOAT3 m_right;
