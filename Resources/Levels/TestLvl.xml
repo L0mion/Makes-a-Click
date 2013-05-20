@@ -1,12 +1,4 @@
-<MAC Name = "TestLvl">
-	<Resource>
-		<Heightmap Name = "TestLvl">
-			<Ending> raw  </Ending>
-			<CntCol> 257  </CntCol>
-			<CntRow> 257  </CntRow>
-			<CellSize> 1.0  </CellSize>
-			<Scale>  0.1  </Scale>
-			<Offset> 0.0  </Offset>
-		</Heightmap>
-	</Resource>
+<?xml version="1.0" encoding="utf-8"?>
+<MAC Version="1.0" Name="TestLvl">
+	<Resource Type="Heightmap" Name="TestLvl" Ending="raw" CntCol="257" CntRow="257" CellSize="1.0" Scale="0.1" Offset="0.0"/>
 </MAC>

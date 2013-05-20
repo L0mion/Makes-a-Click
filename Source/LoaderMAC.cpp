@@ -1,4 +1,5 @@
 #include <LoaderXML.h>
+#include <Util.h>
 
 #include "LoaderMAC.h"
 
@@ -12,8 +13,10 @@ LoaderMAC::~LoaderMAC() {
 }
 
 bool LoaderMAC::init() {
+	Util::Mac temp; //This ought to be a member var or inout
+
 	m_loaderXML = new Loader_XML::LoaderXML();
-	bool sucessfulLoad = m_loaderXML->init();
+	bool sucessfulLoad = m_loaderXML->init( temp );
 
 	return sucessfulLoad;
 }

@@ -25,7 +25,7 @@ namespace Parser_XML {
 	std::string& DocXML::getRawXML() { 
 		return m_rawXML; 
 	}
-	const rapidxml::xml_document<>* DocXML::getXML() const {
+	rapidxml::xml_document<>* DocXML::getXML() const {
 		return m_xml;
 	}
 

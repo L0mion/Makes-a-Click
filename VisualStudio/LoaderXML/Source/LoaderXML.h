@@ -6,6 +6,9 @@ namespace Loader_XML {
 namespace Parser_XML {
 	class DocXML;
 }
+namespace Util {
+	struct Mac;
+}
 
 #include <string>
 
@@ -25,15 +28,15 @@ namespace Loader_XML {
 		LoaderXML();
 		~LoaderXML();
 
-		bool init();
+		bool init( Util::Mac& inout_result );
 	protected:
 	private:
-		bool parse();
+		bool parse( Util::Mac& inout_result );
 		bool parseXML(
 			const std::wstring filePath, 
 			const std::wstring fileName, 
-			const std::wstring fileEnding);
-		void loadXML(Parser_XML::DocXML* docXML);
+			const std::wstring fileEnding,
+			Util::Mac& inout_result );
 
 		Loader_XML::WinDetective* m_winDetective;
 	};

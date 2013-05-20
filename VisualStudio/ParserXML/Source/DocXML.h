@@ -14,7 +14,7 @@ namespace Parser_XML {
 
 		//Gets
 		std::string& getRawXML();
-		const rapidxml::xml_document<>* getXML() const;
+		rapidxml::xml_document<>* getXML() const;
 
 		//Sets
 		void setXML(rapidxml::xml_document<>* p_xml);
