@@ -79,7 +79,7 @@ XInputFetcher::XInputFetcher()
 
 XInputFetcher::~XInputFetcher()
 {
-	vibrate(0.0f, 0.0f);
+	vibrate( 0, 0 );
 }
 
 void XInputFetcher::update()

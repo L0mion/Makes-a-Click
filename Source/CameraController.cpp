@@ -25,7 +25,7 @@ CameraController::CameraController( Camera* p_camera,
 	m_sensitivity[Sticks_LEFT]  = 64.0f;
 	m_sensitivity[Sticks_RIGHT] = 2.0f;
 	m_curVantagePoint = VantagePoints_FAR;
-	m_curVantage = s_vantagePoints[m_curVantagePoint];
+	m_curVantage = (float)s_vantagePoints[m_curVantagePoint];
 
 	m_pivotPoint	= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
 	m_position		= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
@@ -89,7 +89,7 @@ void CameraController::update( float p_dt )
 	} else {
 		movePivot( m_north, thumbLX, m_east, thumbLY );
 		m_position.x = 0.0f;
-		m_position.y = s_vantagePoints[VantagePoints_ONTOP];
+		m_position.y = (float)s_vantagePoints[VantagePoints_ONTOP];
 		m_position.z = 0.0f;
 
 		m_look.x = 0.0f;
@@ -108,10 +108,10 @@ void CameraController::handleZoom( float p_dt )
 {
 	float smoothZoomTime = 0.2f;
 	float zoomFac = 100.0f;
-	float vibTime = 0.2;
+	float vibTime = 0.2f;
 	
 	if( m_vibbedTime > vibTime ) {
-		m_xinput->vibrate( 0.0f, 0.0f );
+		m_xinput->vibrate( 0, 0 );
 	} else {
 		m_vibbedTime += p_dt;
 	}
@@ -156,14 +156,14 @@ void CameraController::zoomIn()
 {
 	m_curVantagePoint--;
 	m_curVantagePoint = inBoundVantagePoint( m_curVantagePoint );
-	m_curVantage = s_vantagePoints[m_curVantagePoint];
+	m_curVantage = (float)s_vantagePoints[m_curVantagePoint];
 }
 
 void CameraController::zoomOut()
 {
 	m_curVantagePoint++;
 	m_curVantagePoint = inBoundVantagePoint( m_curVantagePoint );
-	m_curVantage = s_vantagePoints[m_curVantagePoint];
+	m_curVantage = (float)s_vantagePoints[m_curVantagePoint];
 }
 
 int CameraController::vantagePointFromVantage( float p_vantage )
@@ -192,10 +192,10 @@ int CameraController::inBoundVantagePoint( int p_vantagePoint )
 float CameraController::inBoundVantage( float p_vantage )
 {
 	if( p_vantage < s_vantagePoints[VantagePoints_FIRST] ) {
-		p_vantage = s_vantagePoints[VantagePoints_FIRST];
+		p_vantage = (float)s_vantagePoints[VantagePoints_FIRST];
 		vibrate();
 	} else if( p_vantage > s_vantagePoints[VantagePoints_LAST] ) {
-		p_vantage = s_vantagePoints[VantagePoints_LAST];
+		p_vantage = (float)s_vantagePoints[VantagePoints_LAST];
 		vibrate();
 	}
 	return p_vantage;
@@ -208,13 +208,12 @@ void CameraController::vibrate()
 	m_xinput->vibrate( motorSpeed, motorSpeed );
 }
 
-
 float CameraController::getThumbLX( float p_dt )
 {
 	double thumbLX	= m_xinput->getCalibratedAnalogQuad(
 		InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE );
 	thumbLX *= m_sensitivity[Sticks_LEFT]  * p_dt;
-	return thumbLX;
+	return (float)thumbLX;
 }
 
 float CameraController::getThumbLY( float p_dt )
@@ -222,7 +221,7 @@ float CameraController::getThumbLY( float p_dt )
 	double thumbLY	= m_xinput->getCalibratedAnalogQuad(
 		InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE );
 	thumbLY *= m_sensitivity[Sticks_LEFT]  * p_dt;
-	return thumbLY;
+	return (float)thumbLY;
 }
 
 float CameraController::getThumbRX( float p_dt )
@@ -230,7 +229,7 @@ float CameraController::getThumbRX( float p_dt )
 	double thumbRX	= m_xinput->getCalibratedAnalogQuad(
 		InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE );
 	thumbRX *= m_sensitivity[Sticks_RIGHT] * p_dt;
-	return thumbRX;
+	return (float)thumbRX;
 
 }
 
@@ -239,7 +238,7 @@ float CameraController::getThumbRY( float p_dt )
 	double thumbRY	= m_xinput->getCalibratedAnalogQuad(
 		InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE );
 	thumbRY *= m_sensitivity[Sticks_RIGHT] * p_dt  *-1;
-	return thumbRY;
+	return (float)thumbRY;
 }
 
 void CameraController::movePivot( XMFLOAT3 p_forward, float p_x, XMFLOAT3 p_right, float p_y )
