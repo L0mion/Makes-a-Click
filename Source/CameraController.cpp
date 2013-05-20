@@ -8,10 +8,10 @@
 #include <AntTweakBar.h>
 
 const int CameraController::s_vantagePoints[VantagePoints_CNT] = {
-	5,
 	10,
-	20,
+	50,
 	100,
+	200,
 	350
 };
 
@@ -24,28 +24,38 @@ CameraController::CameraController( Camera* p_camera,
 
 	m_sensitivity[Sticks_LEFT]  = 64.0f;
 	m_sensitivity[Sticks_RIGHT] = 2.0f;
-	m_currentVantagePoint = VantagePoints_MEDIUM;
+	m_curVantagePoint = VantagePoints_FAR;
+	m_curVantage = s_vantagePoints[m_curVantagePoint];
 
 	m_pivotPoint	= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
 	m_position		= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
+	m_forward		= DirectX::XMFLOAT3( 0.0f, 0.0f, 1.0f );
 	m_right			= DirectX::XMFLOAT3( 1.0f, 0.0f, 0.0f );
+	
 	m_look			= DirectX::XMFLOAT3( 0.0f, 0.0f, 1.0f );
-	m_up			= DirectX::XMFLOAT3( 0.0f, 1.0f, 0.0f );
 
-	m_north = XMFLOAT3( 0.0f, 0.0f, 1.0f );
-	m_east = XMFLOAT3( 1.0f, 0.0f, 0.0f );
+	m_up			= DirectX::XMFLOAT3( 0.0f, 1.0f, 0.0f );
+	m_north			= XMFLOAT3( 0.0f, 0.0f, 1.0f );
+	m_east			= XMFLOAT3( 1.0f, 0.0f, 0.0f );
 
 	m_pivotAngleX = 0.01f;
 	m_pivotAngleY = 0.01f;
 
 	DebugGUI* dGui = DebugGUI::getInstance();
-	dGui->addVar( "Camera debug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "pivot point", &m_position.x );
-	dGui->addVar( "Camera debug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "position", &m_position.x );
-	dGui->addVar( "Camera debug", DebugGUI::Types_FLOAT, DebugGUI::Permissions_READ_WRITE, "x angle", &m_pivotAngleX );
-	dGui->addVar( "Camera debug", DebugGUI::Types_FLOAT, DebugGUI::Permissions_READ_WRITE, "y angle", &m_pivotAngleY );
-	dGui->addVar( "Camera debug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "look", &m_look.x );
-	dGui->addVar( "Camera debug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "right", &m_right.x );
-	dGui->addVar( "Camera debug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "up", &m_up.x );
+	dGui->addVar( "CameraDebug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "pivot point", &m_position.x );
+	dGui->addVar( "CameraDebug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "position", &m_position.x );
+	dGui->addVar( "CameraDebug", DebugGUI::Types_FLOAT, DebugGUI::Permissions_READ_WRITE, "x angle", &m_pivotAngleX, "step=0.1" );
+	dGui->addVar( "CameraDebug", DebugGUI::Types_FLOAT, DebugGUI::Permissions_READ_WRITE, "y angle", &m_pivotAngleY, "step=0.1" );
+	dGui->addVar( "CameraDebug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "look", &m_look.x, "opened=true" );
+	dGui->addVar( "CameraDebug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "right", &m_right.x, "opened=true" );
+	dGui->addVar( "CameraDebug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "forward", &m_forward.x, "opened=true" );
+	dGui->addVar( "CameraDebug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "up", &m_up.x );
+	dGui->addVar( "CameraDebug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "north", &m_north.x );
+	dGui->addVar( "CameraDebug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "east", &m_east.x );
+
+	dGui->setPosition( "CameraDebug", 420, 0 );
+	dGui->setSize( "CameraDebug", 300, 480 );
+
 }
 
 CameraController::~CameraController()
@@ -53,46 +63,35 @@ CameraController::~CameraController()
 
 }
 
+DirectX::XMFLOAT3 CameraController::getPosition() const
+{
+	return m_position;
+}
+DirectX::XMFLOAT3 CameraController::getPivotPosition() const
+{
+	return m_pivotPoint;
+}
+
 void CameraController::update( float p_dt )
 {
-	double thumbLY	= m_xinput->getCalibratedAnalogQuad(
-		InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE );
-	double thumbLX	= m_xinput->getCalibratedAnalogQuad(
-		InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE );
-	double thumbRX	= m_xinput->getCalibratedAnalogQuad(
-		InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE );
-	double thumbRY	= m_xinput->getCalibratedAnalogQuad(
-		InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE );
+	handleZoom( p_dt );
 
-	InputHelper::KeyStates dUp = m_xinput->getBtnState(
-		InputHelper::Xbox360Digitals_DPAD_UP );
-	InputHelper::KeyStates dDown = m_xinput->getBtnState(
-		InputHelper::Xbox360Digitals_DPAD_DOWN );
+	float thumbLX = getThumbLX( p_dt );
+	float thumbLY = getThumbLY( p_dt );
+	float thumbRX = getThumbRX( p_dt );
+	float thumbRY = getThumbRY( p_dt );
 
-	if( dUp == InputHelper::KeyStates_KEY_PRESSED ) {
-		zoomIn();
-	} else if( dDown == InputHelper::KeyStates_KEY_PRESSED ) {
-		zoomOut();
-	}
-
-	thumbLX *= m_sensitivity[Sticks_LEFT]  * p_dt;
-	thumbLY *= m_sensitivity[Sticks_LEFT]  * p_dt;
-	thumbRX *= m_sensitivity[Sticks_RIGHT] * p_dt;
-	thumbRY *= m_sensitivity[Sticks_RIGHT] * p_dt * -1;
-
-
-	if( m_currentVantagePoint != VantagePoints_ONTOP ) {
+	if( m_curVantagePoint != VantagePoints_ONTOP ) {
 		updateAngles( thumbRX, thumbRY );
 		updateVecsAndMats();
-		//movePivotByRightAndLook( thumbLX, thumbLY );
-		moveCam();
-		updateLookAndRight();
+		movePivot( m_forward, thumbLX, m_right, thumbLY );
+		updateCam();
 	} else {
-		movePivotStatically( thumbLX, thumbLY );
+		movePivot( m_north, thumbLX, m_east, thumbLY );
 		m_position.x = 0.0f;
 		m_position.y = s_vantagePoints[VantagePoints_ONTOP];
 		m_position.z = 0.0f;
-		
+
 		m_look.x = 0.0f;
 		m_look.y = -1.0f;
 		m_look.z = 0.0f;
@@ -105,38 +104,151 @@ void CameraController::update( float p_dt )
 	m_camera->rebuildView( m_position, m_right, m_look, m_up );
 }
 
-DirectX::XMFLOAT3 CameraController::getPosition() const
+void CameraController::handleZoom( float p_dt )
 {
-	return m_position;
-}
-DirectX::XMFLOAT3 CameraController::getPivotPosition() const
-{
-	return m_pivotPoint;
-}
-
-void CameraController::movePivotStatically( float p_x, float p_y )
-{
-	XMFLOAT3 north( 0.0f, 0.0f, 1.0f );
-	XMFLOAT3 east( 1.0f, 0.0f, 0.0f );
-
-	m_pivotPoint.x += north.x * p_y;
-	m_pivotPoint.z += north.z * p_y;
-
-	m_pivotPoint.x += east.x * p_x;
-	m_pivotPoint.z += east.z * p_x;
-
-	m_pivotPoint.y = m_heightmap->getHeight( m_pivotPoint.x, m_pivotPoint.z );
-}
-
-void CameraController::movePivotByRightAndLook( float p_x, float p_y )
-{
+	float smoothZoomTime = 0.2f;
+	float zoomFac = 100.0f;
+	float vibTime = 0.2;
 	
+	if( m_vibbedTime > vibTime ) {
+		m_xinput->vibrate( 0.0f, 0.0f );
+	} else {
+		m_vibbedTime += p_dt;
+	}
 
-	m_pivotPoint.x += m_north.x * p_y;
-	m_pivotPoint.z += m_north.z * p_y;
+	InputHelper::KeyStates dUp = m_xinput->getBtnState(
+		InputHelper::Xbox360Digitals_DPAD_UP );
+	InputHelper::KeyStates dDown = m_xinput->getBtnState(
+		InputHelper::Xbox360Digitals_DPAD_DOWN );
 
-	m_pivotPoint.x += m_east.x * p_x;
-	m_pivotPoint.z += m_east.z * p_x;
+	if( dUp == InputHelper::KeyStates_KEY_PRESSED ) {
+		m_zoomPressedTime = 0.0f;
+	} else if( dUp == InputHelper::KeyStates_KEY_DOWN ) {
+		m_zoomPressedTime += p_dt;
+		if( m_zoomPressedTime > smoothZoomTime ) {
+			m_curVantage -= p_dt * zoomFac;
+		}
+	} else if( dUp == InputHelper::KeyStates_KEY_RELEASED ) {
+		if( m_zoomPressedTime < smoothZoomTime ) {
+			zoomIn();
+		}
+	} 
+	
+	if( dDown == InputHelper::KeyStates_KEY_PRESSED ) {
+		m_zoomPressedTime = 0.0f;
+	} else if( dDown == InputHelper::KeyStates_KEY_DOWN ) {
+		m_zoomPressedTime += p_dt;
+		if( m_zoomPressedTime > smoothZoomTime ) {
+			m_curVantage += p_dt * zoomFac;
+		}
+	} else if( dDown == InputHelper::KeyStates_KEY_RELEASED ) {
+		if( m_zoomPressedTime < smoothZoomTime ) {
+			zoomOut();
+		}
+	}
+
+	// Zoom must be in correct range
+	m_curVantagePoint = vantagePointFromVantage( m_curVantage );
+	m_curVantage =  inBoundVantage( m_curVantage );
+}
+
+void CameraController::zoomIn()
+{
+	m_curVantagePoint--;
+	m_curVantagePoint = inBoundVantagePoint( m_curVantagePoint );
+	m_curVantage = s_vantagePoints[m_curVantagePoint];
+}
+
+void CameraController::zoomOut()
+{
+	m_curVantagePoint++;
+	m_curVantagePoint = inBoundVantagePoint( m_curVantagePoint );
+	m_curVantage = s_vantagePoints[m_curVantagePoint];
+}
+
+int CameraController::vantagePointFromVantage( float p_vantage )
+{
+	int vantage = (int)p_vantage;
+	for( int i=VantagePoints_LAST; i>0; i-- ) {
+		if( vantage >= s_vantagePoints[i] ) {
+			return i;
+		}
+	}
+	return VantagePoints_FIRST;
+}
+
+int CameraController::inBoundVantagePoint( int p_vantagePoint )
+{
+	if( p_vantagePoint < VantagePoints_FIRST ) {
+		p_vantagePoint = VantagePoints_FIRST;
+		vibrate();
+	} else if( p_vantagePoint > VantagePoints_LAST ) {
+		p_vantagePoint = VantagePoints_LAST;
+		vibrate();
+	}
+	return p_vantagePoint;
+}
+
+float CameraController::inBoundVantage( float p_vantage )
+{
+	if( p_vantage < s_vantagePoints[VantagePoints_FIRST] ) {
+		p_vantage = s_vantagePoints[VantagePoints_FIRST];
+		vibrate();
+	} else if( p_vantage > s_vantagePoints[VantagePoints_LAST] ) {
+		p_vantage = s_vantagePoints[VantagePoints_LAST];
+		vibrate();
+	}
+	return p_vantage;
+}
+
+void CameraController::vibrate()
+{
+	unsigned short motorSpeed = USHRT_MAX;
+	m_vibbedTime = 0.0f;
+	m_xinput->vibrate( motorSpeed, motorSpeed );
+}
+
+
+float CameraController::getThumbLX( float p_dt )
+{
+	double thumbLX	= m_xinput->getCalibratedAnalogQuad(
+		InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE );
+	thumbLX *= m_sensitivity[Sticks_LEFT]  * p_dt;
+	return thumbLX;
+}
+
+float CameraController::getThumbLY( float p_dt )
+{
+	double thumbLY	= m_xinput->getCalibratedAnalogQuad(
+		InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE );
+	thumbLY *= m_sensitivity[Sticks_LEFT]  * p_dt;
+	return thumbLY;
+}
+
+float CameraController::getThumbRX( float p_dt )
+{
+	double thumbRX	= m_xinput->getCalibratedAnalogQuad(
+		InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE );
+	thumbRX *= m_sensitivity[Sticks_RIGHT] * p_dt;
+	return thumbRX;
+
+}
+
+float CameraController::getThumbRY( float p_dt )
+{
+	double thumbRY	= m_xinput->getCalibratedAnalogQuad(
+		InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE );
+	thumbRY *= m_sensitivity[Sticks_RIGHT] * p_dt  *-1;
+	return thumbRY;
+}
+
+void CameraController::movePivot( XMFLOAT3 p_forward, float p_x, XMFLOAT3 p_right, float p_y )
+{
+	m_pivotPoint.x += p_forward.x * p_y;
+	m_pivotPoint.z += p_forward.z * p_y;
+
+	m_pivotPoint.x += p_right.x * p_x;
+	m_pivotPoint.z += p_right.z * p_x;
 
 	m_pivotPoint.y = m_heightmap->getHeight( m_pivotPoint.x, m_pivotPoint.z );
 }
@@ -146,7 +258,7 @@ void CameraController::updateAngles( float p_x, float p_y )
 	m_pivotAngleX += p_x;
 	m_pivotAngleY += p_y;
 
-	float maxPivotAngleYFactor = 0.33;
+	float maxPivotAngleYFactor = 0.5;
 
 	if( m_pivotAngleY > XM_PI*maxPivotAngleYFactor ) {
 		m_pivotAngleY = XM_PI*maxPivotAngleYFactor;
@@ -158,6 +270,7 @@ void CameraController::updateAngles( float p_x, float p_y )
 void CameraController::updateVecsAndMats()
 {
 	// Set up rotation in xz-plane (turning).
+	XMFLOAT3 down( 0, -1, 0 );
 	XMVECTOR upRotVec = XMLoadFloat3( &m_up );
 	XMMATRIX upRotMat = XMMatrixRotationAxis( upRotVec, m_pivotAngleX );
 	XMStoreFloat4x4( &m_upRot, upRotMat );
@@ -171,10 +284,10 @@ void CameraController::updateVecsAndMats()
 	XMStoreFloat3( &m_right, rightVec );
 
 	XMMATRIX rightRotMat = XMMatrixRotationAxis( rightVec, m_pivotAngleY );
-	XMStoreFloat4x4( &m_upRot, upRotMat );
+	XMStoreFloat4x4( &m_rightRot, rightRotMat );
 }
 
-void CameraController::moveCam()
+void CameraController::updateCam()
 {
 	// Set up rotation in xz-plane (turning).
 	XMMATRIX upRotMat = XMLoadFloat4x4( &m_upRot );
@@ -183,64 +296,33 @@ void CameraController::moveCam()
 	XMMATRIX rightRotMat = XMLoadFloat4x4( &m_rightRot );
 
 	// Rotate 
-	float distToVantage = s_vantagePoints[m_currentVantagePoint];
-	XMFLOAT3 finalPos = XMFLOAT3( distToVantage , 0.0f, 0.0f );
-	XMVECTOR finalPosVec = XMLoadFloat3( &finalPos );
-	finalPosVec = XMVector3Transform( finalPosVec, upRotMat );
-	finalPosVec = XMVector3Transform( finalPosVec, rightRotMat );
+	//float distToVantage = s_vantagePoints[m_currentVantagePoint];
 
-	XMStoreFloat3( &finalPos, finalPosVec );
-	m_position.x = m_pivotPoint.x + finalPos.x;
-	m_position.y = finalPos.y;
-	m_position.z = m_pivotPoint.z + finalPos.z;
+	m_look.x = m_forward.x;
+	m_look.y = m_forward.y;
+	m_look.z = m_forward.z;
+
+	XMVECTOR lookVec = XMLoadFloat3( &m_look );
+	lookVec = XMVector3Transform( lookVec, rightRotMat );
+	XMStoreFloat3( &m_look, lookVec );
+
+	XMFLOAT3 finalPos = m_look;
+	finalPos.x *= m_curVantage;
+	finalPos.y *= m_curVantage;
+	finalPos.z *= m_curVantage;
+
+	m_position.x = m_pivotPoint.x - finalPos.x;
+	m_position.y = - finalPos.y;
+	m_position.z = m_pivotPoint.z - finalPos.z;
 	
 	// Last zoom level has a static height
-	if( m_currentVantagePoint != VantagePoints_FARFAR ) {
+	if( m_curVantagePoint < VantagePoints_FAR ) {
 		m_position.y += m_pivotPoint.y;
 	}
 }
 
-
-void CameraController::updateLookAndRight()
-{
-	m_look.x = m_pivotPoint.x - m_position.x;
-	m_look.y = -m_position.y;
-	m_look.z = m_pivotPoint.z - m_position.z;
-
-	// Last zoom level has a static height
-	if( m_currentVantagePoint != VantagePoints_FARFAR ) {
-		m_look.y += m_pivotPoint.y;
-	}
-
-	XMVECTOR lookVec = XMLoadFloat3( &m_look );
-	lookVec = XMVector3Normalize( lookVec );
-
-	XMVECTOR upVec = XMLoadFloat3( &m_up );
-	XMVECTOR rightVec;
-	rightVec = XMVector3Cross( upVec, lookVec );
-	rightVec = XMVector3Normalize( rightVec );
-
-	XMStoreFloat3( &m_look, lookVec );
-	XMStoreFloat3( &m_right, rightVec );
-
-}
-
-void CameraController::zoomIn()
-{
-	m_currentVantagePoint--;
-	if( m_currentVantagePoint < VantagePoints_FIRST ) {
-		m_currentVantagePoint = VantagePoints_FIRST;
-	}
-}
-
-void CameraController::zoomOut()
-{
-	m_currentVantagePoint++;
-	if( m_currentVantagePoint > VantagePoints_LAST ) {
-		m_currentVantagePoint = VantagePoints_LAST;
-	}
-}
-
+//UNUSED
+/*
 void CameraController::strafeCam( float p_distance )
 {
 	m_position.x += m_right.x * p_distance;
@@ -295,4 +377,4 @@ void CameraController::yawCam( float p_angle )
 	DirectX::XMStoreFloat3(&m_right, xmRight);
 	DirectX::XMStoreFloat3(&m_look, xmLook);
 	DirectX::XMStoreFloat3(&m_up, xmUp);
-}
+}*/

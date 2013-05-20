@@ -195,14 +195,11 @@ void XInputFetcher::calibrate( double p_epsilon )
 	}
 }
 
-void XInputFetcher::vibrate(float p_leftMotor, float p_rightMotor) const
+void XInputFetcher::vibrate( unsigned short p_leftMotor, unsigned short p_rightMotor ) const
 {
-	// Create state
 	XINPUT_VIBRATION vibration;
-	ZeroMemory(&vibration, sizeof(XINPUT_VIBRATION));
-	vibration.wLeftMotorSpeed = (WORD)(min(100.0f,p_leftMotor)*655.35f);
-	vibration.wRightMotorSpeed = (WORD)(min(100.0f,p_rightMotor)*655.35f);
-	// execute
+	vibration.wLeftMotorSpeed = (WORD)p_leftMotor;
+	vibration.wRightMotorSpeed = (WORD)p_rightMotor;
 	XInputSetState(0, &vibration);
 }
 
