@@ -29,9 +29,6 @@
     <ClCompile Include="..\..\Source\sprite.cpp">
       <Filter>Sprite</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\DDSTextureLoader.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\managementTex.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -74,11 +71,8 @@
     <ClCompile Include="..\..\Source\ObjFileReader.cpp">
       <Filter>Factories</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\LoaderMAC.cpp">
-      <Filter>LoaderMAC</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\LoaderRaw.cpp">
-      <Filter>LoaderMAC</Filter>
+    <ClCompile Include="..\..\Source\managementWrite.cpp">
+      <Filter>ManagementWrite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -124,9 +118,6 @@
     <ClInclude Include="..\..\Source\sprite.h">
       <Filter>Sprite</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\DDSTextureLoader.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\managementTex.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -169,11 +160,11 @@
     <ClInclude Include="..\..\Source\ObjFileReader.h">
       <Filter>Factories</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\LoaderMAC.h">
-      <Filter>LoaderMAC</Filter>
+    <ClInclude Include="..\..\Source\managementWrite.h">
+      <Filter>ManagementWrite</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\LoaderRaw.h">
-      <Filter>LoaderMAC</Filter>
+    <ClInclude Include="..\..\Source\text.h">
+      <Filter>ManagementWrite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -207,8 +198,8 @@
     <Filter Include="ManagementMenu">
       <UniqueIdentifier>{db340f81-ae62-4a2b-a7ad-4f7e7af580f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="LoaderMAC">
-      <UniqueIdentifier>{60974b02-539b-4994-a1e5-84c8842ba6a0}</UniqueIdentifier>
+    <Filter Include="ManagementWrite">
+      <UniqueIdentifier>{159754c5-aa90-4aeb-98c1-0068b427e516}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

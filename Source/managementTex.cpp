@@ -1,5 +1,5 @@
 #include "managementTex.h"
-#include "DDSTextureLoader.h"
+#include <DDSTextureLoader.h>
 #include "utility.h"
 
 ManagementTex::ManagementTex()
