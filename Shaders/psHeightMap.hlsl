@@ -28,8 +28,8 @@ float4 ps( VSHeightMapOut psIn ) : SV_TARGET
 	light.enabled 	= true;
 	float gloss = 0;
 
-	float3 lightOut = parallelLight( surface, light, cameraPos, psIn.normal,
-		psIn.position );
+	float3 lightOut = parallelLight( surface, light, cameraPos,
+		psIn.normal.xyz, psIn.position.xyz );
 
 	float3 color = texSprite.Sample( ssSprite, psIn.texCoord ).xyz;
 

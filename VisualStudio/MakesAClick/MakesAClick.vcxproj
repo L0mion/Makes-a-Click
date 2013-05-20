@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\camera.cpp" />
-    <ClCompile Include="..\..\Source\DDSTextureLoader.cpp" />
     <ClCompile Include="..\..\Source\CubeFactory.cpp" />
     <ClCompile Include="..\..\Source\DebugGUI.cpp" />
     <ClCompile Include="..\..\Source\EntityBufferInfo.cpp" />
@@ -32,6 +31,7 @@
     <ClCompile Include="..\..\Source\managementSprite.cpp" />
     <ClCompile Include="..\..\Source\managementSS.cpp" />
     <ClCompile Include="..\..\Source\managementTex.cpp" />
+    <ClCompile Include="..\..\Source\managementWrite.cpp" />
     <ClCompile Include="..\..\Source\mathHelper.cpp" />
     <ClCompile Include="..\..\Source\ObjFileReader.cpp" />
     <ClCompile Include="..\..\Source\renderer.cpp" />
@@ -43,7 +43,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h" />
     <ClInclude Include="..\..\Source\cbDesc.h" />
-    <ClInclude Include="..\..\Source\DDSTextureLoader.h" />
     <ClInclude Include="..\..\Source\CubeFactory.h" />
     <ClInclude Include="..\..\Source\DebugGUI.h" />
     <ClInclude Include="..\..\Source\EntityBufferInfo.h" />
@@ -64,10 +63,12 @@
     <ClInclude Include="..\..\Source\managementSprite.h" />
     <ClInclude Include="..\..\Source\managementSS.h" />
     <ClInclude Include="..\..\Source\managementTex.h" />
+    <ClInclude Include="..\..\Source\managementWrite.h" />
     <ClInclude Include="..\..\Source\mathHelper.h" />
     <ClInclude Include="..\..\Source\ObjFileReader.h" />
     <ClInclude Include="..\..\Source\renderer.h" />
     <ClInclude Include="..\..\Source\sprite.h" />
+    <ClInclude Include="..\..\Source\text.h" />
     <ClInclude Include="..\..\Source\textureIds.h" />
     <ClInclude Include="..\..\Source\utility.h" />
     <ClInclude Include="..\..\Source\vertex.h" />
@@ -138,6 +139,11 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DirectXTK\DirectXTK_Desktop_2012.vcxproj">
+      <Project>{e0b52ae7-e160-4d32-bf3f-910b785e5a8e}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9A5CEA45-E561-4BF3-AB29-97A8216B62BE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -169,12 +175,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\Util\Source\;$(SolutionDir)\LoaderXML\Source\;..\..\External\AntTweakBar\include;$(SolutionDir)\WriterXML\Source\;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Util\Source\;$(SolutionDir)\DirectXTK\inc;$(SolutionDir)\LoaderXML\Source\;..\..\External\AntTweakBar\include;$(SolutionDir)\WriterXML\Source\;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>..\..\External\AntTweakBar\lib;$(SolutionDir)$(Configuration);$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\..\External\AntTweakBar\include;$(SolutionDir)\Parser\Source\;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\DirectXTK\inc;..\..\External\AntTweakBar\include;$(SolutionDir)\Parser\Source\;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath)</IncludePath>
     <LibraryPath>..\..\External\AntTweakBar\lib;$(SolutionDir)$(Configuration);$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
