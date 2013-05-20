@@ -34,6 +34,12 @@ public:
 		SpriteIds_OBJECT_PROPERTY_2,
 		SpriteIds_OBJECT_PROPERTY_3,
 
+		SpriteIds_TEXT_BACK,
+		SpriteIds_TEXT_BACKGROUND,
+		SpriteIds_TEXT_HIGHLIGHTER,
+		SpriteIds_TEXT,
+		SpriteIds_TEXT_OUTPUT_BACKGROUND,
+
 		SpriteIds_COUNT
 	};
 	enum SpriteCollectionIds
@@ -55,6 +61,12 @@ public:
 		SectorIds_SECTOR_5,
 		SectorIds_SECTOR_6,
 		SectorIds_SECTOR_7,
+
+		SectorIds_SECTOR_0_A,
+		SectorIds_SECTOR_0_B,
+		SectorIds_SECTOR_0_X,
+		SectorIds_SECTOR_0_Y,
+
 		SectorIds_COUNT
 	};
 
@@ -81,6 +93,7 @@ private:
 	void initToolSprites(Sprite* p_highlighter);
 	void initSandPropertySprites(Sprite* p_highlighter);
 	void initObjectPropertySprites(Sprite* p_highlighter);
+	void initTextMenuSprites(Sprite* p_highlighter, Sprite* p_circleBackground);
 	void initSpriteCollection();
 
 	std::vector<Vertex_PT> createVertices();
@@ -89,6 +102,7 @@ private:
 	void setSpriteCollectionToolsMenu();
 	void setSpriteCollectionSandPropertiesMenu();
 	void setSpriteCollectionObjectPropertiesMenu();
+	void setSpriteCollectionTextMenu();
 	void setSpriteCollectionNone();
 
 	void calcSectorCoords(float p_aspectRatio);

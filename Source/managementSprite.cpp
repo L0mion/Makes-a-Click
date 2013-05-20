@@ -29,6 +29,9 @@ void ManagementSprite::setSpriteCollection(SpriteCollectionIds spriteCollection)
 	case SpriteCollectionIds_TOOLS_MENU:
 		setSpriteCollectionToolsMenu();
 		break;
+	case SpriteCollectionIds_TEXT_MENU:
+		setSpriteCollectionTextMenu();
+		break;
 	case SpriteCollectionIds_SAND_PROPERTIES_MENU:
 		setSpriteCollectionSandPropertiesMenu();
 		break;
@@ -154,6 +157,10 @@ void ManagementSprite::initSprites()
 	initToolSprites(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
 	initSandPropertySprites(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
 	initObjectPropertySprites(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));	
+	
+	initTextMenuSprites(
+		m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT),
+		m_sprites->at(SpriteIds_CIRCLE_BACKGROUND));
 }
 
 void ManagementSprite::initPlaceHolderSprite()
@@ -173,8 +180,8 @@ void ManagementSprite::initMenuSprites(float p_aspectRatio)
 						0.0f,
 						0.0f,
 						0.0f,
-						1.0f/p_aspectRatio,
-						1.0f,
+						0.8f/p_aspectRatio,
+						0.8f,
 						TextureIds::TextureIds_CIRCLE_BACKGROUND);
 	m_sprites->at(SpriteIds_CIRCLE_BACKGROUND) = sprite;
 	
@@ -278,6 +285,54 @@ void ManagementSprite::initObjectPropertySprites(Sprite* p_highlighter)
 		p_highlighter->getScale().y,
 		TextureIds::TextureIds_OBJECT);
 }
+void ManagementSprite::initTextMenuSprites(Sprite* p_highlighter, Sprite* p_circleBackground)
+{
+	m_sprites->at(SpriteIds_TEXT_BACK) = new Sprite(
+		0.0f,
+		0.0f,
+		0.0f,
+		0.0f,
+		1.0f,
+		1.0f,
+		TextureIds::TextureIds_TEXT_BACK);
+
+	m_sprites->at(SpriteIds_TEXT_BACKGROUND) = new Sprite(
+		p_circleBackground->getPosition().x,
+		p_circleBackground->getPosition().y,
+		0.0f,
+		0.0f, 
+		p_circleBackground->getScale().x,
+		p_circleBackground->getScale().y,
+		TextureIds::TextureIds_TEXT_BACKGROUND);
+
+	m_sprites->at(SpriteIds_TEXT_HIGHLIGHTER) = new Sprite(
+		0.0f,
+		0.0f,
+		0.0f,
+		0.0f,
+		p_highlighter->getScale().x,
+		p_highlighter->getScale().y,
+		TextureIds::TextureIds_TEXT_HIGHLIGHTER);
+
+	m_sprites->at(SpriteIds_TEXT) = new Sprite(
+		p_circleBackground->getPosition().x,
+		p_circleBackground->getPosition().y,
+		0.0f,
+		0.0f,
+		p_circleBackground->getScale().x,
+		p_circleBackground->getScale().y,
+		TextureIds::TextureIds_TEXT);
+
+	m_sprites->at(SpriteIds_TEXT_OUTPUT_BACKGROUND) = new Sprite(
+		0.0f,
+		-0.9f,
+		0.0f,
+		0.0f,
+		1.0f,
+		0.1f,
+		TextureIds::TextureIds_TEXT_OUTPUT_BACKGROUND);
+
+}
 void ManagementSprite::initSpriteCollection()
 {
 	m_spriteCollection = new std::vector<Sprite*>();
@@ -340,6 +395,18 @@ void ManagementSprite::setSpriteCollectionObjectPropertiesMenu()
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT_PROPERTY_2));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT_PROPERTY_3));
 }
+void ManagementSprite::setSpriteCollectionTextMenu()
+{
+	m_spriteCollection->clear();
+
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXT_BACK));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXT_BACKGROUND));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXT_HIGHLIGHTER));
+
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXT));
+
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXT_OUTPUT_BACKGROUND));
+}
 void ManagementSprite::setSpriteCollectionNone()
 {
 	m_spriteCollection->clear();
@@ -352,6 +419,9 @@ void ManagementSprite::calcSectorCoords(float p_aspectRatio)
 
 	float backgroundHeight = circle->getScale().y - highlighter->getScale().y;
 	float backgroundWidth = backgroundHeight / p_aspectRatio;
+
+	float highlighterHeight = highlighter->getScale().y;
+	float highlighterWidth  = highlighterHeight / p_aspectRatio;
 
 	m_sectorCoords.resize(SectorIds_COUNT);
 
@@ -381,4 +451,17 @@ void ManagementSprite::calcSectorCoords(float p_aspectRatio)
 
 	m_sectorCoords[SectorIds_SECTOR_7].x = -backgroundWidth * sin(DirectX::XM_PIDIV4);
 	m_sectorCoords[SectorIds_SECTOR_7].y = backgroundHeight * cos(DirectX::XM_PIDIV4);
+
+
+	m_sectorCoords[SectorIds_SECTOR_0_A].x = m_sectorCoords[SectorIds_SECTOR_0].x + 0.0f;
+	m_sectorCoords[SectorIds_SECTOR_0_A].y = m_sectorCoords[SectorIds_SECTOR_0].y - highlighterHeight;
+
+	m_sectorCoords[SectorIds_SECTOR_0_B].x = m_sectorCoords[SectorIds_SECTOR_0].x + highlighterWidth;
+	m_sectorCoords[SectorIds_SECTOR_0_B].y = m_sectorCoords[SectorIds_SECTOR_0].y + 0.0f;
+	
+	m_sectorCoords[SectorIds_SECTOR_0_Y].x = m_sectorCoords[SectorIds_SECTOR_0].x + 0.0f;
+	m_sectorCoords[SectorIds_SECTOR_0_Y].y = m_sectorCoords[SectorIds_SECTOR_0].y + highlighterHeight;
+	
+	m_sectorCoords[SectorIds_SECTOR_0_X].x = m_sectorCoords[SectorIds_SECTOR_0].x - highlighterWidth;
+	m_sectorCoords[SectorIds_SECTOR_0_X].y = m_sectorCoords[SectorIds_SECTOR_0].y + 0.0f;
 }

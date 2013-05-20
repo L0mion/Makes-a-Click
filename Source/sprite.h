@@ -18,6 +18,7 @@ public:
 	void setPosition(float p_posX, float p_posY);
 	void setRotation(float p_rotX, float p_rotY);
 	void setScale(float p_scaleX, float p_scaleY);
+	void setTextureId(TextureIds::Id p_textureId);
 
 	TextureIds::Id getTextureId() const;
 
