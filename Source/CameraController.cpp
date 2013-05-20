@@ -38,8 +38,8 @@ CameraController::CameraController( Camera* p_camera,
 	m_north			= XMFLOAT3( 0.0f, 0.0f, 1.0f );
 	m_east			= XMFLOAT3( 1.0f, 0.0f, 0.0f );
 
-	m_pivotAngleX = 0.01f;
-	m_pivotAngleY = 0.01f;
+	m_pivotAngleX = 0.0f;
+	m_pivotAngleY = 0.3f;
 
 	DebugGUI* dGui = DebugGUI::getInstance();
 	dGui->addVar( "CameraDebug", DebugGUI::Types_VEC3, DebugGUI::Permissions_READ_ONLY, "pivot point", &m_position.x );
