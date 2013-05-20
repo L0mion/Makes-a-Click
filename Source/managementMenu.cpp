@@ -32,7 +32,10 @@ void ManagementMenu::useTextMenu()
 	textMenuSwitchCase();
 
 	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) == InputHelper::KeyStates_KEY_PRESSED)
-		m_textMenuOut.pop_back();
+	{
+		if(m_textMenuOut.length() > 0)
+			m_textMenuOut.pop_back();
+	}
 	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_R) == InputHelper::KeyStates_KEY_PRESSED)
 		m_textMenuOut.push_back(' ');
 
