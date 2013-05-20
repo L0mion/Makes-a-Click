@@ -8,6 +8,7 @@ using namespace std;
 
 struct EntityBufferInfo;
 class ManagementD3D;
+class PivotPoint;
 
 class HeightMap
 {
@@ -18,6 +19,8 @@ public:
 	float getHeight(float p_x, float p_z);
 
 	EntityBufferInfo* getEntityBufferInfo();
+
+	void update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot );
 
 private:
 	// Heightmap specific
@@ -38,6 +41,11 @@ private: // Variables
 	int m_colCnt;
 	int m_rowCnt;
 	int m_faceCnt;
+
+	int m_vertexCnt;
+	int m_indecCnt;
+	vector<Vertex_PNT> m_vertices;
+	vector<int> m_indices;
 	vector<float> m_heightMap;
 
 	EntityBufferInfo* m_bufferInfo;

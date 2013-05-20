@@ -11,13 +11,16 @@ namespace Util {
 }
 
 #include <string>
+#include <vector>
+
+#include "Mac.h"
 
 class LoaderMAC {
 public:
 	LoaderMAC();
 	~LoaderMAC();
 
-	bool init();
+	bool init( Mac& io_result );
 protected:
 private:
 	const std::wstring	m_filePathToSearch;

@@ -34,6 +34,7 @@
     <ClCompile Include="..\..\Source\managementWrite.cpp" />
     <ClCompile Include="..\..\Source\mathHelper.cpp" />
     <ClCompile Include="..\..\Source\ObjFileReader.cpp" />
+    <ClCompile Include="..\..\Source\PivotPoint.cpp" />
     <ClCompile Include="..\..\Source\renderer.cpp" />
     <ClCompile Include="..\..\Source\sprite.cpp" />
     <ClCompile Include="..\..\Source\Vertex.cpp" />
@@ -54,6 +55,7 @@
     <ClInclude Include="..\..\Source\LoaderHeightmap.h" />
     <ClInclude Include="..\..\Source\LoaderMAC.h" />
     <ClInclude Include="..\..\Source\LoaderRaw.h" />
+    <ClInclude Include="..\..\Source\Mac.h" />
     <ClInclude Include="..\..\Source\managementBS.h" />
     <ClInclude Include="..\..\Source\managementCB.h" />
     <ClInclude Include="..\..\Source\managementD3D.h" />
@@ -66,6 +68,7 @@
     <ClInclude Include="..\..\Source\managementWrite.h" />
     <ClInclude Include="..\..\Source\mathHelper.h" />
     <ClInclude Include="..\..\Source\ObjFileReader.h" />
+    <ClInclude Include="..\..\Source\PivotPoint.h" />
     <ClInclude Include="..\..\Source\renderer.h" />
     <ClInclude Include="..\..\Source\sprite.h" />
     <ClInclude Include="..\..\Source\text.h" />
