@@ -166,7 +166,7 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, flo
 	float lowLimit = 0.0f;
 	float speedFac = 30.0f;
 	float speed = p_pivot->getSpeed() * speedFac;
-	if( speed > 0.01f )
+	if( fabs(speed) > 0.0f ) // If the user has pressed the pour/suck buttons
 	{
 		int rad = 10;
 		int col = getCol( p_pivot->getPosition().x );

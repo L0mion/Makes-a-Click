@@ -28,8 +28,13 @@ void PivotPoint::update( const float p_dt, const XMFLOAT3& p_forward,
 	float thumbLX = getThumbLX( p_dt );
 	float thumbLY = getThumbLY( p_dt );
 
-	setSpeed((float)m_xinput->getCalibratedAnalogQuad(
-		InputHelper::Xbox360Analogs_TRIGGER_R ));
+	float totSpeed = 0.0f;
+	totSpeed += (float)m_xinput->getCalibratedAnalogQuad(
+		InputHelper::Xbox360Analogs_TRIGGER_R ); 
+	totSpeed -= (float)m_xinput->getCalibratedAnalogQuad(
+		InputHelper::Xbox360Analogs_TRIGGER_L );
+
+	setSpeed( totSpeed );
 
 	movePivot( p_forward, thumbLX, p_right, thumbLY );
 }
