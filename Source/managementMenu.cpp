@@ -337,24 +337,28 @@ void ManagementMenu::textMenuInputText(double p_analogX, double p_analogY)
 		m_cursorIndex++;
 	}
 	
-	if(insideSector0(p_analogX, p_analogY))
-		textMenuSector0();
-	if(insideSector1(p_analogX, p_analogY))
-		textMenuSector1();
-	if(insideSector2(p_analogX, p_analogY))
-		textMenuSector2();
-	if(insideSector3(p_analogX, p_analogY))
-		textMenuSector3();
-	if(insideSector4(p_analogX, p_analogY))
-		textMenuSector4();
-	if(insideSector5(p_analogX, p_analogY))
-		textMenuSector5();
-	if(insideSector6(p_analogX, p_analogY))
-		textMenuSector6();
-	if(insideSector7(p_analogX, p_analogY))
-		textMenuSector7();
-	else
-		textMenuSectorNone();
+	int maxNumChars = 65;
+	if(m_textMenuOut.size() < maxNumChars)
+	{
+		if(insideSector0(p_analogX, p_analogY))
+			textMenuSector0();
+		if(insideSector1(p_analogX, p_analogY))
+			textMenuSector1();
+		if(insideSector2(p_analogX, p_analogY))
+			textMenuSector2();
+		if(insideSector3(p_analogX, p_analogY))
+			textMenuSector3();
+		if(insideSector4(p_analogX, p_analogY))
+			textMenuSector4();
+		if(insideSector5(p_analogX, p_analogY))
+			textMenuSector5();
+		if(insideSector6(p_analogX, p_analogY))
+			textMenuSector6();
+		if(insideSector7(p_analogX, p_analogY))
+			textMenuSector7();
+		else
+			textMenuSectorNone();
+	}
 }
 void ManagementMenu::textMenuSector0()
 {
