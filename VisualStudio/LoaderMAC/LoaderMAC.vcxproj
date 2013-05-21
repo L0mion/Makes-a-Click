@@ -53,7 +53,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)\LoaderXML\Source\;$(SolutionDir)\..\External\zlib128-dll\include\;$(SolutionDir)\Util\Source\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\External\rapidxml-1.13\zlib128-dll\lib\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\..\External\zlib128-dll\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
