@@ -61,6 +61,7 @@ public:
 	HRESULT init(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon);
 private:
 	HRESULT initManagementSprite(ID3D11Device* p_device);
+	void initManagementWrite(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon);
 
 	void moveSpriteToSector(double p_analogStickX, double p_analogStickY, ManagementSprite::SpriteIds p_spriteId);
 	void setSpriteSector(ManagementSprite::SectorIds sectorId, ManagementSprite::SpriteIds p_spriteId);
@@ -77,6 +78,7 @@ private:
 
 	void textMenuSwitchHighlighter(double p_analogX, double p_analogY);
 	void textMenuSwitchCase();
+	void textMenuMoveCursor();
 	void textMenuSector0();
 	void textMenuSector1();
 	void textMenuSector2();
@@ -126,6 +128,7 @@ private:
 	DirectX::XMFLOAT4	m_textColor;
 	std::vector<Text*>	m_textStrings;
 	ManagementSprite*	m_managementSprite;
+	ManagementWrite*	m_managementWrite;
 	ToolIds				m_activeTool;
 	ToolIds				m_tempSelectedTool;
 	ToolPropertyIds		m_tempSelectedProperty;

@@ -69,6 +69,9 @@ HRESULT ManagementTex::init(ID3D11Device* p_device)
 	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Textures/textNumbers.dds",
 			TextureIds::TextureIds_TEXT_NUMBERS);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/cursor.dds",
+			TextureIds::TextureIds_TEXT_CURSOR);
 
 	return hr;
 }

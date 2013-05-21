@@ -11,6 +11,7 @@ ManagementMenu::ManagementMenu(XInputFetcher* p_xinput)
 
 	m_textColor			= DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_managementSprite	= NULL;
+	m_managementWrite	= NULL;
 	m_activeTool		= ToolIds_SAND;
 	m_tempSelectedTool	= ToolIds_NONE;
 	m_textState			= TextStates_LOWER_CASE;
@@ -19,6 +20,7 @@ ManagementMenu::ManagementMenu(XInputFetcher* p_xinput)
 ManagementMenu::~ManagementMenu()
 {
 	SAFE_DELETE(m_managementSprite);
+	SAFE_DELETE(m_managementWrite);
 }
 
 void ManagementMenu::useTextMenu()
@@ -30,6 +32,7 @@ void ManagementMenu::useTextMenu()
 
 	textMenuSwitchHighlighter(analogX, analogY);
 	textMenuSwitchCase();
+	textMenuMoveCursor();
 
 	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) == InputHelper::KeyStates_KEY_PRESSED)
 	{
@@ -142,6 +145,9 @@ HRESULT ManagementMenu::init(ID3D11Device* p_device, ID3D11DeviceContext* p_devc
 {
 	HRESULT hr = S_OK;
 	hr = initManagementSprite(p_device);
+
+	initManagementWrite(p_device, p_devcon);
+
 	return hr;
 }
 HRESULT ManagementMenu::initManagementSprite(ID3D11Device* p_device)
@@ -150,6 +156,11 @@ HRESULT ManagementMenu::initManagementSprite(ID3D11Device* p_device)
 	m_managementSprite = new ManagementSprite();
 	m_managementSprite->init(p_device);
 	return hr;
+}
+void ManagementMenu::initManagementWrite(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon)
+{
+	m_managementWrite = new ManagementWrite();
+	m_managementWrite->init(p_device, p_devcon);
 }
 
 void ManagementMenu::moveSpriteToSector(double p_analogStickX, double p_analogStickY, ManagementSprite::SpriteIds p_spriteId)
@@ -297,6 +308,21 @@ void ManagementMenu::textMenuSwitchCase()
 		text->setTextureId(TextureIds::TextureIds_TEXT);
 		m_textState = TextStates_LOWER_CASE;
 	}
+}
+void ManagementMenu::textMenuMoveCursor()
+{
+	Sprite* cursor = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TEXT_CURSOR);
+
+	int numTrailingSpaces = m_managementWrite->findNumTrailingSpaces(m_textMenuOut);
+
+	DirectX::XMFLOAT2 origin = calcTextMenuOutPos(m_textMenuOut);
+	DirectX::XMFLOAT2 stringSize = m_managementWrite->measureString(m_textMenuOut);
+	float posX = origin.x+ stringSize.x + numTrailingSpaces * ManagementWrite::SPACE_WIDTH;
+	posX = posX / SCREEN_WIDTH;
+	posX = (posX-0.5f) * 2;
+	float posY = cursor->getPosition().y;
+
+	cursor->setPosition(posX, posY);
 }
 void ManagementMenu::textMenuSector0()
 {
@@ -555,7 +581,7 @@ void ManagementMenu::textMenuSector6()
 	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_B) == InputHelper::KeyStates_KEY_PRESSED)
 	{
 		if(m_textState == TextStates_LOWER_CASE)
-			m_textMenuOut.push_back('.');
+			m_textMenuOut.push_back(',');
 		if(m_textState == TextStates_UPPER_CASE)
 			m_textMenuOut.push_back('?');
 		if(m_textState == TextStates_NUMBERS)
@@ -564,7 +590,7 @@ void ManagementMenu::textMenuSector6()
 	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
 	{
 		if(m_textState == TextStates_LOWER_CASE)
-			m_textMenuOut.push_back(',');
+			m_textMenuOut.push_back('.');
 		if(m_textState == TextStates_UPPER_CASE)
 			m_textMenuOut.push_back('!');
 		if(m_textState == TextStates_NUMBERS)
@@ -825,11 +851,10 @@ void ManagementMenu::objectPropertiesSectorNone()
 DirectX::XMFLOAT2 ManagementMenu::calcTextPosForCenter(std::wstring p_text)
 {
 	DirectX::XMFLOAT2 pos = DirectX::XMFLOAT2(SCREEN_WIDTH/2.0f, SCREEN_HEIGHT/2.0f);
-	int charWidth		= 5;
-	int halfCharHeight	= 8;
+	DirectX::XMFLOAT2 stringSize = m_managementWrite->measureString(p_text);
 
-	pos.x -= p_text.length() * charWidth;
-	pos.y -= halfCharHeight;
+	pos.x -= stringSize.x/2.0f;
+	pos.y -= stringSize.y/2.0f;
 
 	return pos;
 }
@@ -844,11 +869,14 @@ DirectX::XMFLOAT2 ManagementMenu::calcTextMenuOutPos(std::wstring p_text)
 	pos.x = (pos.x + 1.0f) /2.0f;
 	pos.y = (pos.y + 1.0f) /2.0f;
 
-	float charWidth = 4.45f;
-	float charHalfHeight = 8.0f;
+	DirectX::XMFLOAT2 stringSize = m_managementWrite->measureString(p_text);
 
-	pos.x = pos.x * SCREEN_WIDTH - p_text.length() * charWidth;
-	pos.y = pos.y * SCREEN_HEIGHT - charHalfHeight;
+	int numTrailingSpaces = m_managementWrite->findNumTrailingSpaces(p_text);
+	stringSize.x += numTrailingSpaces * ManagementWrite::SPACE_WIDTH; 
+
+
+	pos.x = pos.x * SCREEN_WIDTH - stringSize.x/2.0f;
+	pos.y = pos.y * SCREEN_HEIGHT - stringSize.y/2.0f;
 
 	return pos;
 }
