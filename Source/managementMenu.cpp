@@ -296,7 +296,7 @@ void ManagementMenu::textMenuMoveCursor()
 	}
 	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_DPAD_RIGHT) == InputHelper::KeyStates_KEY_PRESSED)
 	{
-		if(m_cursorIndex < m_textMenuOut.size())
+		if(m_cursorIndex < (int)m_textMenuOut.size())
 			m_cursorIndex++;
 	}
 }
@@ -305,7 +305,7 @@ void ManagementMenu::textMenuCalcCursorPos()
 	Sprite* cursor = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TEXT_CURSOR);
 
 	std::wstring text;
-	for(unsigned int i=0; i<m_cursorIndex; i++)
+	for(unsigned int i=0; i<(unsigned int)m_cursorIndex; i++)
 	{
 		text.push_back(m_textMenuOut.at(i));
 	}
@@ -338,7 +338,7 @@ void ManagementMenu::textMenuInputText(double p_analogX, double p_analogY)
 	}
 	
 	int maxNumChars = 65;
-	if(m_textMenuOut.size() < maxNumChars)
+	if((int)m_textMenuOut.size() < maxNumChars)
 	{
 		if(insideSector0(p_analogX, p_analogY))
 			textMenuSector0();

@@ -145,7 +145,7 @@ float HeightMap::getHeight( int p_idx )
 {
 	if( p_idx < 0 ){
 		p_idx = 0; //throw exception?
-	} else if( p_idx >= m_vertices.size() ){
+	} else if( p_idx >= (int)m_vertices.size() ){
 		p_idx = m_vertices.size()-1; //throw exception?
 	}
 
@@ -294,7 +294,7 @@ float HeightMap::average(int p_posRow, int p_posCol)
 
 bool HeightMap::inBounds( int p_idx )
 {
-	if ( 0 < p_idx && p_idx < m_vertices.size() ) {
+	if ( 0 < p_idx && p_idx < (int)m_vertices.size() ) {
 		return true;
 	} else {
 		return false;

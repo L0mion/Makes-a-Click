@@ -77,7 +77,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		g_renderer->getD3DManagement(),
 		mac.heightmap,
 		(float)std::atof(			mac.macDesc.heightmap.cellSize.c_str()	),	//Jag ska fixa detta. Lovar.
-		(float)std::atoi(			mac.macDesc.heightmap.cntCol.c_str()	),	//Jag ska fixa detta. Lovar.
+		(unsigned int)std::atoi(	mac.macDesc.heightmap.cntCol.c_str()	),	//Jag ska fixa detta. Lovar.
 		(unsigned int)std::atoi(	mac.macDesc.heightmap.cntRow.c_str()	));	//Jag ska fixa detta. Lovar.
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
 	g_renderer->addEntity( heightMapBuffers );
