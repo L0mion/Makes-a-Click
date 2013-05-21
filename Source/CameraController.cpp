@@ -76,6 +76,11 @@ DirectX::XMFLOAT3 CameraController::getPosition() const
 
 void CameraController::update( float p_dt )
 {
+	//HACK: should not be here
+	m_pivot->m_speed = m_xinput->getCalibratedAnalogQuad(
+		InputHelper::Xbox360Analogs_TRIGGER_R );
+
+
 	handleZoom( p_dt );
 
 	float thumbLX = getThumbLX( p_dt );

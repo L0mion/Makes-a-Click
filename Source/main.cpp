@@ -103,7 +103,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			xinput->update();
 			handleInput(xinput, dt);
 
-			heightMap->update( g_renderer->getD3DManagement() );
+			heightMap->update( g_renderer->getD3DManagement(), pivot, dt );
 
 			DirectX::XMFLOAT3 pivotPos = pivot->m_position;
 			blueberry->m_world._41 = pivotPos.x;

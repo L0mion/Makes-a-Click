@@ -4,6 +4,7 @@
 #include "managementD3D.h"
 #include "vertex.h"
 #include "PivotPoint.h"
+#include <math.h>
 
 HeightMap::HeightMap( ManagementD3D* p_managementD3D )
 {
@@ -97,31 +98,25 @@ float HeightMap::getHeight( float p_x, float p_z )
 		return 5.0f; //HACK:
 	if((p_z > (m_rowCnt-1)*m_cellSize*0.5f) || (p_z < -1*(m_rowCnt-1)*m_cellSize*0.5f))
 		return 5.0f; //HACK:
-
-
-	// Transform from terrain local space to "cell" space.
-	float c = (p_x + 0.5f*(m_colCnt-1)*m_cellSize) / m_cellSize;
-	float d = (p_z - 0.5f*(m_rowCnt-1)*m_cellSize) / -m_cellSize;
-
-	// Get the row and column we are in.
-	int row = (int)floorf(d);
-	int col = (int)floorf(c);
+	
+	int col = getCol( p_x );
+	int row = getRow( p_z );
 
 	// Grab the heights of the cell we are in.
 	// A 0--0 B
 	//   | /|
 	//   |/ |
 	// C 0--0 D
-	float A = m_heightMap[row*m_colCnt + col];
-	float B = m_heightMap[row*m_colCnt + col + 1];
-	float C = m_heightMap[(row+1)*m_colCnt + col];
-	float D = m_heightMap[(row+1)*m_colCnt + col + 1];
+	float A = getHeight(col,   row);
+	float B = getHeight(col+1, row);
+	float C = getHeight(col,   row+1);
+	float D = getHeight(col+1, row+1);
 
 	// Where we are relative to the cell.
-	float s = c - (float)col;
-	float t = d - (float)row;
+	float s = getColDiff( p_x );
+	float t = getRowDiff( p_z );
 
-	if( s + t <= 1.0f)		// If upper triangle ABC.
+	if( s+t <= 1.0f )		// If upper triangle ABC.
 	{
 		float uy = B - A;
 		float vy = C - A;
@@ -135,36 +130,102 @@ float HeightMap::getHeight( float p_x, float p_z )
 	}
 }
 
+float HeightMap::getHeight( int p_col, int p_row )
+{
+	return getHeight( p_row*m_colCnt + p_col );
+}
+
+float HeightMap::getHeight( int p_idx )
+{
+	return m_vertices[p_idx].position[Coords::Y];
+}
+
 EntityBufferInfo* HeightMap::getEntityBufferInfo()
 {
 	return m_bufferInfo;
 }
 
-void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot  )
+void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, float p_dt )
 {
-	static int t = 0;
-	m_vertices[t].position[Coords::Y] = 1.0f;
 
-	t++;
-	t %= m_vertexCnt;
+	// Modify heightmap 
+	//float rad = 10.0f;
+	float heightLimit = 25.60f;
+	float lowLimit = 0.0f;
+	float speedFac = 30.0f;
+	p_pivot->m_speed *= speedFac;
+	if( p_pivot->m_speed > 0.01f )
+	{
+		int rad = 10;
+		int col = getCol( p_pivot->m_position.x );
+		int row = getRow( p_pivot->m_position.z );
 
-	ID3D11DeviceContext* devcon = p_managementD3D->getDeviceContext();
-	D3D11_MAPPED_SUBRESOURCE resource;
-	ZeroMemory( &resource, sizeof(D3D11_MAPPED_SUBRESOURCE) );
-	HRESULT hResult = devcon->Map( m_bufferInfo->m_vertexBuffer, 0,
-		D3D11_MAP_WRITE_DISCARD, 0, &resource);
+		int xStart	= col-rad;
+		int xStop	= col+rad;
+		int zStart	= row-rad;
+		int zStop	= row+rad;
 
-	memcpy( resource.pData,& m_vertices[0], sizeof(Vertex_PNT)*m_vertexCnt );
+		for( int x=-rad; x<rad; x++ ) {
+			for( int z=-rad; z<rad; z++ ) 
+			{
+				int idx = (z+row)*m_colCnt + (x + col);
+				float height = m_vertices[idx].position[Coords::Y];
+				if( height < heightLimit && height > lowLimit )
+				{
+					float xAbs = fabs((float)x/(float)rad);
+					float zAbs = fabs((float)z/(float)rad);
+					float amount = max( 0.0f, 1-(xAbs*xAbs + zAbs*zAbs) );
+					amount *= p_dt * p_pivot->m_speed;
 
-	devcon->Unmap( m_bufferInfo->m_vertexBuffer, 0 );
+					m_vertices[idx].position[Coords::Y] += amount;
+				}
+			}
+		}
+		estimateNormals();
+		//smoothHeightMap();
 
-	//update vertbuffer
-	/*Vertex_PNT* memVertices = 0;
-	HR(vertexBuffer->Map(D3D10_MAP_WRITE_DISCARD, 0, (void**)&memVertices));
-	ZeroMemory(memVertices, sizeof(VertexType)*numVertices);
-	updateVertices(memVertices, _dt);
-	vertexBuffer->Unmap();*/
+		// Copy to gpu
+		ID3D11DeviceContext* devcon = p_managementD3D->getDeviceContext();
+		D3D11_MAPPED_SUBRESOURCE resource;
+		ZeroMemory( &resource, sizeof(D3D11_MAPPED_SUBRESOURCE) );
+		HRESULT hResult = devcon->Map( m_bufferInfo->m_vertexBuffer, 0,
+			D3D11_MAP_WRITE_DISCARD, 0, &resource);
+		memcpy( resource.pData,& m_vertices[0], sizeof(Vertex_PNT)*m_vertexCnt );
+		devcon->Unmap( m_bufferInfo->m_vertexBuffer, 0 );
+	}
+}
 
+float HeightMap::getColDiff( float p_x )
+{
+	return getColAsFloat( p_x ) - (float)getCol( p_x );
+}
+
+int HeightMap::getCol( float p_x )
+{
+	// Transform from terrain local space to "cell" space.
+	float col = getColAsFloat( p_x );
+	return (int)floorf(col);
+}
+
+float HeightMap::getColAsFloat( float p_x )
+{
+	return (p_x + 0.5f*(m_colCnt-1)*m_cellSize) / m_cellSize;
+}
+
+float HeightMap::getRowDiff( float p_z )
+{
+	return getRowAsFloat( p_z ) - (float)getRow( p_z );
+}
+
+int HeightMap::getRow( float p_z )
+{
+	float row = getRowAsFloat( p_z );
+	return (int)floorf(row);
+}
+
+float HeightMap::getRowAsFloat( float p_z )
+{
+	return (p_z - 0.5f*(m_rowCnt-1)*m_cellSize) / -m_cellSize;
 }
 
 void HeightMap::loadHeightMap( int p_vertexCnt )
@@ -228,8 +289,8 @@ void HeightMap::createEntityBufferInfo()
 	m_vertexCnt = m_rowCnt*m_colCnt;
 	m_indecCnt = m_faceCnt*3;
 	
-	m_vertices = defineVertexBuffer(m_vertexCnt);
-	m_indices = defineIndexBuffer(m_indecCnt);
+	defineVertexBuffer(m_vertexCnt);
+	defineIndexBuffer(m_indecCnt);
 
 	m_bufferInfo = new EntityBufferInfo();
 	m_bufferInfo->setVertexBuffer( sizeof(Vertex_PNT), m_vertexCnt,
@@ -238,13 +299,13 @@ void HeightMap::createEntityBufferInfo()
 	m_bufferInfo->m_textureId = TextureIds::TextureIds_HEIGHTMAP;
 }
 
-vector<Vertex_PNT> HeightMap::defineVertexBuffer( int p_vertexCnt )
+void HeightMap::defineVertexBuffer( int p_vertexCnt )
 {
 	int pos;
 	float x, y, z;
 
 	//create geometry
-	vector<Vertex_PNT> vertices( p_vertexCnt );
+	m_vertices.resize( p_vertexCnt );
 	float halfWidth = (m_colCnt-1)*m_cellSize*0.5f;
 	float halfDepth = (m_rowCnt-1)*m_cellSize*0.5f;
 
@@ -260,27 +321,37 @@ vector<Vertex_PNT> HeightMap::defineVertexBuffer( int p_vertexCnt )
 			pos = rowIdx*m_colCnt + colIdx;
 			y = m_heightMap[pos];
 
-			vertices[pos].position[Coords::X]	= x;
-			vertices[pos].position[Coords::Y]	= y;
-			vertices[pos].position[Coords::Z]	= z;
-			vertices[pos].normal[Coords::X]		= 0.0f; //HACK: hardcoded
-			vertices[pos].normal[Coords::Y]		= 1.0f; //HACK: hardcoded
-			vertices[pos].normal[Coords::Z]		= 0.0f; //HACK: hardcoded
-			vertices[pos].texCoord[Coords::U]	= (float)(colIdx*du);
-			vertices[pos].texCoord[Coords::V]	= (float)(rowIdx*dv);
+			m_vertices[pos].position[Coords::X]	= x;
+			m_vertices[pos].position[Coords::Y]	= y;
+			m_vertices[pos].position[Coords::Z]	= z;
+			m_vertices[pos].normal[Coords::X]		= 0.0f; //HACK: hardcoded
+			m_vertices[pos].normal[Coords::Y]		= 1.0f; //HACK: hardcoded
+			m_vertices[pos].normal[Coords::Z]		= 0.0f; //HACK: hardcoded
+			m_vertices[pos].texCoord[Coords::U]	= (float)(colIdx*du);
+			m_vertices[pos].texCoord[Coords::V]	= (float)(rowIdx*dv);
 		}
 	}
+	estimateNormals();
+}
 
+void HeightMap::estimateNormals()
+{
 	// Estimate normals for interior nodes using central difference.
 	float invTwoDX = 1.0f / (2.0f*m_cellSize);
 	float invTwoDZ = 1.0f / (2.0f*m_cellSize);
 
 	for( int rowIdx = 2; rowIdx <m_rowCnt-1; rowIdx++ ) {
 		for( int colIdx = 2; colIdx < m_colCnt-1; colIdx++ ) {
-			float t = m_heightMap[(rowIdx-1)*m_colCnt + colIdx];
+
+			float t = getHeight(colIdx,   rowIdx-1);
+			float b = getHeight(colIdx,   rowIdx+1);
+			float l = getHeight(colIdx-1, rowIdx+1);
+			float r = getHeight(colIdx+1, rowIdx+1);
+
+			/*float t = m_heightMap[(rowIdx-1)*m_colCnt + colIdx];
 			float b = m_heightMap[(rowIdx+1)*m_colCnt + colIdx];
 			float l = m_heightMap[rowIdx*m_colCnt + colIdx - 1];
-			float r = m_heightMap[rowIdx*m_colCnt + colIdx + 1];
+			float r = m_heightMap[rowIdx*m_colCnt + colIdx + 1];*/
 
 			/*D3DXVECTOR3 tanZ(0.0f, (t-b)*invTwoDZ, 1.0f);
 			D3DXVECTOR3 tanX(1.0f, (r-l)*invTwoDX, 0.0f);
@@ -296,31 +367,29 @@ vector<Vertex_PNT> HeightMap::defineVertexBuffer( int p_vertexCnt )
 			DirectX::XMFLOAT3 normal;
 			DirectX::XMStoreFloat3( &normal, N );
 
-			vertices[rowIdx*m_colCnt+colIdx].normal[Coords::X] = normal.x;
-			vertices[rowIdx*m_colCnt+colIdx].normal[Coords::Y] = normal.y;
-			vertices[rowIdx*m_colCnt+colIdx].normal[Coords::Z] = normal.z;
+			m_vertices[rowIdx*m_colCnt+colIdx].normal[Coords::X] = normal.x;
+			m_vertices[rowIdx*m_colCnt+colIdx].normal[Coords::Y] = normal.y;
+			m_vertices[rowIdx*m_colCnt+colIdx].normal[Coords::Z] = normal.z;
 		}
 	}
-	return vertices;
 }
 
-vector<int> HeightMap::defineIndexBuffer( int p_indexCnt )
+void HeightMap::defineIndexBuffer( int p_indexCnt )
 {
 	int k = 0;
 
-	vector<int> indices(p_indexCnt);
+	m_indices.resize( p_indexCnt );
 	for( int rowIdx = 0; rowIdx<m_rowCnt-1; rowIdx++ ) {
 		for( int colIdx = 0; colIdx<m_colCnt-1; colIdx++ ) {
-			indices[k]   = rowIdx*m_colCnt+colIdx;
-			indices[k+1] = rowIdx*m_colCnt+colIdx+1;
-			indices[k+2] = (rowIdx+1)*m_colCnt+colIdx;
+			m_indices[k]   = rowIdx*m_colCnt+colIdx;
+			m_indices[k+1] = rowIdx*m_colCnt+colIdx+1;
+			m_indices[k+2] = (rowIdx+1)*m_colCnt+colIdx;
 
-			indices[k+3] = (rowIdx+1)*m_colCnt+colIdx;
-			indices[k+4] = rowIdx*m_colCnt+colIdx+1;
-			indices[k+5] = (rowIdx+1)*m_colCnt+colIdx+1;
+			m_indices[k+3] = (rowIdx+1)*m_colCnt+colIdx;
+			m_indices[k+4] = rowIdx*m_colCnt+colIdx+1;
+			m_indices[k+5] = (rowIdx+1)*m_colCnt+colIdx+1;
 
 			k += 6; // next quad
 		}
 	}
-	return indices;
 }
