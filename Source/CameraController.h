@@ -4,6 +4,7 @@
 using namespace DirectX;
 
 class Camera;
+class DigitalSmoothControl;
 class HeightMap;
 class PivotPoint;
 class XInputFetcher;
@@ -37,12 +38,12 @@ public:
 
 private:
 	void handleZoom( float p_dt );
-	void zoomIn();
+	/*void zoomIn();
 	void zoomOut();
 	int vantagePointFromVantage( float p_vantage );
 	int inBoundVantagePoint( int p_vantagePoint );
 	float inBoundVantage( float p_vantage );
-	void vibrate();
+	void vibrate();*/
 
 	float getThumbRX( float p_dt );
 	float getThumbRY( float p_dt );
@@ -54,13 +55,14 @@ private:
 private:
 	Camera* m_camera;
 	XInputFetcher* m_xinput;
-
 	// Zoom control
+	DigitalSmoothControl* m_zoomControl;
 	static const int s_vantagePoints[VantagePoints_CNT];
-	int m_curVantagePoint;
+
+	/*int m_curVantagePoint;
 	float m_curVantage;
 	float m_zoomPressedTime;
-	float m_vibbedTime;
+	float m_vibbedTime;*/
 
 	// Overall
 	XMFLOAT3 m_position;
