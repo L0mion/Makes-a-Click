@@ -79,6 +79,8 @@ private:
 	void textMenuSwitchHighlighter(double p_analogX, double p_analogY);
 	void textMenuSwitchCase();
 	void textMenuMoveCursor();
+	void textMenuCalcCursorPos();
+	void textMenuInputText(double p_analogX, double p_analogY);
 	void textMenuSector0();
 	void textMenuSector1();
 	void textMenuSector2();
@@ -135,6 +137,8 @@ private:
 	ToolPropertyIds		m_activeProperty;
 	TextStates			m_textState;
 	XInputFetcher*		m_xinput;
+
+	int m_cursorIndex;
 
 	double		m_analogActive;
 };
