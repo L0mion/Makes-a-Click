@@ -66,10 +66,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\InterpreterXML.cpp" />
     <ClCompile Include="Source\LoaderXML.cpp" />
     <ClCompile Include="Source\WinDetective.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\InterpreterXML.h" />
     <ClInclude Include="Source\LoaderXML.h" />
     <ClInclude Include="Source\WinDetective.h" />
   </ItemGroup>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Source\LoaderMAC.cpp" />
+    <ClCompile Include="Source\LoaderHeightmap.cpp">
+      <Filter>LoaderHeightmap</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoaderRaw.cpp">
+      <Filter>LoaderRaw</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\LoaderMAC.h" />
+    <ClInclude Include="Source\Mac.h" />
+    <ClInclude Include="Source\LoaderHeightmap.h">
+      <Filter>LoaderHeightmap</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoaderRaw.h">
+      <Filter>LoaderRaw</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="LoaderHeightmap">
+      <UniqueIdentifier>{0983f973-cf56-42ba-8911-1f5b1b75b5ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LoaderRaw">
+      <UniqueIdentifier>{8c6fe44a-e34f-40b9-9354-ad6c0b8f436a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

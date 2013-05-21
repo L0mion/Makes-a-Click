@@ -28,6 +28,9 @@
 #include "EntityBufferInfo.h"
 #include "PivotPoint.h"
 
+//Loading
+#include <LoaderMAC.h>
+
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void initDebugGui( float* p_dt, float* p_fps );
 void handleInput(XInputFetcher* xinput, float dt);
@@ -45,17 +48,6 @@ CameraController* g_cameraControl;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int cmdShow)
 {
-	//Temp: Using whilst testing XML-Loader.
-	//Loader_XML::LoaderXML* loaderXML = new Loader_XML::LoaderXML();
-	//loaderXML->init();
-	//delete loaderXML;
-
-	//Writer_XML::DescMAC descMac("Testing", "Testing", 0);
-	//Writer_XML::WriterXML* writerXML 
-	//	= new Writer_XML::WriterXML(descMac);
-	//writerXML->init();
-	//delete writerXML;
-
 #if defined( DEBUG ) || defined( _DEBUG )
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 	_CrtSetReportMode ( _CRT_ERROR, _CRTDBG_MODE_DEBUG );
@@ -73,9 +65,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	XInputFetcher* xinput = new XInputFetcher();
 	xinput->calibrate(0.4);
 
+	//Detta är kanske typ nästan helt och hållet lite smått temporärt.
+	Mac mac;
+	LoaderMAC* loaderMAC = new LoaderMAC();
+	bool sucessfulLoad = loaderMAC->init( mac );
+	delete loaderMAC;
+
 	PivotPoint* pivot = new PivotPoint( xinput );
 
-	HeightMap* heightMap = new HeightMap( g_renderer->getD3DManagement() );
+	HeightMap* heightMap = new HeightMap(
+		g_renderer->getD3DManagement(),
+		mac.heightmap,
+		(float)std::atof(			mac.macDesc.heightmap.cellSize.c_str()	),	//Jag ska fixa detta. Lovar.
+		(float)std::atoi(			mac.macDesc.heightmap.cntCol.c_str()	),	//Jag ska fixa detta. Lovar.
+		(unsigned int)std::atoi(	mac.macDesc.heightmap.cntRow.c_str()	));	//Jag ska fixa detta. Lovar.
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
 	g_renderer->addEntity( heightMapBuffers );
 
@@ -85,6 +88,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	g_renderer->addEntity( blueberry );
 	
 	g_cameraControl = new CameraController( g_camera, xinput, heightMap, pivot );
+
+	g_managementMenu = new ManagementMenu(xinput);
+		hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
+			g_renderer->getD3DManagement()->getDeviceContext());
 
 	if(SUCCEEDED(hr))
 	{
@@ -167,12 +174,6 @@ HRESULT initialize(HINSTANCE hInstance, int cmdShow)
 		g_camera = new Camera();
 		g_camera->setLens(DirectX::XM_PIDIV4, static_cast<float>(SCREEN_WIDTH)/static_cast<float>(SCREEN_HEIGHT), 1.0f, 1000.0f);
 	}
-	if(SUCCEEDED(hr))
-	{
-		g_managementMenu = new ManagementMenu();
-		hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
-			g_renderer->getD3DManagement()->getDeviceContext());
-	}
 
 	return hr;
 }
@@ -195,6 +196,10 @@ void initDebugGui( float* p_dt, float* p_fps )
 void handleInput(XInputFetcher* xinput, float dt)
 {
 	bool menuIsActive = false;
+	
+	static bool s_textInput		 = false;
+	static bool s_alreadyPressed = false;
+	static float s_timer		 = 0.0f;
 
 	float leftAnalogSens  = 64.0f;
 	float rightAnalogSens = 2.0f;
@@ -204,25 +209,37 @@ void handleInput(XInputFetcher* xinput, float dt)
 	double yawAngle			= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE);
 	double pitchAngle		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);
 	
-	
-	if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) > 0)
+	if(xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_BACK) == InputHelper::KeyStates_KEY_PRESSED)
 	{
-		menuIsActive = true;
-		g_managementMenu->useToolsMenu(strafeDistance, walkDistance);
+		if(!s_textInput)
+			s_textInput = true;
+		else
+			s_textInput = false;
 	}
-	else if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_R) > 0)
+
+	if(!s_textInput)
 	{
-		menuIsActive = true;
-		g_managementMenu->useToolPropertiesMenu(strafeDistance, walkDistance);
+		if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) == InputHelper::KeyStates_KEY_DOWN)
+		{
+			menuIsActive = true;
+			g_managementMenu->useToolsMenu();
+		}
+		else if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_R) == InputHelper::KeyStates_KEY_DOWN)
+		{
+			menuIsActive = true;
+			g_managementMenu->useToolPropertiesMenu();
+		}
+		else
+			g_managementMenu->useNoMenu();
+		
+		if(!menuIsActive)
+		{
+			g_managementMenu->setSelectedTool();
+			g_cameraControl->update( dt );
+		}
 	}
 	else
-		g_managementMenu->useNoMenu();
-	
-	if(!menuIsActive)
-	{
-		g_managementMenu->setSelectedTool();
-		g_cameraControl->update( dt );
-	}
+		g_managementMenu->useTextMenu();
 }
 
 void clean()

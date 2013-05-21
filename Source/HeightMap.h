@@ -13,7 +13,12 @@ class PivotPoint;
 class HeightMap
 {
 public:
-	HeightMap( ManagementD3D* p_managementD3D );
+	HeightMap(
+		ManagementD3D*		p_managementD3D,
+		std::vector<float>	p_heightmap,
+		float				p_cellSize,
+		unsigned int		p_cntCol,
+		unsigned int		p_cntRow);
 	~HeightMap();
 	//vector<Model> createModels(/*int pTechNr = 0, int pPassNr = 0, */int maxSize = 256);
 	float getHeight( float p_x, float p_z );

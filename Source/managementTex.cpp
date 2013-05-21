@@ -45,6 +45,31 @@ HRESULT ManagementTex::init(ID3D11Device* p_device)
 	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Textures/object-icon.dds",
 			TextureIds::TextureIds_OBJECT);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/textOutputBackground.dds",
+			TextureIds::TextureIds_TEXT_OUTPUT_BACKGROUND);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/textBackground.dds",
+			TextureIds::TextureIds_TEXT_BACKGROUND);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/textBack.dds",
+			TextureIds::TextureIds_TEXT_BACK);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/textHighlighterButtons.dds",
+			TextureIds::TextureIds_TEXT_HIGHLIGHTER_BUTTONS);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/textHighlighter.dds",
+			TextureIds::TextureIds_TEXT_HIGHLIGHTER);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/text.dds",
+			TextureIds::TextureIds_TEXT);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/textCaps.dds",
+			TextureIds::TextureIds_TEXT_CAPS);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/textNumbers.dds",
+			TextureIds::TextureIds_TEXT_NUMBERS);
+
 	return hr;
 }
 HRESULT ManagementTex::loadTexture( ID3D11Device* p_device,

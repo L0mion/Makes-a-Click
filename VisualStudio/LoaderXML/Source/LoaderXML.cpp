@@ -1,19 +1,26 @@
 #include <rapidxml.hpp>
-#include <rapidxml_print.hpp>
 
 //Parser_XML
 #include <ParserXML.h>
 #include <DocXML.h>
 
 //Util
-#include <UtilString.h>
+#include <Util.h>
 
 #include "WinDetective.h"
+#include "InterpreterXML.h"
 
 #include "LoaderXML.h"
 
 namespace Loader_XML {
-	LoaderXML::LoaderXML() {
+	LoaderXML::LoaderXML(
+		std::wstring	p_filePathToSearch,
+		std::wstring	p_fileEnding,
+		bool			p_recursiveSearch) {
+		m_filePathToSearch	= p_filePathToSearch;
+		m_fileEnding		= p_fileEnding;
+		m_recursiveSearch	= p_recursiveSearch;
+
 		m_winDetective = nullptr;
 	}
 	LoaderXML::~LoaderXML() {
@@ -22,26 +29,28 @@ namespace Loader_XML {
 		}
 	}
 
-	bool LoaderXML::init() {
+	bool LoaderXML::init( Util::Mac& inout_result ) {
 		m_winDetective = new WinDetective(
-			g_filePathToSearch, 
-			g_fileEnding, 
-			g_recursiveSearch);
+			m_filePathToSearch, 
+			m_fileEnding, 
+			m_recursiveSearch);
 		bool sucessfulLoad = false;
 		sucessfulLoad = m_winDetective->init();
 
 		if(sucessfulLoad) {
-			parse();
+			parse( inout_result );
 		}
 
 		return sucessfulLoad;
 	}
 
-	bool LoaderXML::parse() {
+	bool LoaderXML::parse( Util::Mac& inout_result ) {
 		std::vector<WinDetective::Culprit> foundFiles;
 		foundFiles = m_winDetective->getLocatedCulprits();
 
 		bool sucessfulParse = true;
+
+		//This needs to be fixed somehow, append result to vector of MACs instead of a single inout-parameter?
 		for(unsigned int i = 0; 
 			i<foundFiles.size() && sucessfulParse==true; 
 			i++) {
@@ -49,7 +58,8 @@ namespace Loader_XML {
 				sucessfulParse = parseXML(
 					c.filePath, 
 					c.fileName, 
-					c.fileEnding);
+					c.fileEnding,
+					inout_result );
 		}
 
 		return sucessfulParse;
@@ -58,7 +68,8 @@ namespace Loader_XML {
 	bool LoaderXML::parseXML(
 		const std::wstring filePath, 
 		const std::wstring fileName, 
-		const std::wstring fileEnding) {
+		const std::wstring fileEnding,
+		Util::Mac& inout_result ) {
 			std::string filePathStd; 
 			std::string fileNameStd;
 			filePathStd = Util::UtilString::W2Std(filePath, filePathStd);
@@ -72,40 +83,17 @@ namespace Loader_XML {
 			if(sucessfulParse == true) {
 				Parser_XML::DocXML* docXML = nullptr;
 				parserXML.getDocXML(&docXML);
-				loadXML(docXML);
+				
+				//Load data from parsed XML-document into resulting type
+				InterpreterXML interpreter( docXML->getXML() );
+				sucessfulParse = interpreter.init( inout_result );
+
+				//Clear some memory
 				if( docXML != nullptr ) {
 					delete docXML;
 				}
 			}
 
 			return sucessfulParse;
-	}
-
-	void LoaderXML::loadXML(Parser_XML::DocXML* docXML) {
-		/*
-		std::string firstNode = docXML->getXML()->first_node()->name();
-		
-		std::string xmlshit = "";
-		for(auto node = docXML->getXML()->first_node();
-			node;
-			node = node->next_sibling()) {
-				xmlshit += node->name();
-		}
-		
-		//std::string firstVal = docXML->getXML()->first_node()->value();
-
-		//std::string xmlshit = "";
-		//
-		//rapidxml::xml_node<>* node = docXML->getXML()->first_node();
-		//for (
-		//	rapidxml::xml_attribute<>* attr = node->first_attribute();
-		//	attr; 
-		//	attr = attr->next_attribute() ) {
-		//	xmlshit += attr->name();
-		//	xmlshit += attr->value();
-		//}
-
-		std::string derp;
-		*/
 	}
 }

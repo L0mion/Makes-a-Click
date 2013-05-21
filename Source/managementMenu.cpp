@@ -3,41 +3,97 @@
 #include "sprite.h"
 #include "text.h"
 #include "utility.h"
+#include "XInputFetcher.h"
 
-ManagementMenu::ManagementMenu()
+ManagementMenu::ManagementMenu(XInputFetcher* p_xinput)
 {
+	m_xinput = p_xinput;
+
 	m_textColor			= DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_managementSprite	= NULL;
 	m_activeTool		= ToolIds_SAND;
 	m_tempSelectedTool	= ToolIds_NONE;
+	m_textState			= TextStates_LOWER_CASE;
+	m_analogActive		= 0.5;
 }
 ManagementMenu::~ManagementMenu()
 {
 	SAFE_DELETE(m_managementSprite);
 }
 
-void ManagementMenu::useToolsMenu(double p_analogStickX, double p_analogStickY)
+void ManagementMenu::useTextMenu()
 {
+	double analogX	= m_xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LX_POSITIVE);
+	double analogY	= m_xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE);
+
+	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TEXT_MENU);
+
+	textMenuSwitchHighlighter(analogX, analogY);
+	textMenuSwitchCase();
+
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textMenuOut.length() > 0)
+			m_textMenuOut.pop_back();
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_R) == InputHelper::KeyStates_KEY_PRESSED)
+		m_textMenuOut.push_back(' ');
+
+	if(insideSector0(analogX, analogY))
+		textMenuSector0();
+	if(insideSector1(analogX, analogY))
+		textMenuSector1();
+	if(insideSector2(analogX, analogY))
+		textMenuSector2();
+	if(insideSector3(analogX, analogY))
+		textMenuSector3();
+	if(insideSector4(analogX, analogY))
+		textMenuSector4();
+	if(insideSector5(analogX, analogY))
+		textMenuSector5();
+	if(insideSector6(analogX, analogY))
+		textMenuSector6();
+	if(insideSector7(analogX, analogY))
+		textMenuSector7();
+	else
+		textMenuSectorNone();
+
+	DirectX::XMFLOAT2 pos = calcTextMenuOutPos(m_textMenuOut);
+	m_textStrings.push_back(
+		new Text(m_textMenuOut,
+		pos,
+		m_textColor));
+
+	moveSpriteToSector(analogX, analogY, ManagementSprite::SpriteIds_TEXT_HIGHLIGHTER);
+}
+void ManagementMenu::useToolsMenu()
+{
+	double analogX	= m_xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE);
+	double analogY	= m_xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE);
+
 	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TOOLS_MENU);
 
-	if(insideSector0(p_analogStickX, p_analogStickY))
+	if(insideSector0(analogX, analogY))
 		toolsMenuSector0();
-	else if(insideSector1(p_analogStickX, p_analogStickY))
+	else if(insideSector1(analogX, analogY))
 		toolsMenuSector1();
 	else
 		toolsMenuSectorNone();
 
-	moveHighlighter(p_analogStickX, p_analogStickY);
+	moveSpriteToSector(analogX, analogY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
-void ManagementMenu::useToolPropertiesMenu(double p_analogStickX, double p_analogStickY)
+void ManagementMenu::useToolPropertiesMenu()
 {
+	double analogX	= m_xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE);
+	double analogY	= m_xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE);
+
 	switch(m_activeTool)
 	{
 	case ToolIds_SAND:
-		useSandPropertiesMenu(p_analogStickX, p_analogStickY);
+		useSandPropertiesMenu(analogX, analogY);
 		break;
 	case ToolIds_OBJECT:
-		useObjectPropertiesMenu(p_analogStickX, p_analogStickY);
+		useObjectPropertiesMenu(analogX, analogY);
 		break;
 	}
 }
@@ -96,46 +152,46 @@ HRESULT ManagementMenu::initManagementSprite(ID3D11Device* p_device)
 	return hr;
 }
 
-void ManagementMenu::moveHighlighter(double p_analogStickX, double p_analogStickY)
+void ManagementMenu::moveSpriteToSector(double p_analogStickX, double p_analogStickY, ManagementSprite::SpriteIds p_spriteId)
 {
 	if(insideSector0(p_analogStickX, p_analogStickY))	
-		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_0);
+		setSpriteSector(ManagementSprite::SectorIds_SECTOR_0, p_spriteId);
 
 	else if(insideSector1(p_analogStickX, p_analogStickY))
-		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_1);
+		setSpriteSector(ManagementSprite::SectorIds_SECTOR_1, p_spriteId);
 	
 	else if(insideSector2(p_analogStickX, p_analogStickY))
-		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_2);
+		setSpriteSector(ManagementSprite::SectorIds_SECTOR_2, p_spriteId);
 	
 	else if(insideSector3(p_analogStickX, p_analogStickY))
-		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_3);
+		setSpriteSector(ManagementSprite::SectorIds_SECTOR_3, p_spriteId);
 
 	else if(insideSector4(p_analogStickX, p_analogStickY))
-		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_4);
+		setSpriteSector(ManagementSprite::SectorIds_SECTOR_4, p_spriteId);
 
 	else if(insideSector5(p_analogStickX, p_analogStickY))
-		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_5);
+		setSpriteSector(ManagementSprite::SectorIds_SECTOR_5, p_spriteId);
 
 	else if(insideSector6(p_analogStickX, p_analogStickY))
-		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_6);
+		setSpriteSector(ManagementSprite::SectorIds_SECTOR_6, p_spriteId);
 
 	else if(insideSector7(p_analogStickX, p_analogStickY))
-		setHighlighterPos(ManagementSprite::SectorIds_SECTOR_7);
+		setSpriteSector(ManagementSprite::SectorIds_SECTOR_7, p_spriteId);
 		
 	else
-		setHighlighterPos(ManagementSprite::SectorIds_CENTER);
+		setSpriteSector(ManagementSprite::SectorIds_CENTER, p_spriteId);
 }
-void ManagementMenu::setHighlighterPos(ManagementSprite::SectorIds sectorId)
+void ManagementMenu::setSpriteSector(ManagementSprite::SectorIds sectorId, ManagementSprite::SpriteIds p_spriteId)
 {
 	DirectX::XMFLOAT2 pos = m_managementSprite->getSectorCoords(sectorId);
-	Sprite* highlighter = m_managementSprite->getSprite(ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
+	Sprite* highlighter = m_managementSprite->getSprite(p_spriteId);
 	highlighter->setPosition(pos.x, pos.y);
 }
 
 bool ManagementMenu::insideSector0(double p_analogX, double p_analogY)
 {
 	bool isInside = false;
-	if((p_analogX < 0.5 && p_analogX > -0.5) && p_analogY > 0.5f)
+	if((p_analogX < m_analogActive && p_analogX > -m_analogActive) && p_analogY > m_analogActive)
 		isInside = true;
 
 	return isInside;
@@ -143,7 +199,7 @@ bool ManagementMenu::insideSector0(double p_analogX, double p_analogY)
 bool ManagementMenu::insideSector1(double p_analogX, double p_analogY)
 {
 	bool isInside = false;
-	if(p_analogX > 0.5f && p_analogY > 0.5f)
+	if(p_analogX > m_analogActive && p_analogY > m_analogActive)
 		isInside = true;
 	
 	return isInside;
@@ -151,7 +207,7 @@ bool ManagementMenu::insideSector1(double p_analogX, double p_analogY)
 bool ManagementMenu::insideSector2(double p_analogX, double p_analogY)
 {
 	bool isInside = false;
-	if(p_analogX > 0.5f && (p_analogY > -0.5f && p_analogY < 0.5f))
+	if(p_analogX > m_analogActive && (p_analogY > -m_analogActive && p_analogY < m_analogActive))
 		isInside = true;
 	
 	return isInside;
@@ -159,7 +215,7 @@ bool ManagementMenu::insideSector2(double p_analogX, double p_analogY)
 bool ManagementMenu::insideSector3(double p_analogX, double p_analogY)
 {
 	bool isInside = false;
-	if(p_analogX > 0.5f && p_analogY < -0.5f)
+	if(p_analogX > m_analogActive && p_analogY < -m_analogActive)
 		isInside = true;
 
 	return isInside;
@@ -167,7 +223,7 @@ bool ManagementMenu::insideSector3(double p_analogX, double p_analogY)
 bool ManagementMenu::insideSector4(double p_analogX, double p_analogY)
 {
 	bool isInside = false;
-	if((p_analogX < 0.5f && p_analogX > -0.5f) && p_analogY < -0.5f)
+	if((p_analogX < m_analogActive && p_analogX > -m_analogActive) && p_analogY < -m_analogActive)
 		isInside = true;
 
 	return isInside;
@@ -175,7 +231,7 @@ bool ManagementMenu::insideSector4(double p_analogX, double p_analogY)
 bool ManagementMenu::insideSector5(double p_analogX, double p_analogY)
 {
 	bool isInside = false;
-	if(p_analogX < -0.5f && p_analogY < -0.5f)
+	if(p_analogX < -m_analogActive && p_analogY < -m_analogActive)
 		isInside = true;
 
 	return isInside;
@@ -183,7 +239,7 @@ bool ManagementMenu::insideSector5(double p_analogX, double p_analogY)
 bool ManagementMenu::insideSector6(double p_analogX, double p_analogY)
 {
 	bool isInside = false;
-	if(p_analogX < -0.5f &&( p_analogY < 0.5f && p_analogY > -0.5f))
+	if(p_analogX < -m_analogActive &&( p_analogY < m_analogActive && p_analogY > -m_analogActive))
 		isInside = true;
 
 	return isInside;
@@ -191,10 +247,371 @@ bool ManagementMenu::insideSector6(double p_analogX, double p_analogY)
 bool ManagementMenu::insideSector7(double p_analogX, double p_analogY)
 {
 	bool isInside = false;
-	if(p_analogX < -0.5f && p_analogY > 0.5f)
+	if(p_analogX < -m_analogActive && p_analogY > m_analogActive)
 		isInside = true;
 
 	return isInside;
+}
+bool ManagementMenu::insideSectorNone(double p_analogX, double p_analogY)
+{
+	bool isInside = false;
+	if(p_analogX > -m_analogActive && p_analogX < m_analogActive &&
+	   p_analogY > -m_analogActive && p_analogY < m_analogActive)
+	{
+		isInside = true;
+	}
+	
+	return isInside;
+}
+
+void ManagementMenu::textMenuSwitchHighlighter(double p_analogX, double p_analogY)
+{
+	if(insideSectorNone(p_analogX, p_analogY))
+	{
+		Sprite* textHighlighter = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TEXT_HIGHLIGHTER);
+		textHighlighter->setTextureId(TextureIds::TextureIds_TEXT_HIGHLIGHTER);
+	}
+	else
+	{
+		Sprite* textHighlighter = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TEXT_HIGHLIGHTER);
+		textHighlighter->setTextureId(TextureIds::TextureIds_TEXT_HIGHLIGHTER_BUTTONS);
+	}
+}
+void ManagementMenu::textMenuSwitchCase()
+{
+	if(m_xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_TRIGGER_L) > m_analogActive)
+	{
+		Sprite* text = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TEXT);
+		text->setTextureId(TextureIds::TextureIds_TEXT_CAPS);
+		m_textState = TextStates_UPPER_CASE;
+	}
+	else if(m_xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_TRIGGER_R) > m_analogActive)
+	{
+		Sprite* text = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TEXT);
+		text->setTextureId(TextureIds::TextureIds_TEXT_NUMBERS);
+		m_textState = TextStates_NUMBERS;
+	}
+	else
+	{
+		Sprite* text = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TEXT);
+		text->setTextureId(TextureIds::TextureIds_TEXT);
+		m_textState = TextStates_LOWER_CASE;
+	}
+}
+void ManagementMenu::textMenuSector0()
+{
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_X) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('a');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('A');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('1');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_Y) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('b');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('B');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('2');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_B) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('c');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('C');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('3');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('d');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('D');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('4');
+	}
+}
+void ManagementMenu::textMenuSector1()
+{
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_X) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('e');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('E');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('5');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_Y) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('f');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('F');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('6');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_B) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('g');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('G');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('7');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('h');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('H');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('8');
+	}
+}
+void ManagementMenu::textMenuSector2()
+{
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_X) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('i');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('I');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('9');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_Y) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('j');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('J');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('0');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_B) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('k');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('K');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('*');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('l');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('L');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('+');
+	}
+}
+void ManagementMenu::textMenuSector3()
+{
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_X) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('m');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('M');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('-');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_Y) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('n');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('N');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('@');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_B) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('o');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('O');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('$');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('p');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('P');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back(',');
+	}
+}
+void ManagementMenu::textMenuSector4()
+{
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_X) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('q');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('Q');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('\'');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_Y) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('r');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('R');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('\"');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_B) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('s');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('S');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('~');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('t');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('T');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('|');
+	}
+}
+void ManagementMenu::textMenuSector5()
+{
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_X) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('u');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('U');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('=');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_Y) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('v');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('V');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('<');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_B) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('w');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('W');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('>');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('x');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('X');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('[');
+	}
+}
+void ManagementMenu::textMenuSector6()
+{
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_X) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('y');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('Y');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back(']');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_Y) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('z');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('Z');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('{');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_B) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('.');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('?');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('}');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back(',');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('!');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('(');
+	}
+}
+void ManagementMenu::textMenuSector7()
+{
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_X) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back(':');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back(';');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back(')');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_Y) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('a');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('A');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('/');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_B) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('a');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('A');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('&');
+	}
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+	{
+		if(m_textState == TextStates_LOWER_CASE)
+			m_textMenuOut.push_back('o');
+		if(m_textState == TextStates_UPPER_CASE)
+			m_textMenuOut.push_back('O');
+		if(m_textState == TextStates_NUMBERS)
+			m_textMenuOut.push_back('%');
+	}
+}
+void ManagementMenu::textMenuSectorNone()
+{
 }
 
 void ManagementMenu::toolsMenuSector0()
@@ -260,7 +677,7 @@ void ManagementMenu::useSandPropertiesMenu(double p_analogStickX, double p_analo
 	if(insideSector3(p_analogStickX, p_analogStickY))
 		sandPropertiesSector3();
 
-	moveHighlighter(p_analogStickX, p_analogStickY);
+	moveSpriteToSector(p_analogStickX, p_analogStickY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
 void ManagementMenu::sandPropertiesSector0()
 {
@@ -339,7 +756,7 @@ void ManagementMenu::useObjectPropertiesMenu(double p_analogStickX, double p_ana
 	if(insideSector3(p_analogStickX, p_analogStickY))
 		objectPropertiesSector3();
 
-	moveHighlighter(p_analogStickX, p_analogStickY);
+	moveSpriteToSector(p_analogStickX, p_analogStickY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
 void ManagementMenu::objectPropertiesSector0()
 {
@@ -413,6 +830,25 @@ DirectX::XMFLOAT2 ManagementMenu::calcTextPosForCenter(std::wstring p_text)
 
 	pos.x -= p_text.length() * charWidth;
 	pos.y -= halfCharHeight;
+
+	return pos;
+}
+DirectX::XMFLOAT2 ManagementMenu::calcTextMenuOutPos(std::wstring p_text)
+{
+	Sprite* outBackground = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TEXT_OUTPUT_BACKGROUND);
+	DirectX::XMFLOAT2 pos;
+	pos.x = outBackground->getPosition().x;
+	pos.y = outBackground->getPosition().y * -1;
+
+	//Transform from [-1 .. 1] to [0 .. 1]
+	pos.x = (pos.x + 1.0f) /2.0f;
+	pos.y = (pos.y + 1.0f) /2.0f;
+
+	float charWidth = 4.45f;
+	float charHalfHeight = 8.0f;
+
+	pos.x = pos.x * SCREEN_WIDTH - p_text.length() * charWidth;
+	pos.y = pos.y * SCREEN_HEIGHT - charHalfHeight;
 
 	return pos;
 }
