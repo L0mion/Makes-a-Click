@@ -19,6 +19,7 @@ struct TextureIds
 		TextureIds_TEXT,
 		TextureIds_TEXT_CAPS,
 		TextureIds_TEXT_NUMBERS,
+		TextureIds_TEXT_CURSOR,
 		TextureIds_COUNT
 	};
 };

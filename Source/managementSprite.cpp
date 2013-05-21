@@ -332,6 +332,18 @@ void ManagementSprite::initTextMenuSprites(Sprite* p_highlighter, Sprite* p_circ
 		0.1f,
 		TextureIds::TextureIds_TEXT_OUTPUT_BACKGROUND);
 
+	float cursorHeight = 24.0f;
+	float cursorWidth = 1.0f;
+	m_sprites->at(SpriteIds_TEXT_CURSOR) = new Sprite(
+		m_sprites->at(SpriteIds_TEXT_OUTPUT_BACKGROUND)->getPosition().x,
+		m_sprites->at(SpriteIds_TEXT_OUTPUT_BACKGROUND)->getPosition().y,
+		0.0f,
+		0.0f,
+		cursorWidth/SCREEN_WIDTH,
+		cursorHeight/SCREEN_HEIGHT,
+		TextureIds::TextureIds_TEXT_CURSOR);
+
+
 }
 void ManagementSprite::initSpriteCollection()
 {
@@ -406,6 +418,7 @@ void ManagementSprite::setSpriteCollectionTextMenu()
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXT));
 
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXT_OUTPUT_BACKGROUND));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXT_CURSOR));
 }
 void ManagementSprite::setSpriteCollectionNone()
 {

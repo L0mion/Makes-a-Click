@@ -3,6 +3,8 @@
 #include "text.h"
 #include "utility.h"
 
+const float ManagementWrite::SPACE_WIDTH = 5.5f;
+
 ManagementWrite::ManagementWrite()
 {
 	m_spriteBatch = NULL;
@@ -12,6 +14,31 @@ ManagementWrite::~ManagementWrite()
 {
 	SAFE_DELETE(m_spriteBatch);
 	SAFE_DELETE(m_spriteFont);
+}
+
+DirectX::XMFLOAT2 ManagementWrite::measureString(std::wstring p_text)
+{
+	DirectX::XMVECTOR length = m_spriteFont->MeasureString(p_text.c_str());
+	DirectX::XMFLOAT2 result;
+	DirectX::XMStoreFloat2(&result, length);
+
+	return result;
+}
+
+int ManagementWrite::findNumTrailingSpaces(std::wstring p_text)
+{
+	int numTrailingSpaces = 0;
+	if(p_text.size() > 0)
+	{
+		for(unsigned int i = p_text.size()-1; i>=0; i--)
+		{
+			if(p_text.at(i) == ' ')
+				numTrailingSpaces++;
+			else
+				break;
+		}
+	}
+	return numTrailingSpaces;
 }
 
 void ManagementWrite::renderText(Text* p_text)

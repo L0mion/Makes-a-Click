@@ -38,6 +38,7 @@ public:
 		SpriteIds_TEXT_BACKGROUND,
 		SpriteIds_TEXT_HIGHLIGHTER,
 		SpriteIds_TEXT,
+		SpriteIds_TEXT_CURSOR,
 		SpriteIds_TEXT_OUTPUT_BACKGROUND,
 
 		SpriteIds_COUNT
