@@ -29,8 +29,7 @@
 #include "PivotPoint.h"
 
 //Loading
-#include "LoaderMAC.h"
-#include "Mac.h"
+#include <LoaderMAC.h>
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void initDebugGui( float* p_dt, float* p_fps );

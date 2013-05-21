@@ -77,15 +77,6 @@
     <ClCompile Include="..\..\Source\PivotPoint.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\LoaderHeightmap.cpp">
-      <Filter>LoaderMAC</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\LoaderMAC.cpp">
-      <Filter>LoaderMAC</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\LoaderRaw.cpp">
-      <Filter>LoaderMAC</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h">
@@ -181,18 +172,6 @@
     <ClInclude Include="..\..\Source\PivotPoint.h">
       <Filter>Logic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\LoaderHeightmap.h">
-      <Filter>LoaderMAC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\LoaderMAC.h">
-      <Filter>LoaderMAC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\LoaderRaw.h">
-      <Filter>LoaderMAC</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Mac.h">
-      <Filter>LoaderMAC</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Shaders">
@@ -230,9 +209,6 @@
     </Filter>
     <Filter Include="Logic">
       <UniqueIdentifier>{efced057-1d1c-4d80-ace9-5690e816ff9e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="LoaderMAC">
-      <UniqueIdentifier>{a5ff926c-0838-419c-a109-f58d4ce61b03}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
