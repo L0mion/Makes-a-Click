@@ -34,13 +34,26 @@ bool WriterZlib::init() {
 	source = fopen("ToCompress.txt", "r");
 	if( source!=NULL ) {
 		FILE* target = NULL;
-		target = fopen("Compressed.txt", "w");
+		target = fopen("Compressed.txt", "wb");
 		if( target!=NULL ) {
 
 			//SET_BINARY_MODE(source);
 			//SET_BINARY_MODE(target);
 
 			int result = def( source, target, Z_DEFAULT_COMPRESSION ); //0?
+
+			fclose(source);
+			fclose(target);
+
+			FILE* newSource = fopen("Compressed.txt", "rb");
+			if(newSource!= NULL) {
+				FILE* newTarget = NULL;
+				newTarget = fopen("Uncompressed.txt", "w");
+
+				if(newTarget!=NULL) {
+					result = inf(newSource, newTarget);
+				}
+			}
 		}
 	}
 
@@ -105,4 +118,76 @@ int WriterZlib::def( FILE* source, FILE* target, int compLvl ) {
 	(void)deflateEnd( &strm );
 
 	return result;
+}
+
+/*
+C-style function uncompressing data from source into target until EOF.
+
+Return values:
+	Z_OK			- Success.
+	Z_MEM_ERROR		- Memory could not be allocated.
+	Z_STREAM_ERROR	- Invalid compression level passed to function.
+	Z_VERSION ERROR	- Header and lib of zlib does not match.
+	Z_ERRNO			- Error reading/writing files.
+*/
+int WriterZlib::inf( FILE* source, FILE* target ) {
+	int result = 0;
+	unsigned int have = 0;
+	z_stream strm;
+	unsigned char in [CHUNK_SIZE];
+	unsigned char out[CHUNK_SIZE];
+
+	/*Initialize zlib*/
+	strm.zalloc		= Z_NULL;
+	strm.zfree		= Z_NULL;
+	strm.opaque		= Z_NULL;
+	strm.avail_in	= 0;
+	strm.next_in	= Z_NULL;
+	result = inflateInit( &strm );
+	if( result!=Z_OK ) {
+		return result;
+	}
+
+	/*decompress until deflate stream ends or end of file*/
+	do {
+		strm.avail_in = fread( in, 1, CHUNK_SIZE, source );
+		if( ferror(source) ) {
+			(void)inflateEnd( &strm );
+			return Z_ERRNO;
+		}
+		if( strm.avail_in==0 ) {
+			break;
+		}
+		strm.next_in = in;
+
+		/*run inflate-func on input until output buffer not full*/
+		do {
+			strm.avail_out	= CHUNK_SIZE;
+			strm.next_out	= out;
+			result = inflate( &strm, Z_NO_FLUSH );
+			
+			//Do extensive error checking
+			if( result==Z_STREAM_ERROR ) {
+				return result;
+			}
+			switch( result ) {
+			case Z_NEED_DICT:
+				result = Z_DATA_ERROR;
+			case Z_DATA_ERROR:
+			case Z_MEM_ERROR:
+				(void)inflateEnd( &strm );
+				return result;
+			}
+
+			have = CHUNK_SIZE - strm.avail_out;
+			if( fwrite(out, 1, have, target) != have||ferror(target) ) {
+				(void)inflateEnd( &strm );
+				return Z_ERRNO;
+			}
+		} while( strm.avail_out==0 );
+	} while( result!=Z_STREAM_END );
+
+	(void)inflateEnd( &strm );
+	return result == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
+
 }
