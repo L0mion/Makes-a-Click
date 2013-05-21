@@ -3,10 +3,12 @@
 
 DigitalSmoothControl::DigitalSmoothControl(
 	XInputFetcher* p_xinput,
-	InputHelper::Xbox360Digitals p_raise,
 	InputHelper::Xbox360Digitals p_lower,
+	InputHelper::Xbox360Digitals p_raise,
 	vector<int> p_points,
-	float p_smoothTime, float p_smoothSpeed, float p_vibrationDuration )
+	float p_smoothSpeed,
+	float p_smoothTime,
+	float p_vibrationDuration )
 {
 	m_xinput = p_xinput;
 	m_next = p_raise;
@@ -24,7 +26,6 @@ DigitalSmoothControl::DigitalSmoothControl(
 
 DigitalSmoothControl::~DigitalSmoothControl()
 {
-
 }
 
 void DigitalSmoothControl::update( const float p_dt )

@@ -27,7 +27,7 @@ public:
 	};
 
 	CameraController( Camera* p_camera, XInputFetcher* p_xinput );
-	~CameraController();
+	virtual ~CameraController();
 
 	DirectX::XMFLOAT3 getPosition() const;
 	//DirectX::XMFLOAT3 getPivotPosition() const;

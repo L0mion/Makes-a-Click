@@ -25,9 +25,9 @@ CameraController::CameraController( Camera* p_camera, XInputFetcher* p_xinput )
 	
 	vector<int> points( begin(s_vantagePoints), end(s_vantagePoints) );
 	m_zoomControl = new DigitalSmoothControl( m_xinput,
-		InputHelper::Xbox360Digitals_DPAD_DOWN,
 		InputHelper::Xbox360Digitals_DPAD_UP,
-		points, 0.2f, 100.0f, 0.2f );
+		InputHelper::Xbox360Digitals_DPAD_DOWN,
+		points, 100.0f );
 	m_zoomControl->setCurrentPoint( VantagePoints_FAR );
 
 	m_position		= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
@@ -62,7 +62,7 @@ CameraController::CameraController( Camera* p_camera, XInputFetcher* p_xinput )
 
 CameraController::~CameraController()
 {
-
+	delete m_zoomControl;
 }
 
 DirectX::XMFLOAT3 CameraController::getPosition() const
@@ -98,7 +98,14 @@ void CameraController::update( float p_dt, const XMFLOAT3& p_pivotPos )
 	m_camera->rebuildView( m_position, m_right, m_look, m_up );
 }
 
-const XMFLOAT3& CameraController::getForward() const { return m_forward; }
+const XMFLOAT3& CameraController::getForward() const
+{
+	if( m_zoomControl->getCurrentPoint() != VantagePoints_ONTOP ) {
+		return m_forward;
+	} else {
+		return m_north;
+	}
+}
 const XMFLOAT3& CameraController::getRight() const { return m_right; }
 
 void CameraController::handleZoom( float p_dt )

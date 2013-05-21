@@ -11,11 +11,13 @@ class DigitalSmoothControl
 public:
 	DigitalSmoothControl(
 		XInputFetcher* p_xinput,
-		InputHelper::Xbox360Digitals p_raise,
 		InputHelper::Xbox360Digitals p_lower,
+		InputHelper::Xbox360Digitals p_raise,
 		vector<int> p_points,
-		float p_smoothTime, float p_smoothSpeed, float p_vibrationDuration );
-	~DigitalSmoothControl();
+		float p_smoothSpeed,
+		float p_smoothTime = 0.2f,
+		float p_vibrationDuration = 0.2f );
+	virtual ~DigitalSmoothControl();
 
 	void update( const float p_dt );
 

@@ -3,6 +3,7 @@
 #include <DirectXMath.h>
 using namespace DirectX;
 
+class DigitalSmoothControl;
 class HeightMap;
 class XInputFetcher;
 struct EntityBufferInfo;
@@ -11,10 +12,7 @@ class PivotPoint
 {
 public:
 	PivotPoint( XInputFetcher* p_xinput, HeightMap* p_heightmap, EntityBufferInfo* p_avatar );
-	~PivotPoint();
-
-	//float getSize();
-	//float getSpeed();
+	virtual ~PivotPoint();
 
 	void update( const float p_dt, const XMFLOAT3& p_forward,
 		const XMFLOAT3& p_right );
@@ -36,12 +34,11 @@ private:
 	XInputFetcher* m_xinput;
 	HeightMap* m_heightmap;
 	EntityBufferInfo* m_avatar;
+	DigitalSmoothControl* m_sizeControl;
 
 	float m_sensitivity;
 
 	XMFLOAT3 m_position;
 	float m_size;
 	float m_speed;
-
-
 };
