@@ -5,16 +5,25 @@
     <ClCompile Include="Source\WinDetective.cpp">
       <Filter>WinDetective</Filter>
     </ClCompile>
+    <ClCompile Include="Source\InterpreterXML.cpp">
+      <Filter>InterpreterXML</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\LoaderXML.h" />
     <ClInclude Include="Source\WinDetective.h">
       <Filter>WinDetective</Filter>
     </ClInclude>
+    <ClInclude Include="Source\InterpreterXML.h">
+      <Filter>InterpreterXML</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="WinDetective">
       <UniqueIdentifier>{78778736-f7ad-4f20-b300-0c1ec31234bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InterpreterXML">
+      <UniqueIdentifier>{61854721-d0f1-44a8-a7a0-4bc393ffe1b2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

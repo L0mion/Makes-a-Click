@@ -1,5 +1,4 @@
 #include <string>
-#include <UtilDefinitionMAC.h>
 #include <rapidxml_print.hpp>
 
 #include "SettingsWriterXML.h"

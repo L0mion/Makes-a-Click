@@ -23,9 +23,6 @@
     <ClCompile Include="..\..\Source\managementCB.cpp">
       <Filter>ManagmentCB</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\DebugGUI.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\sprite.cpp">
       <Filter>Sprite</Filter>
     </ClCompile>
@@ -47,9 +44,6 @@
     <ClCompile Include="..\..\Source\Vertex.cpp">
       <Filter>Utilties</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\HeightMap.cpp">
-      <Filter>Utilties</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\EntityBufferInfo.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -62,9 +56,6 @@
     <ClCompile Include="..\..\Source\ManagementDebug.cpp">
       <Filter>Utilties</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\CameraController.cpp">
-      <Filter>Utilties</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\CubeFactory.cpp">
       <Filter>Factories</Filter>
     </ClCompile>
@@ -73,6 +64,18 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\managementWrite.cpp">
       <Filter>ManagementWrite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\HeightMap.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CameraController.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\DebugGUI.cpp">
+      <Filter>Utilties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\PivotPoint.cpp">
+      <Filter>Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,9 +115,6 @@
     <ClInclude Include="..\..\Source\vertex.h">
       <Filter>Utilties</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\DebugGUI.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\sprite.h">
       <Filter>Sprite</Filter>
     </ClInclude>
@@ -136,9 +136,6 @@
     <ClInclude Include="..\..\Source\InputHelper.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\HeightMap.h">
-      <Filter>Utilties</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\EntityBufferInfo.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -149,9 +146,6 @@
       <Filter>ManagementMenu</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ManagementDebug.h">
-      <Filter>Utilties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\CameraController.h">
       <Filter>Utilties</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CubeFactory.h">
@@ -165,6 +159,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\text.h">
       <Filter>ManagementWrite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\HeightMap.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CameraController.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\DebugGUI.h">
+      <Filter>Utilties</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PivotPoint.h">
+      <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +206,9 @@
     </Filter>
     <Filter Include="ManagementWrite">
       <UniqueIdentifier>{159754c5-aa90-4aeb-98c1-0068b427e516}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logic">
+      <UniqueIdentifier>{efced057-1d1c-4d80-ace9-5690e816ff9e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

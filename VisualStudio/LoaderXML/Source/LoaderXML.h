@@ -6,13 +6,11 @@ namespace Loader_XML {
 namespace Parser_XML {
 	class DocXML;
 }
+namespace Util {
+	struct Mac;
+}
 
 #include <string>
-
-//These are fairly temporary.
-static const std::wstring	g_filePathToSearch	= L"../../Resources/"	;
-static const std::wstring	g_fileEnding		= L".xml"				;
-static const bool			g_recursiveSearch	= true					;
 
 /*------------------------------------------*/
 /*			 - Note to self -				*/
@@ -22,18 +20,25 @@ static const bool			g_recursiveSearch	= true					;
 namespace Loader_XML {
 	class LoaderXML {
 	public:
-		LoaderXML();
+		LoaderXML(
+			std::wstring	p_filePathToSearch,
+			std::wstring	p_fileEnding,
+			bool			p_recursiveSearch);
 		~LoaderXML();
 
-		bool init();
+		bool init( Util::Mac& inout_result );
 	protected:
 	private:
-		bool parse();
+		bool parse( Util::Mac& inout_result );
 		bool parseXML(
 			const std::wstring filePath, 
 			const std::wstring fileName, 
-			const std::wstring fileEnding);
-		void loadXML(Parser_XML::DocXML* docXML);
+			const std::wstring fileEnding,
+			Util::Mac& inout_result );
+
+		std::wstring m_filePathToSearch;
+		std::wstring m_fileEnding;
+		bool m_recursiveSearch;
 
 		Loader_XML::WinDetective* m_winDetective;
 	};

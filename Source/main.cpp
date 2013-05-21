@@ -26,6 +26,10 @@
 #include "utility.h"
 #include "window.h"
 #include "EntityBufferInfo.h"
+#include "PivotPoint.h"
+
+//Loading
+#include <LoaderMAC.h>
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void initDebugGui( float* p_dt, float* p_fps );
@@ -44,17 +48,6 @@ CameraController* g_cameraControl;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int cmdShow)
 {
-	//Temp: Using whilst testing XML-Loader.
-	//Loader_XML::LoaderXML* loaderXML = new Loader_XML::LoaderXML();
-	//loaderXML->init();
-	//delete loaderXML;
-
-	//Writer_XML::DescMAC descMac("Testing", "Testing", 0);
-	//Writer_XML::WriterXML* writerXML 
-	//	= new Writer_XML::WriterXML(descMac);
-	//writerXML->init();
-	//delete writerXML;
-
 #if defined( DEBUG ) || defined( _DEBUG )
 	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 	_CrtSetReportMode ( _CRT_ERROR, _CRTDBG_MODE_DEBUG );
@@ -72,16 +65,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	XInputFetcher* xinput = new XInputFetcher();
 	xinput->calibrate(0.4);
 
-	HeightMap* heightMap = new HeightMap( g_renderer->getD3DManagement() );
+	//Detta är kanske typ nästan helt och hållet lite smått temporärt.
+	Mac mac;
+	LoaderMAC* loaderMAC = new LoaderMAC();
+	bool sucessfulLoad = loaderMAC->init( mac );
+	delete loaderMAC;
+
+	PivotPoint* pivot = new PivotPoint( xinput );
+
+	HeightMap* heightMap = new HeightMap(
+		g_renderer->getD3DManagement(),
+		mac.heightmap,
+		(float)std::atof(			mac.macDesc.heightmap.cellSize.c_str()	),	//Jag ska fixa detta. Lovar.
+		(float)std::atoi(			mac.macDesc.heightmap.cntCol.c_str()	),	//Jag ska fixa detta. Lovar.
+		(unsigned int)std::atoi(	mac.macDesc.heightmap.cntRow.c_str()	));	//Jag ska fixa detta. Lovar.
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
 	g_renderer->addEntity( heightMapBuffers );
 
 	ObjFileReader reader;
-	EntityBufferInfo* barrel = reader.readFile( "../../resources/",
+	EntityBufferInfo* blueberry = reader.readFile( "../../resources/",
 		"sphere.obj", false, g_renderer->getD3DManagement() );
-	g_renderer->addEntity( barrel );
+	g_renderer->addEntity( blueberry );
 	
-	g_cameraControl = new CameraController( g_camera, xinput, heightMap );
+	g_cameraControl = new CameraController( g_camera, xinput, heightMap, pivot );
 
 	g_managementMenu = new ManagementMenu(xinput);
 		hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
@@ -104,10 +110,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			xinput->update();
 			handleInput(xinput, dt);
 
-			DirectX::XMFLOAT3 pivotPos = g_cameraControl->getPivotPosition();
-			barrel->m_world._41 = pivotPos.x;
-			barrel->m_world._42 = pivotPos.y;
-			barrel->m_world._43 = pivotPos.z;
+			heightMap->update( g_renderer->getD3DManagement(), pivot, dt );
+
+			DirectX::XMFLOAT3 pivotPos = pivot->m_position;
+			blueberry->m_world._41 = pivotPos.x;
+			blueberry->m_world._42 = pivotPos.y;
+			blueberry->m_world._43 = pivotPos.z;
 
 			DirectX::XMFLOAT4X4 finalMatrix = MathHelper::multiplyMatrix( 
 				g_camera->getViewMatrix(), g_camera->getProjectionMatrix() );
@@ -123,13 +131,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			old.QuadPart = current.QuadPart;
 
-			Sleep(8);
+			//Sleep(8);
 		}
 	}
 
 	delete g_cameraControl;
 	delete heightMap;
 	delete xinput;
+	delete pivot;
 
 	DebugGUI::getInstance()->terminate();
 	

@@ -5,6 +5,7 @@
 #include "mathHelper.h"
 #include "DebugGUI.h"
 #include "HeightMap.h"
+#include "PivotPoint.h"
 #include <AntTweakBar.h>
 
 const int CameraController::s_vantagePoints[VantagePoints_CNT] = {
@@ -16,18 +17,19 @@ const int CameraController::s_vantagePoints[VantagePoints_CNT] = {
 };
 
 CameraController::CameraController( Camera* p_camera,
-	XInputFetcher* p_xinput, HeightMap* p_heightmap )
+	XInputFetcher* p_xinput, HeightMap* p_heightmap, PivotPoint* p_pivot  )
 {
 	m_camera = p_camera;
 	m_xinput = p_xinput;
 	m_heightmap = p_heightmap;
+	m_pivot = p_pivot;
 
 	m_sensitivity[Sticks_LEFT]  = 64.0f;
 	m_sensitivity[Sticks_RIGHT] = 2.0f;
 	m_curVantagePoint = VantagePoints_FAR;
 	m_curVantage = (float)s_vantagePoints[m_curVantagePoint];
 
-	m_pivotPoint	= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
+	//m_pivot	= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
 	m_position		= DirectX::XMFLOAT3( 0.0f, 10.0f, -10.0f );
 	m_forward		= DirectX::XMFLOAT3( 0.0f, 0.0f, 1.0f );
 	m_right			= DirectX::XMFLOAT3( 1.0f, 0.0f, 0.0f );
@@ -67,13 +69,18 @@ DirectX::XMFLOAT3 CameraController::getPosition() const
 {
 	return m_position;
 }
-DirectX::XMFLOAT3 CameraController::getPivotPosition() const
-{
-	return m_pivotPoint;
-}
+//DirectX::XMFLOAT3 CameraController::getPivotPosition() const
+//{
+//	return m_pivot;
+//}
 
 void CameraController::update( float p_dt )
 {
+	//HACK: should not be here
+	m_pivot->m_speed = m_xinput->getCalibratedAnalogQuad(
+		InputHelper::Xbox360Analogs_TRIGGER_R );
+
+
 	handleZoom( p_dt );
 
 	float thumbLX = getThumbLX( p_dt );
@@ -243,15 +250,15 @@ float CameraController::getThumbRY( float p_dt )
 
 void CameraController::movePivot( XMFLOAT3 p_forward, float p_x, XMFLOAT3 p_right, float p_y )
 {
-	m_pivotPoint.x += p_forward.x * p_y;
-	m_pivotPoint.z += p_forward.z * p_y;
+	m_pivot->m_position.x += p_forward.x * p_y;
+	m_pivot->m_position.z += p_forward.z * p_y;
 
-	m_pivotPoint.x += p_right.x * p_x;
-	m_pivotPoint.z += p_right.z * p_x;
+	m_pivot->m_position.x += p_right.x * p_x;
+	m_pivot->m_position.z += p_right.z * p_x;
 
-	m_pivotPoint.y = m_heightmap->getHeight( m_pivotPoint.x, m_pivotPoint.z );
+	m_pivot->m_position.y = m_heightmap->getHeight(
+		m_pivot->m_position.x, m_pivot->m_position.z );
 }
-
 void CameraController::updateAngles( float p_x, float p_y )
 {
 	m_pivotAngleX += p_x;
@@ -310,13 +317,13 @@ void CameraController::updateCam()
 	finalPos.y *= m_curVantage;
 	finalPos.z *= m_curVantage;
 
-	m_position.x = m_pivotPoint.x - finalPos.x;
+	m_position.x = m_pivot->m_position.x - finalPos.x;
 	m_position.y = - finalPos.y;
-	m_position.z = m_pivotPoint.z - finalPos.z;
+	m_position.z = m_pivot->m_position.z - finalPos.z;
 	
 	// Last zoom level has a static height
 	if( m_curVantagePoint < VantagePoints_FAR ) {
-		m_position.y += m_pivotPoint.y;
+		m_position.y += m_pivot->m_position.y;
 	}
 }
 

@@ -26,3 +26,19 @@ DirectX::XMFLOAT4X4 MathHelper::multiplyMatrix(DirectX::XMFLOAT4X4 matrix1, Dire
 
 	return result;
 }
+
+float MathHelper::lerp( float p_start, float p_end, float p_percent )
+{
+	return (p_start + p_percent*(p_end - p_start));
+}
+
+DirectX::XMFLOAT3 MathHelper::lerp( DirectX::XMFLOAT3 p_start,
+	DirectX::XMFLOAT3 p_end, float p_percent )
+{
+	DirectX::XMFLOAT3 tmp;
+	tmp.x = p_start.x + p_percent*(p_end.x - p_start.x);
+	tmp.y = p_start.y + p_percent*(p_end.y - p_start.y);
+	tmp.z = p_start.z + p_percent*(p_end.z - p_start.z);
+
+	return tmp;
+}
