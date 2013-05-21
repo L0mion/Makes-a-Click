@@ -114,6 +114,8 @@ void Renderer::renderEntityBufferInfo( EntityBufferInfo* p_info )
 {
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
 
+	managementBS_->setBlendState( devcon, p_info->m_blendState );
+
 	managementCB_->vsSetCB(devcon, CBTypes_OBJECT);
 	managementCB_->updateCBObject( devcon, p_info->m_world );
 

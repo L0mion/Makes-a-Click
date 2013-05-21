@@ -22,6 +22,8 @@ EntityBufferInfo::EntityBufferInfo()
 
 	m_vertexBuffer = NULL;
 	m_indexBuffer = NULL;
+
+	m_blendState = ManagementBS::BSTypes_DEFAULT;
 }
 
 HRESULT EntityBufferInfo::setVertexBuffer( const int p_vertexSize, const int p_verticesCnt,

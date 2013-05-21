@@ -165,12 +165,12 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, flo
 	float hightLimit = 25.60f;
 	float lowLimit = 0.0f;
 	float speedFac = 30.0f;
-	p_pivot->m_speed *= speedFac;
-	if( p_pivot->m_speed > 0.01f )
+	float speed = p_pivot->getSpeed() * speedFac;
+	if( speed > 0.01f )
 	{
 		int rad = 10;
-		int col = getCol( p_pivot->m_position.x );
-		int row = getRow( p_pivot->m_position.z );
+		int col = getCol( p_pivot->getPosition().x );
+		int row = getRow( p_pivot->getPosition().z );
 
 		for( int x=-rad; x<rad; x++ ) {
 			for( int z=-rad; z<rad; z++ ) 
@@ -185,7 +185,7 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, flo
 						float xAbs = fabs((float)x/(float)rad);
 						float zAbs = fabs((float)z/(float)rad);
 						float amount = max( 0.0f, 1-(xAbs*xAbs + zAbs*zAbs) );
-						amount *= p_dt * p_pivot->m_speed;
+						amount *= p_dt * speed;
 
 						m_vertices[idx].position[Coords::Y] += amount;
 

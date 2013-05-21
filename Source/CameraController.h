@@ -11,13 +11,6 @@ class XInputFetcher;
 class CameraController
 {
 public:
-	enum Sticks
-	{
-		Sticks_LEFT,
-		Sticks_RIGHT,
-		Sticks_CNT
-	};
-
 	enum VantagePoints
 	{
 		VantagePoints_FIRST,
@@ -32,13 +25,15 @@ public:
 		VantagePoints_CNT
 	};
 
-	CameraController( Camera* p_camera, XInputFetcher* p_xinput,
-		HeightMap* p_heightmap, PivotPoint* pivot );
+	CameraController( Camera* p_camera, XInputFetcher* p_xinput );
 	~CameraController();
 
 	DirectX::XMFLOAT3 getPosition() const;
 	//DirectX::XMFLOAT3 getPivotPosition() const;
-	void update( float p_dt );
+	void update( float p_dt, const XMFLOAT3& p_pivotPos );
+
+	const XMFLOAT3& getForward() const;
+	const XMFLOAT3& getRight() const;
 
 private:
 	void handleZoom( float p_dt );
@@ -49,30 +44,16 @@ private:
 	float inBoundVantage( float p_vantage );
 	void vibrate();
 
-	float getThumbLX( float p_dt );
-	float getThumbLY( float p_dt );
 	float getThumbRX( float p_dt );
 	float getThumbRY( float p_dt );
 
-	void movePivot( XMFLOAT3 p_forward, float p_x, XMFLOAT3 p_right, float p_y );
 	void updateAngles( float p_x, float p_y );
 	void updateVecsAndMats();
-	void updateCam();
-
-
-	//UNUSED
-	/*void strafeCam( float p_distance );
-	void walk( float p_distance );
-	void walkDeluxe( float p_distance );
-	void verticalWalk( float p_distance );
-
-	void pitchCam(float angle);
-	void yawCam(float angle);*/
+	void updateCam( const XMFLOAT3& p_pivotPos );
 
 private:
 	Camera* m_camera;
 	XInputFetcher* m_xinput;
-	HeightMap* m_heightmap;
 
 	// Zoom control
 	static const int s_vantagePoints[VantagePoints_CNT];
@@ -82,9 +63,6 @@ private:
 	float m_vibbedTime;
 
 	// Overall
-	//XMFLOAT3 m_pivotPoint;
-	PivotPoint* m_pivot;
-	
 	XMFLOAT3 m_position;
 	XMFLOAT3 m_forward;
 	XMFLOAT3 m_right;
@@ -100,7 +78,7 @@ private:
 	XMFLOAT3 m_north;
 	XMFLOAT3 m_east;
 
-	double m_sensitivity[Sticks_CNT];
+	double m_sensitivity/*[Sticks_CNT]*/;
 
 	float m_pivotAngleX;
 	float m_pivotAngleY;

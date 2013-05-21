@@ -16,16 +16,15 @@ const int CameraController::s_vantagePoints[VantagePoints_CNT] = {
 	350
 };
 
-CameraController::CameraController( Camera* p_camera,
-	XInputFetcher* p_xinput, HeightMap* p_heightmap, PivotPoint* p_pivot  )
+CameraController::CameraController( Camera* p_camera, XInputFetcher* p_xinput )
 {
 	m_camera = p_camera;
 	m_xinput = p_xinput;
-	m_heightmap = p_heightmap;
-	m_pivot = p_pivot;
 
-	m_sensitivity[Sticks_LEFT]  = 64.0f;
-	m_sensitivity[Sticks_RIGHT] = 2.0f;
+	/*m_sensitivity[Sticks_LEFT]  = 64.0f;
+	m_sensitivity[Sticks_RIGHT] = 2.0f;*/
+	m_sensitivity = 2.0f;
+
 	m_curVantagePoint = VantagePoints_FAR;
 	m_curVantage = (float)s_vantagePoints[m_curVantagePoint];
 
@@ -69,32 +68,19 @@ DirectX::XMFLOAT3 CameraController::getPosition() const
 {
 	return m_position;
 }
-//DirectX::XMFLOAT3 CameraController::getPivotPosition() const
-//{
-//	return m_pivot;
-//}
 
-void CameraController::update( float p_dt )
+void CameraController::update( float p_dt, const XMFLOAT3& p_pivotPos )
 {
-	//HACK: should not be here
-	m_pivot->m_speed = (float)m_xinput->getCalibratedAnalogQuad(
-		InputHelper::Xbox360Analogs_TRIGGER_R );
-
-
 	handleZoom( p_dt );
 
-	float thumbLX = getThumbLX( p_dt );
-	float thumbLY = getThumbLY( p_dt );
 	float thumbRX = getThumbRX( p_dt );
 	float thumbRY = getThumbRY( p_dt );
 
 	if( m_curVantagePoint != VantagePoints_ONTOP ) {
 		updateAngles( thumbRX, thumbRY );
 		updateVecsAndMats();
-		movePivot( m_forward, thumbLX, m_right, thumbLY );
-		updateCam();
+		updateCam( p_pivotPos );
 	} else {
-		movePivot( m_north, thumbLX, m_east, thumbLY );
 		m_position.x = 0.0f;
 		m_position.y = (float)s_vantagePoints[VantagePoints_ONTOP];
 		m_position.z = 0.0f;
@@ -110,6 +96,9 @@ void CameraController::update( float p_dt )
 
 	m_camera->rebuildView( m_position, m_right, m_look, m_up );
 }
+
+const XMFLOAT3& CameraController::getForward() const { return m_forward; }
+const XMFLOAT3& CameraController::getRight() const { return m_right; }
 
 void CameraController::handleZoom( float p_dt )
 {
@@ -215,27 +204,11 @@ void CameraController::vibrate()
 	m_xinput->vibrate( motorSpeed, motorSpeed );
 }
 
-float CameraController::getThumbLX( float p_dt )
-{
-	double thumbLX	= m_xinput->getCalibratedAnalogQuad(
-		InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE );
-	thumbLX *= m_sensitivity[Sticks_LEFT]  * p_dt;
-	return (float)thumbLX;
-}
-
-float CameraController::getThumbLY( float p_dt )
-{
-	double thumbLY	= m_xinput->getCalibratedAnalogQuad(
-		InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE );
-	thumbLY *= m_sensitivity[Sticks_LEFT]  * p_dt;
-	return (float)thumbLY;
-}
-
 float CameraController::getThumbRX( float p_dt )
 {
 	double thumbRX	= m_xinput->getCalibratedAnalogQuad(
 		InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE );
-	thumbRX *= m_sensitivity[Sticks_RIGHT] * p_dt;
+	thumbRX *= m_sensitivity * p_dt;
 	return (float)thumbRX;
 
 }
@@ -244,21 +217,10 @@ float CameraController::getThumbRY( float p_dt )
 {
 	double thumbRY	= m_xinput->getCalibratedAnalogQuad(
 		InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE );
-	thumbRY *= m_sensitivity[Sticks_RIGHT] * p_dt  *-1;
+	thumbRY *= m_sensitivity * p_dt  *-1;
 	return (float)thumbRY;
 }
 
-void CameraController::movePivot( XMFLOAT3 p_forward, float p_x, XMFLOAT3 p_right, float p_y )
-{
-	m_pivot->m_position.x += p_forward.x * p_y;
-	m_pivot->m_position.z += p_forward.z * p_y;
-
-	m_pivot->m_position.x += p_right.x * p_x;
-	m_pivot->m_position.z += p_right.z * p_x;
-
-	m_pivot->m_position.y = m_heightmap->getHeight(
-		m_pivot->m_position.x, m_pivot->m_position.z );
-}
 void CameraController::updateAngles( float p_x, float p_y )
 {
 	m_pivotAngleX += p_x;
@@ -293,7 +255,7 @@ void CameraController::updateVecsAndMats()
 	XMStoreFloat4x4( &m_rightRot, rightRotMat );
 }
 
-void CameraController::updateCam()
+void CameraController::updateCam( const XMFLOAT3& p_pivotPos )
 {
 	// Set up rotation in xz-plane (turning).
 	XMMATRIX upRotMat = XMLoadFloat4x4( &m_upRot );
@@ -317,70 +279,12 @@ void CameraController::updateCam()
 	finalPos.y *= m_curVantage;
 	finalPos.z *= m_curVantage;
 
-	m_position.x = m_pivot->m_position.x - finalPos.x;
+	m_position.x = p_pivotPos.x - finalPos.x;
 	m_position.y = - finalPos.y;
-	m_position.z = m_pivot->m_position.z - finalPos.z;
+	m_position.z = p_pivotPos.z - finalPos.z;
 	
 	// Last zoom level has a static height
 	if( m_curVantagePoint < VantagePoints_FAR ) {
-		m_position.y += m_pivot->m_position.y;
+		m_position.y += p_pivotPos.y;
 	}
 }
-
-//UNUSED
-/*
-void CameraController::strafeCam( float p_distance )
-{
-	m_position.x += m_right.x * p_distance;
-	m_position.y += m_right.y * p_distance;
-	m_position.z += m_right.z * p_distance;
-}
-void CameraController::walk( float p_distance )
-{
-	m_position.x += m_look.x * p_distance;
-	m_position.y += m_look.y * p_distance;
-	m_position.z += m_look.z * p_distance;
-}
-void CameraController::walkDeluxe( float p_distance )
-{
-	m_position.x += m_look.x * p_distance;
-	m_position.z += m_look.z * p_distance;
-}
-void CameraController::verticalWalk( float p_distance )
-{
-	m_position.y += p_distance;
-}
-
-void CameraController::pitchCam( float p_angle )
-{
-	DirectX::XMMATRIX rotationMatrix;
-	DirectX::XMVECTOR xmRight	= DirectX::XMLoadFloat3(&m_right);
-	DirectX::XMVECTOR xmLook	= DirectX::XMLoadFloat3(&m_look);
-	DirectX::XMVECTOR xmUp		= DirectX::XMLoadFloat3(&m_up);
-	rotationMatrix = DirectX::XMMatrixRotationAxis(xmRight, p_angle);
-
-	xmLook	= DirectX::XMVector3TransformNormal(xmLook, rotationMatrix);
-	xmUp	= DirectX::XMVector3TransformNormal(xmUp, rotationMatrix);
-
-	DirectX::XMStoreFloat3(&m_look, xmLook);
-	DirectX::XMStoreFloat3(&m_up, xmUp);
-}
-
-void CameraController::yawCam( float p_angle )
-{
-	DirectX::XMVECTOR yAxis = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	DirectX::XMMATRIX rotationMatrix;
-
-	DirectX::XMVECTOR xmRight	= DirectX::XMLoadFloat3(&m_right);
-	DirectX::XMVECTOR xmLook	= DirectX::XMLoadFloat3(&m_look);
-	DirectX::XMVECTOR xmUp		= DirectX::XMLoadFloat3(&m_up);
-
-	rotationMatrix = DirectX::XMMatrixRotationAxis(yAxis, p_angle);
-	xmRight	= DirectX::XMVector3TransformNormal(xmRight, rotationMatrix);
-	xmLook	= DirectX::XMVector3TransformNormal(xmLook, rotationMatrix);
-	xmUp	= DirectX::XMVector3TransformNormal(xmUp, rotationMatrix);
-
-	DirectX::XMStoreFloat3(&m_right, xmRight);
-	DirectX::XMStoreFloat3(&m_look, xmLook);
-	DirectX::XMStoreFloat3(&m_up, xmUp);
-}*/
