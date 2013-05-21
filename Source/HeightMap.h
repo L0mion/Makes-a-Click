@@ -40,13 +40,22 @@ private:
 
 	void loadHeightMap(int p_vertexCnt);
 	void smoothHeightMap();
+	void smoothHeightMap( int p_colBegin, int p_colEnd, int p_rowBegin,
+		int p_rowEnd );
 	float average(int p_posRow, int p_posCol);
-	bool inBounds(int i, int j);
+
+	bool inBounds( int p_idx );
+	bool inBounds( int p_row, int p_col );
+
+	void toInBounds( int* inout_colBegin, int* inout_colEnd,
+		int* inout_rowBegin, int* inout_rowEnd );
+	void toInBounds( int* inout_col, int* inout_row);
 
 	// Generate EntityBufferInfo
 	void createEntityBufferInfo();
 	void defineVertexBuffer( int p_vertexCnt );
 	void estimateNormals();
+	void estimateNormals( int p_colBegin, int p_colEnd, int rowBegin, int rowEnd );
 	void defineIndexBuffer( int p_indexCnt );
 
 private: // Variables

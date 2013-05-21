@@ -30,70 +30,72 @@ HeightMap::HeightMap(
 
 HeightMap::~HeightMap()
 {
-	// This is done by the renderer 
-	//delete m_bufferInfo;
+	/*delete m_bufferInfo;*/ // This is done by the renderer now
 }
 
-//vector<Model> HeightMap::createModels(/*int pTechNr, int pPassNr, */int maxSize)
-//{
-//	// Not used or tested yet
-//	////calculate number of models to produce:
-//	//int numColModels = 0;
-//	//int numRowModels = 0;
-//	//unsigned int tmpNumCols = (unsigned int)nrOfCols;
-//	//unsigned int tmpNumRows = (unsigned int)nrOfRows;
-//	//while(tmpNumCols > maxSize)
-//	//{
-//	//	numColModels++;
-//	//	tmpNumCols >>= 2; //2 shifts = 1/4
-//	//}
-//	//while(tmpNumRows > maxSize)
-//	//{
-//	//	numRowModels++;
-//	//	tmpNumRows >>= 2; //2 shifts = 1/4
-//	//}
-//
-//	int numVertices = nrOfRows*nrOfCols;
-//	int numIndices = nrOfFaces*3;
-//
-//	vector<HeightMapVertex> vertices = defineVertexBuffer(numVertices);
-//	vector<int> indices = defineIndexBuffer(numIndices);
-//
-//	
-//	string blendMapPath = "assets/textures/blendmap3.png";
-//	//vector<string> texFileNames(5);
-//	//for(int i=0; i<5; i++)
-//	//{
-//	//	texFileNames[i] = "assets/textures/";
-//	//}
-//
-//	//texFileNames[0] += "wood.png";
-//	//texFileNames[1] += "bricks.jpg";
-//	//texFileNames[2] += "perlin.jpg";
-//	//texFileNames[3] += "tileBrick.jpg";
-//	//texFileNames[4] += "stones.jpg";
-//	
-//	//Mesh* mesh = new Mesh(system, vertices, indices, pTechNr, pPassNr);
-//	//Surface* surface = new Surface(system, texFileNames, uvScales, assetFolders, true);
-//	vector<Model> models;
-//	models.push_back(Model());
-//	//Model model;
-//	models[0].setVertices(vertices);
-//	models[0].setIndices(indices);
-//
-//	//HACK: hardcoded textures and stuph
-//	//No normalmaps or specularmaps
-//	models[0].addMaterial("assets/textures/wood.png",		"assets/textures/blendmap3.png", "");
-//	models[0].addMaterial("assets/textures/bricks.jpg",		"", "");
-//	models[0].addMaterial("assets/textures/perlin.jpg",		"", "");
-//	models[0].addMaterial("assets/textures/tileBrick.jpg",	"", "");
-//	models[0].addMaterial("assets/textures/stones.jpg",		"", "");
-//	models[0].name = "World heightmap";
-//
-//	//models.push_back(new Model(system, mesh, surface, TransformInfo()));
-//	
-//	return models;
-//}
+/*
+vector<Model> HeightMap::createModels(/*int pTechNr, int pPassNr, int maxSize)
+{
+	// Not used or tested yet
+	////calculate number of models to produce:
+	//int numColModels = 0;
+	//int numRowModels = 0;
+	//unsigned int tmpNumCols = (unsigned int)nrOfCols;
+	//unsigned int tmpNumRows = (unsigned int)nrOfRows;
+	//while(tmpNumCols > maxSize)
+	//{
+	//	numColModels++;
+	//	tmpNumCols >>= 2; //2 shifts = 1/4
+	//}
+	//while(tmpNumRows > maxSize)
+	//{
+	//	numRowModels++;
+	//	tmpNumRows >>= 2; //2 shifts = 1/4
+	//}
+
+	
+	int numVertices = nrOfRows*nrOfCols;
+	int numIndices = nrOfFaces*3;
+	
+	vector<HeightMapVertex> vertices = defineVertexBuffer(numVertices);
+	vector<int> indices = defineIndexBuffer(numIndices);
+
+	
+	string blendMapPath = "assets/textures/blendmap3.png";
+	//vector<string> texFileNames(5);
+	//for(int i=0; i<5; i++)
+	//{
+	//	texFileNames[i] = "assets/textures/";
+	//}
+
+	//texFileNames[0] += "wood.png";
+	//texFileNames[1] += "bricks.jpg";
+	//texFileNames[2] += "perlin.jpg";
+	//texFileNames[3] += "tileBrick.jpg";
+	//texFileNames[4] += "stones.jpg";
+	
+	//Mesh* mesh = new Mesh(system, vertices, indices, pTechNr, pPassNr);
+	//Surface* surface = new Surface(system, texFileNames, uvScales, assetFolders, true);
+	vector<Model> models;
+	models.push_back(Model());
+	//Model model;
+	models[0].setVertices(vertices);
+	models[0].setIndices(indices);
+
+	//HACK: hardcoded textures and stuph
+	//No normalmaps or specularmaps
+	models[0].addMaterial("assets/textures/wood.png",		"assets/textures/blendmap3.png", "");
+	models[0].addMaterial("assets/textures/bricks.jpg",		"", "");
+	models[0].addMaterial("assets/textures/perlin.jpg",		"", "");
+	models[0].addMaterial("assets/textures/tileBrick.jpg",	"", "");
+	models[0].addMaterial("assets/textures/stones.jpg",		"", "");
+	models[0].name = "World heightmap";
+
+	//models.push_back(new Model(system, mesh, surface, TransformInfo()));
+	
+	return models;
+}
+*/
 
 float HeightMap::getHeight( float p_x, float p_z )
 {
@@ -135,11 +137,18 @@ float HeightMap::getHeight( float p_x, float p_z )
 
 float HeightMap::getHeight( int p_col, int p_row )
 {
+	toInBounds( &p_col, &p_row );
 	return getHeight( p_row*m_colCnt + p_col );
 }
 
 float HeightMap::getHeight( int p_idx )
 {
+	if( p_idx < 0 ){
+		p_idx = 0; //throw exception?
+	} else if( p_idx >= m_vertices.size() ){
+		p_idx = m_vertices.size()-1; //throw exception?
+	}
+
 	return m_vertices[p_idx].position[Coords::Y];
 }
 
@@ -153,7 +162,7 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, flo
 
 	// Modify heightmap 
 	//float rad = 10.0f;
-	float heightLimit = 25.60f;
+	float hightLimit = 25.60f;
 	float lowLimit = 0.0f;
 	float speedFac = 30.0f;
 	p_pivot->m_speed *= speedFac;
@@ -163,29 +172,36 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, flo
 		int col = getCol( p_pivot->m_position.x );
 		int row = getRow( p_pivot->m_position.z );
 
-		int xStart	= col-rad;
-		int xStop	= col+rad;
-		int zStart	= row-rad;
-		int zStop	= row+rad;
-
 		for( int x=-rad; x<rad; x++ ) {
 			for( int z=-rad; z<rad; z++ ) 
 			{
 				int idx = (z+row)*m_colCnt + (x + col);
-				float height = m_vertices[idx].position[Coords::Y];
-				if( height < heightLimit && height > lowLimit )
-				{
-					float xAbs = fabs((float)x/(float)rad);
-					float zAbs = fabs((float)z/(float)rad);
-					float amount = max( 0.0f, 1-(xAbs*xAbs + zAbs*zAbs) );
-					amount *= p_dt * p_pivot->m_speed;
 
-					m_vertices[idx].position[Coords::Y] += amount;
+				if( inBounds(idx) )
+				{
+					float height = getHeight( idx );
+					if( height < hightLimit && height > lowLimit )
+					{
+						float xAbs = fabs((float)x/(float)rad);
+						float zAbs = fabs((float)z/(float)rad);
+						float amount = max( 0.0f, 1-(xAbs*xAbs + zAbs*zAbs) );
+						amount *= p_dt * p_pivot->m_speed;
+
+						m_vertices[idx].position[Coords::Y] += amount;
+
+						float newHeight = m_vertices[idx].position[Coords::Y];
+						if( newHeight > hightLimit ) {
+							m_vertices[idx].position[Coords::Y] = hightLimit;
+						} else if( newHeight < lowLimit ) {
+							m_vertices[idx].position[Coords::Y] = lowLimit;
+						}
+					}
 				}
 			}
 		}
-		estimateNormals();
 		//smoothHeightMap();
+		smoothHeightMap( col-rad-1, col+rad+1, row-rad-1, row+rad+1 );
+		estimateNormals( col-rad-1, col+rad+1, row-rad-1, row+rad+1 );
 
 		// Copy to gpu
 		ID3D11DeviceContext* devcon = p_managementD3D->getDeviceContext();
@@ -229,6 +245,88 @@ int HeightMap::getRow( float p_z )
 float HeightMap::getRowAsFloat( float p_z )
 {
 	return (p_z - 0.5f*(m_rowCnt-1)*m_cellSize) / -m_cellSize;
+}
+
+void HeightMap::smoothHeightMap()
+{
+	smoothHeightMap( 0, m_colCnt, 0, m_rowCnt );
+}
+
+void HeightMap::smoothHeightMap( int p_colBegin, int p_colEnd,
+								int p_rowBegin, int p_rowEnd )
+{
+	vector<float> dest( m_vertices.size() );
+
+	toInBounds( &p_colBegin, &p_colEnd, &p_rowBegin, &p_rowEnd );
+
+	for( int rowIdx=p_rowBegin; rowIdx<p_rowEnd; rowIdx++ ) {
+		for( int colIdx=p_colBegin; colIdx<p_colEnd; colIdx++ ) {
+			dest[m_colCnt*rowIdx + colIdx] = average(rowIdx,colIdx);
+		}
+	}
+
+	for( int rowIdx=p_rowBegin; rowIdx<p_rowEnd; rowIdx++ ) {
+		for( int colIdx=p_colBegin; colIdx<p_colEnd; colIdx++ ) {
+			m_vertices[m_colCnt*rowIdx + colIdx].position[Coords::Y] =
+				dest[m_colCnt*rowIdx + colIdx];
+		}
+	}
+
+	//m_heightMap = dest;
+}
+
+float HeightMap::average(int p_posRow, int p_posCol)
+{
+	float avg = 0.0f;
+	float num = 0.0f;
+
+	for( int rowIdx = p_posRow-1; rowIdx <= p_posRow+1; rowIdx++ ) {
+		for( int colIdx = p_posCol-1; colIdx <= p_posCol+1; colIdx++ ) {
+			if(inBounds(rowIdx,colIdx)) {
+				avg += getHeight( colIdx, rowIdx );
+				num += 1.0f;
+			}
+		}
+	}
+
+	return avg / num;
+}
+
+bool HeightMap::inBounds( int p_idx )
+{
+	if ( 0 < p_idx && p_idx < m_vertices.size() ) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool HeightMap::inBounds( int p_row, int p_col )
+{
+	return p_row >= 0 && p_row < m_rowCnt &&
+		p_col >= 0 && p_col < m_colCnt;
+}
+
+void HeightMap::toInBounds( int* inout_colBegin, int* inout_colEnd,
+						   int* inout_rowBegin, int* inout_rowEnd )
+{
+	toInBounds( inout_colBegin, inout_rowBegin );
+	toInBounds( inout_colEnd, inout_rowEnd );
+}
+
+void HeightMap::toInBounds( int* inout_col, int* inout_row )
+{
+	if( *inout_col < 0 ) {
+		*inout_col = 0;
+	} else if( *inout_col > m_colCnt ) {
+		*inout_col = m_colCnt;
+	}
+
+	if( *inout_row < 0 ) {
+		*inout_row = 0;
+	} else if( *inout_row > m_rowCnt ) {
+		*inout_row = m_rowCnt;
+	}
 }
 
 void HeightMap::createEntityBufferInfo()
@@ -281,31 +379,29 @@ void HeightMap::defineVertexBuffer( int p_vertexCnt )
 	estimateNormals();
 }
 
+
+
 void HeightMap::estimateNormals()
 {
+	estimateNormals( 0, m_colCnt, 0, m_rowCnt );
+}
+
+void HeightMap::estimateNormals( int p_colBegin, int p_colEnd, int p_rowBegin, int p_rowEnd )
+{
+
+	toInBounds( &p_colBegin, &p_colEnd, &p_rowBegin, &p_rowEnd );
+
 	// Estimate normals for interior nodes using central difference.
 	float invTwoDX = 1.0f / (2.0f*m_cellSize);
 	float invTwoDZ = 1.0f / (2.0f*m_cellSize);
 
-	for( int rowIdx = 2; rowIdx <m_rowCnt-1; rowIdx++ ) {
-		for( int colIdx = 2; colIdx < m_colCnt-1; colIdx++ ) {
+	for( int rowIdx=p_rowBegin; rowIdx<p_rowEnd; rowIdx++ ) {
+		for( int colIdx=p_colBegin; colIdx<p_colEnd; colIdx++ ) {
 
 			float t = getHeight(colIdx,   rowIdx-1);
 			float b = getHeight(colIdx,   rowIdx+1);
 			float l = getHeight(colIdx-1, rowIdx+1);
 			float r = getHeight(colIdx+1, rowIdx+1);
-
-			/*float t = m_heightMap[(rowIdx-1)*m_colCnt + colIdx];
-			float b = m_heightMap[(rowIdx+1)*m_colCnt + colIdx];
-			float l = m_heightMap[rowIdx*m_colCnt + colIdx - 1];
-			float r = m_heightMap[rowIdx*m_colCnt + colIdx + 1];*/
-
-			/*D3DXVECTOR3 tanZ(0.0f, (t-b)*invTwoDZ, 1.0f);
-			D3DXVECTOR3 tanX(1.0f, (r-l)*invTwoDX, 0.0f);
-
-			D3DXVECTOR3 N;
-			D3DXVec3Cross(&N, &tanZ, &tanX);
-			D3DXVec3Normalize(&N, &N);*/
 
 			DirectX::XMVECTOR tanZ = DirectX::XMVectorSet( 0.0f, (t-b)*invTwoDZ, 1.0f, 0.0f );
 			DirectX::XMVECTOR tanX = DirectX::XMVectorSet( 1.0f, (r-l)*invTwoDX, 0.0f, 0.0f );
