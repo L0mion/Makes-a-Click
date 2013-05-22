@@ -21,7 +21,7 @@ public:
 	{
 		ToolIds_NONE,
 		ToolIds_SAND,
-		ToolIds_ROAD,
+		ToolIds_TEXTURE_BRUSH,
 		ToolIds_OBJECT
 	};
 	enum ToolPropertyIds
@@ -122,6 +122,17 @@ private:
 	void objectPropertiesSector6();
 	void objectPropertiesSector7();
 	void objectPropertiesSectorNone();
+
+	void useTextureBrushPropertiesMenu(double p_analogStickX, double p_analogStickY);
+	void textureBrushPropertiesSector0();
+	void textureBrushPropertiesSector1();
+	void textureBrushPropertiesSector2();
+	void textureBrushPropertiesSector3();
+	void textureBrushPropertiesSector4();
+	void textureBrushPropertiesSector5();
+	void textureBrushPropertiesSector6();
+	void textureBrushPropertiesSector7();
+	void textureBrushPropertiesSectorNone();
 
 	DirectX::XMFLOAT2 calcTextPosForCenter(std::wstring p_text);
 	DirectX::XMFLOAT2 calcTextMenuOutPos(std::wstring p_text);

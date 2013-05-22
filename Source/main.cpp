@@ -85,7 +85,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	BlendMap* blendMap = new BlendMap();
 	blendMap->init(g_renderer->getD3DManagement()->getDevice(), 256, 256);
-	blendMap->psSetBlendMap(g_renderer->getD3DManagement()->getDeviceContext(), 2);
+	blendMap->psSetBlendMap(g_renderer->getD3DManagement()->getDeviceContext(), 4);
 
 	ObjFileReader reader;
 	EntityBufferInfo* blueberry = reader.readFile( "../../resources/",
@@ -118,14 +118,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			xinput->update();
 			handleInput(xinput, dt);
 
-			blendMap->setTexel(g_renderer->getD3DManagement()->getDeviceContext(),
-				Texel(0, 0, 0, 0),
-				0,
-				0);
+		
 
 			if( !g_menuIsActive)
 			{
-				heightMap->update( g_renderer->getD3DManagement(), pivot, dt );
+				if(g_managementMenu->getActiveTool() == ManagementMenu::ToolIds_SAND)
+					heightMap->update( g_renderer->getD3DManagement(), pivot, dt );
+				else if(g_managementMenu->getActiveTool() == ManagementMenu::ToolIds_TEXTURE_BRUSH)
+				{
+					blendMap->update(g_renderer->getD3DManagement()->getDeviceContext(),
+						pivot,
+						heightMap,
+						g_managementMenu->getActiveProperty());
+				}
+
 				pivot->update( dt, cameraControl->getForward(), cameraControl->getRight() );
 				cameraControl->update( dt, pivot->getPosition() );
 			}
@@ -152,6 +158,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	delete heightMap;
 	delete xinput;
 	delete pivot;
+	delete blendMap;
 
 	DebugGUI::getInstance()->terminate();
 	
@@ -251,6 +258,7 @@ void handleInput(XInputFetcher* xinput, float dt)
 		if(!g_menuIsActive)
 		{
 			g_managementMenu->setSelectedTool();
+			g_managementMenu->setSelectedProperty();
 		}
 	}
 	else

@@ -55,7 +55,9 @@ void Renderer::beginRender()
 	managementD3D_->setBackBuffer();
 
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_HEIGHTMAP);
-	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_PLACEHOLDER, 1);
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_STONE, 1);
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_GRASS, 2);
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_GRAVEL, 3);
 	//managementShader_->setShader(devcon, ManagementShader::ShaderIds_DEFAULT);
 }
 

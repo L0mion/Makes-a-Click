@@ -58,6 +58,8 @@ void ManagementMenu::useToolsMenu()
 		toolsMenuSector0();
 	else if(insideSector1(analogX, analogY))
 		toolsMenuSector1();
+	else if(insideSector2(analogX, analogY))
+		toolsMenuSector2();
 	else
 		toolsMenuSectorNone();
 
@@ -76,6 +78,10 @@ void ManagementMenu::useToolPropertiesMenu()
 	case ToolIds_OBJECT:
 		useObjectPropertiesMenu(analogX, analogY);
 		break;
+	case ToolIds_TEXTURE_BRUSH:
+		useTextureBrushPropertiesMenu(analogX, analogY);
+		break;
+
 	}
 }
 void ManagementMenu::useNoMenu()
@@ -768,6 +774,16 @@ void ManagementMenu::toolsMenuSector1()
 }
 void ManagementMenu::toolsMenuSector2()
 {
+	m_tempSelectedTool = ToolIds_TEXTURE_BRUSH;
+	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
+	
+	std::wstring text = L"Texture Brush";
+	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
+
+	m_textStrings.push_back(
+		new Text(text,
+		textPos,
+		m_textColor));
 }
 void ManagementMenu::toolsMenuSector3()
 {
@@ -945,6 +961,74 @@ void ManagementMenu::objectPropertiesSector7()
 {
 }
 void ManagementMenu::objectPropertiesSectorNone()
+{
+}
+
+void ManagementMenu::useTextureBrushPropertiesMenu(double p_analogStickX, double p_analogStickY)
+{
+	m_managementSprite->setSpriteCollection(ManagementSprite::SpriteCollectionIds_TEXTURE_BRUSH_PROPERTIES_MENU);
+
+	if(insideSector0(p_analogStickX, p_analogStickY))
+		textureBrushPropertiesSector0();
+	if(insideSector1(p_analogStickX, p_analogStickY))
+		textureBrushPropertiesSector1();
+	if(insideSector2(p_analogStickX, p_analogStickY))
+		textureBrushPropertiesSector2();
+
+	moveSpriteToSector(p_analogStickX, p_analogStickY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
+}
+void ManagementMenu::textureBrushPropertiesSector0()
+{
+	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
+
+	std::wstring text = L"Stone";
+	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
+
+	m_textStrings.push_back(
+		new Text(text,
+		textPos,
+		m_textColor));
+}
+void ManagementMenu::textureBrushPropertiesSector1()
+{
+	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_1;
+
+	std::wstring text = L"Grass";
+	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
+
+	m_textStrings.push_back(
+		new Text(text,
+		textPos,
+		m_textColor));
+}
+void ManagementMenu::textureBrushPropertiesSector2()
+{
+	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_2;
+
+	std::wstring text = L"Gravel";
+	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
+
+	m_textStrings.push_back(
+		new Text(text,
+		textPos,
+		m_textColor));
+}
+void ManagementMenu::textureBrushPropertiesSector3()
+{
+}
+void ManagementMenu::textureBrushPropertiesSector4()
+{
+}
+void ManagementMenu::textureBrushPropertiesSector5()
+{
+}
+void ManagementMenu::textureBrushPropertiesSector6()
+{
+}
+void ManagementMenu::textureBrushPropertiesSector7()
+{
+}
+void ManagementMenu::textureBrushPropertiesSectorNone()
 {
 }
 

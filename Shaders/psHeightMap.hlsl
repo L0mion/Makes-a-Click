@@ -2,9 +2,11 @@
 #include "structs.hlsl"
 #include "lightLib.hlsl"
 
-Texture2D texSand : register (t0);
-Texture2D texPlaceholder : register (t1);
-Texture2D texBlendMap : register (t2);
+Texture2D texSand	: register (t0);
+Texture2D texStone	: register (t1);
+Texture2D texGrass	: register (t2);
+Texture2D texGravel : register (t3);
+Texture2D texBlendMap : register (t4);
 SamplerState ssSprite : register (s0);
  
 float4 ps( VSHeightMapOut psIn ) : SV_TARGET
@@ -33,11 +35,18 @@ float4 ps( VSHeightMapOut psIn ) : SV_TARGET
 	float3 lightOut = parallelLight( surface, light, cameraPos,
 		psIn.normal.xyz, psIn.position.xyz );
 
-	float3 colorSand = texSand.Sample( ssSprite, psIn.texCoord ).xyz;
-	float3 colorPlaceholder = texPlaceholder.Sample(ssSprite, psIn.texCoord).xyz;
-	float blendFactor = texBlendMap.Sample(ssSprite, psIn.texCoord).x;
+	float3 colorSand	= texSand.Sample( ssSprite, psIn.texCoord ).xyz;
+	float3 colorStone	= texStone.Sample(ssSprite, psIn.texCoord).xyz;
+	float3 colorGrass	= texGrass.Sample(ssSprite, psIn.texCoord).xyz;
+	float3 colorGravel	= texGravel.Sample(ssSprite, psIn.texCoord).xyz;
+	
+	float2 unTiledTex = float2(psIn.texCoord.x/255.0f, psIn.texCoord.y/255.0f); 
+	float4 blendFactor = texBlendMap.Sample(ssSprite, unTiledTex);
 
-	float3 color = lerp(colorSand, colorPlaceholder, blendFactor);
+	float3 color = colorSand;
+	color = lerp(color, colorStone, blendFactor.x);
+	color = lerp(color, colorGrass, blendFactor.y);
+	color = lerp(color, colorGravel, blendFactor.z);
 
 	float4 finalCol = float4( color*lightOut, 1.0f ); 
 

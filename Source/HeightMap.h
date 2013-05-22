@@ -29,13 +29,14 @@ public:
 
 	void update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, float p_dt );
 
+	int getCol( float p_x );
+	int getRow( float p_z );
+
 private:
 	// Heightmap specific
 	float getColDiff( float p_x );
-	int getCol( float p_x );
 	float getColAsFloat( float p_x );
 	float getRowDiff( float p_z );
-	int getRow( float p_z );
 	float getRowAsFloat( float p_z );
 
 	void loadHeightMap(int p_vertexCnt);
