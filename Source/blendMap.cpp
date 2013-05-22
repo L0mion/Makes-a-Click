@@ -24,9 +24,14 @@ void BlendMap::update(ID3D11DeviceContext* p_devcon,
 	float radius = p_pivot->getSize();
 	float speed  = p_pivot->getSpeed();
 
-	for( int x=col-radius; x<col+radius; x++ )
+	int lowX  = col - static_cast<int>(radius);
+	int highX = col + static_cast<int>(radius);
+	int lowZ  = row - static_cast<int>(radius);
+	int highZ = row + static_cast<int>(radius);
+
+	for( int x=lowX; x<highX; x++ )
 	{
-		for( int z=row-radius; z<row+radius; z++ ) 
+		for( int z=lowZ; z<highZ; z++ ) 
 		{	
 			
 			if(insideCircle(radius, x, z, col, row))
@@ -152,7 +157,7 @@ HRESULT BlendMap::updateTexture(ID3D11DeviceContext* p_devcon)
 void BlendMap::modifyRed(float p_value, int p_index)
 {
 	int newValue = m_texels[p_index].m_red;
-	newValue += p_value;
+	newValue += static_cast<int>(p_value);
 	if(newValue > 254)
 		newValue = 254;
 	else if(newValue < 0)
@@ -163,7 +168,7 @@ void BlendMap::modifyRed(float p_value, int p_index)
 void BlendMap::modifyGreen(float p_value, int p_index)
 {
 	int newValue = m_texels[p_index].m_green;
-	newValue += p_value;
+	newValue += static_cast<int>(p_value);
 	if(newValue > 254)
 		newValue = 254;
 	else if(newValue < 0)
@@ -174,7 +179,7 @@ void BlendMap::modifyGreen(float p_value, int p_index)
 void BlendMap::modifyBlue(float p_value, int p_index)
 {
 	int newValue = m_texels[p_index].m_blue;
-	newValue += p_value;
+	newValue += static_cast<int>(p_value);
 	if(newValue > 254)
 		newValue = 254;
 	else if(newValue < 0)
@@ -185,7 +190,8 @@ void BlendMap::modifyBlue(float p_value, int p_index)
 
 bool BlendMap::insideCircle(float p_radius, int p_x, int p_z, int p_col, int p_row)
 {
-	float hyp = sqrt((p_col-p_x)*(p_col-p_x)+(p_row-p_z)*(p_row-p_z));
+	int temp = (p_col-p_x)*(p_col-p_x)+(p_row-p_z)*(p_row-p_z);
+	float hyp = sqrtf(static_cast<float>(temp));
 
 	return hyp < p_radius;
 }
