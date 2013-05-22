@@ -113,9 +113,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			xinput->update();
 			handleInput(xinput, dt);
 
-			heightMap->update( g_renderer->getD3DManagement(), pivot, dt );
-			pivot->update( dt, cameraControl->getForward(), cameraControl->getRight() );
-			if( !g_menuIsActive) {
+			if( !g_menuIsActive)
+			{
+				heightMap->update( g_renderer->getD3DManagement(), pivot, dt );
+				pivot->update( dt, cameraControl->getForward(), cameraControl->getRight() );
 				cameraControl->update( dt, pivot->getPosition() );
 			}
 
@@ -197,7 +198,7 @@ void initDebugGui( float* p_dt, float* p_fps )
 
 void handleInput(XInputFetcher* xinput, float dt)
 {
-	g_menuIsActive = false;
+//	g_menuIsActive = false;
 	
 	static bool s_textInput		 = false;
 	static bool s_alreadyPressed = false;
@@ -232,7 +233,10 @@ void handleInput(XInputFetcher* xinput, float dt)
 			g_managementMenu->useToolPropertiesMenu();
 		}
 		else
+		{
 			g_managementMenu->useNoMenu();
+			g_menuIsActive = false;
+		}
 		
 		if(!g_menuIsActive)
 		{
@@ -240,7 +244,10 @@ void handleInput(XInputFetcher* xinput, float dt)
 		}
 	}
 	else
+	{
+		g_menuIsActive = true;
 		g_managementMenu->useTextMenu();
+	}
 }
 
 void clean()
