@@ -2,7 +2,9 @@
 #include "structs.hlsl"
 #include "lightLib.hlsl"
 
-Texture2D texSprite : register (t0);
+Texture2D texSand : register (t0);
+Texture2D texPlaceholder : register (t1);
+Texture2D texBlendMap : register (t2);
 SamplerState ssSprite : register (s0);
  
 float4 ps( VSHeightMapOut psIn ) : SV_TARGET
@@ -31,7 +33,11 @@ float4 ps( VSHeightMapOut psIn ) : SV_TARGET
 	float3 lightOut = parallelLight( surface, light, cameraPos,
 		psIn.normal.xyz, psIn.position.xyz );
 
-	float3 color = texSprite.Sample( ssSprite, psIn.texCoord ).xyz;
+	float3 colorSand = texSand.Sample( ssSprite, psIn.texCoord ).xyz;
+	float3 colorPlaceholder = texPlaceholder.Sample(ssSprite, psIn.texCoord).xyz;
+	float blendFactor = texBlendMap.Sample(ssSprite, psIn.texCoord).x;
+
+	float3 color = lerp(colorSand, colorPlaceholder, blendFactor);
 
 	float4 finalCol = float4( color*lightOut, 1.0f ); 
 

@@ -55,6 +55,7 @@ void Renderer::beginRender()
 	managementD3D_->setBackBuffer();
 
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_HEIGHTMAP);
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_PLACEHOLDER, 1);
 	//managementShader_->setShader(devcon, ManagementShader::ShaderIds_DEFAULT);
 }
 

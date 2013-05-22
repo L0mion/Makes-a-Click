@@ -7,6 +7,7 @@
 #include <crtdbg.h>
 #endif
 
+#include "blendMap.h"
 #include "CameraController.h"
 #include "CubeFactory.h"
 #include "DebugGUI.h"
@@ -82,6 +83,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
 	g_renderer->addEntity( heightMapBuffers );
 
+	BlendMap* blendMap = new BlendMap();
+	blendMap->init(g_renderer->getD3DManagement()->getDevice(), 256, 256);
+	blendMap->psSetBlendMap(g_renderer->getD3DManagement()->getDeviceContext(), 2);
+
 	ObjFileReader reader;
 	EntityBufferInfo* blueberry = reader.readFile( "../../resources/",
 		"sphere.obj", false, g_renderer->getD3DManagement() );
@@ -109,6 +114,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			xinput->update();
 			handleInput(xinput, dt);
+
+			blendMap->setTexel(g_renderer->getD3DManagement()->getDeviceContext(),
+				Texel(0, 0, 0, 0),
+				0,
+				0);
 
 			heightMap->update( g_renderer->getD3DManagement(), pivot, dt );
 

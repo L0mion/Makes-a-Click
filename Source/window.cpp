@@ -82,7 +82,7 @@ HRESULT Window::createWindow()
 
 	windowHandle_ = CreateWindowEx(NULL,
 								   L"WindowClass",
-								   L"Raytracer",
+								   L"Makes a Click",
 								   WS_OVERLAPPEDWINDOW,
 								   100,
 								   100,
