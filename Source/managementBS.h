@@ -12,7 +12,9 @@ public:
 	enum BSTypes
 	{
 		BSTypes_DEFAULT,
-		BSTypes_TRANSPARENCY
+		BSTypes_TRANSPARENCY,
+		BSTypes_ADDITIVE,
+		BSTypes_CNT
 	};
 
 	void setBlendState(ID3D11DeviceContext* p_devcon, BSTypes p_type);
@@ -21,9 +23,9 @@ public:
 private:
 	HRESULT initBSDefault(ID3D11Device* p_device);
 	HRESULT initBSTransparency(ID3D11Device* p_device);
+	HRESULT initBSAdditive(ID3D11Device* p_device);
 
-	ID3D11BlendState* m_bsDefault;
-	ID3D11BlendState* m_bsTransparency;
+	ID3D11BlendState* m_blendStates[BSTypes_CNT];
 };
 
 #endif //MANAGEMENT_BS_H

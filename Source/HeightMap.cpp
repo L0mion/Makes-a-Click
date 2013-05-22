@@ -165,27 +165,29 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, flo
 	float hightLimit = 25.60f;
 	float lowLimit = 0.0f;
 	float speedFac = 30.0f;
-	p_pivot->m_speed *= speedFac;
-	if( p_pivot->m_speed > 0.01f )
+	float speed = p_pivot->getSpeed() * speedFac;
+	if( fabs(speed) > 0.0f ) // If the user has pressed the pour/suck buttons
 	{
-		int rad = 10;
-		int col = getCol( p_pivot->m_position.x );
-		int row = getRow( p_pivot->m_position.z );
+		int radius = 10.0f;
+		radius = p_pivot->getSize();
+		int col = getCol( p_pivot->getPosition().x );
+		int row = getRow( p_pivot->getPosition().z );
 
-		for( int x=-rad; x<rad; x++ ) {
-			for( int z=-rad; z<rad; z++ ) 
+		for( int x=-radius; x<radius; x++ ) {
+			for( int z=-radius; z<radius; z++ ) 
 			{
 				int idx = (z+row)*m_colCnt + (x + col);
 
 				if( inBounds(idx) )
 				{
 					float height = getHeight( idx );
-					if( height < hightLimit && height > lowLimit )
+					if( ((speed > 0) && (height < hightLimit)) || 
+						((speed < 0) && (height > lowLimit)) )
 					{
-						float xAbs = fabs((float)x/(float)rad);
-						float zAbs = fabs((float)z/(float)rad);
+						float xAbs = fabs((float)x/(float)radius);
+						float zAbs = fabs((float)z/(float)radius);
 						float amount = max( 0.0f, 1-(xAbs*xAbs + zAbs*zAbs) );
-						amount *= p_dt * p_pivot->m_speed;
+						amount *= p_dt * speed;
 
 						m_vertices[idx].position[Coords::Y] += amount;
 
@@ -200,8 +202,8 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, flo
 			}
 		}
 		//smoothHeightMap();
-		smoothHeightMap( col-rad-1, col+rad+1, row-rad-1, row+rad+1 );
-		estimateNormals( col-rad-1, col+rad+1, row-rad-1, row+rad+1 );
+		//smoothHeightMap( col-radius-1, col+radius+1, row-radius-1, row+radius+1 );
+		estimateNormals( col-radius-1, col+radius+1, row-radius-1, row+radius+1 );
 
 		// Copy to gpu
 		ID3D11DeviceContext* devcon = p_managementD3D->getDeviceContext();

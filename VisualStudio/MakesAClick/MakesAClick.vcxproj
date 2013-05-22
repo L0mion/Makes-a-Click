@@ -15,6 +15,7 @@
     <ClCompile Include="..\..\Source\camera.cpp" />
     <ClCompile Include="..\..\Source\CubeFactory.cpp" />
     <ClCompile Include="..\..\Source\DebugGUI.cpp" />
+    <ClCompile Include="..\..\Source\DigitalSmoothControl.cpp" />
     <ClCompile Include="..\..\Source\EntityBufferInfo.cpp" />
     <ClCompile Include="..\..\Source\HeightMap.cpp" />
     <ClCompile Include="..\..\Source\CameraController.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="..\..\Source\cbDesc.h" />
     <ClInclude Include="..\..\Source\CubeFactory.h" />
     <ClInclude Include="..\..\Source\DebugGUI.h" />
+    <ClInclude Include="..\..\Source\DigitalSmoothControl.h" />
     <ClInclude Include="..\..\Source\EntityBufferInfo.h" />
     <ClInclude Include="..\..\Source\HeightMap.h" />
     <ClInclude Include="..\..\Source\inputDesc.h" />

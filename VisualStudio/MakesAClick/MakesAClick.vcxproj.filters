@@ -79,6 +79,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\blendMap.cpp">
       <Filter>Logic</Filter>
+	</ClCompile>
+    <ClCompile Include="..\..\Source\DigitalSmoothControl.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +183,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\texel.h">
       <Filter>Utilties</Filter>
+	</ClInclude>
+    <ClInclude Include="..\..\Source\DigitalSmoothControl.h">
+      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
