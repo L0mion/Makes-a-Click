@@ -435,8 +435,6 @@ void ManagementSprite::setSpriteCollectionSandPropertiesMenu()
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_SAND_PROPERTY_0));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_SAND_PROPERTY_1));
-	m_spriteCollection->push_back(m_sprites->at(SpriteIds_SAND_PROPERTY_2));
-	m_spriteCollection->push_back(m_sprites->at(SpriteIds_SAND_PROPERTY_3));
 }
 void ManagementSprite::setSpriteCollectionObjectPropertiesMenu()
 {

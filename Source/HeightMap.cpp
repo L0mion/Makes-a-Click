@@ -157,7 +157,8 @@ EntityBufferInfo* HeightMap::getEntityBufferInfo()
 	return m_bufferInfo;
 }
 
-void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, float p_dt )
+void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, 
+					   float p_dt, ManagementMenu::ToolPropertyIds p_toolProperty )
 {
 
 	// Modify heightmap 
@@ -173,34 +174,11 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, flo
 		int col = getCol( p_pivot->getPosition().x );
 		int row = getRow( p_pivot->getPosition().z );
 
-		for( int x=-radius; x<radius; x++ ) {
-			for( int z=-radius; z<radius; z++ ) 
-			{
-				int idx = (z+row)*m_colCnt + (x + col);
+		if(p_toolProperty == ManagementMenu::ToolPropertyIds_PROPERTY_0)
+			modifyHeight(radius, row, col, speed, lowLimit, hightLimit, p_dt);
+		else if(p_toolProperty == ManagementMenu::ToolPropertyIds_PROPERTY_1)
+			smoothHeight(radius, row, col, speed, p_dt);
 
-				if( inBounds(idx) )
-				{
-					float height = getHeight( idx );
-					if( ((speed > 0) && (height < hightLimit)) || 
-						((speed < 0) && (height > lowLimit)) )
-					{
-						float xAbs = fabs((float)x/(float)radius);
-						float zAbs = fabs((float)z/(float)radius);
-						float amount = max( 0.0f, 1-(xAbs*xAbs + zAbs*zAbs) );
-						amount *= p_dt * speed;
-
-						m_vertices[idx].position[Coords::Y] += amount;
-
-						float newHeight = m_vertices[idx].position[Coords::Y];
-						if( newHeight > hightLimit ) {
-							m_vertices[idx].position[Coords::Y] = hightLimit;
-						} else if( newHeight < lowLimit ) {
-							m_vertices[idx].position[Coords::Y] = lowLimit;
-						}
-					}
-				}
-			}
-		}
 		//smoothHeightMap();
 		//smoothHeightMap( col-radius-1, col+radius+1, row-radius-1, row+radius+1 );
 		estimateNormals( col-radius-1, col+radius+1, row-radius-1, row+radius+1 );
@@ -213,6 +191,78 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, flo
 			D3D11_MAP_WRITE_DISCARD, 0, &resource);
 		memcpy( resource.pData,& m_vertices[0], sizeof(Vertex_PNT)*m_vertexCnt );
 		devcon->Unmap( m_bufferInfo->m_vertexBuffer, 0 );
+	}
+}
+
+void HeightMap::modifyHeight( int p_radius, int p_row, int p_col,
+							  float p_speed, float p_lowLimit, float p_hightLimit, float p_dt)
+{
+	for( int x=-p_radius; x<p_radius; x++ ) {
+			for( int z=-p_radius; z<p_radius; z++ ) 
+			{
+				int idx = (z+p_row)*m_colCnt + (x + p_col);
+
+				if( inBounds(idx) )
+				{
+					float height = getHeight( idx );
+					if( ((p_speed > 0) && (height < p_hightLimit)) || 
+						((p_speed < 0) && (height > p_lowLimit)) )
+					{
+						float xAbs = fabs((float)x/(float)p_radius);
+						float zAbs = fabs((float)z/(float)p_radius);
+						float amount = max( 0.0f, 1-(xAbs*xAbs + zAbs*zAbs) );
+						amount *= p_dt * p_speed;
+
+						m_vertices[idx].position[Coords::Y] += amount;
+
+						float newHeight = m_vertices[idx].position[Coords::Y];
+						if( newHeight > p_hightLimit ) {
+							m_vertices[idx].position[Coords::Y] = p_hightLimit;
+						} else if( newHeight < p_lowLimit ) {
+							m_vertices[idx].position[Coords::Y] = p_lowLimit;
+						}
+					}
+				}
+			}
+		}
+}
+
+void HeightMap::smoothHeight(int p_radius, int p_row, int p_col,
+							 float p_speed, float p_dt)
+{
+	int lowCol	= p_col-p_radius;
+	int highCol = p_col+p_radius;
+	int lowRow	= p_row-p_radius;
+	int highRow = p_row+p_radius;
+
+	float speedModifier = 7.5f;
+
+	p_speed = fabs(p_speed);
+
+	float sum = 0.0f;
+	int numVerts = 0;
+	for( int x=-p_radius; x<p_radius; x++ ) 
+	{
+		for( int z=-p_radius; z<p_radius; z++ ) 
+		{
+			int index = (z+p_row)*m_colCnt + (x + p_col);
+			if(inBounds(index))
+			{
+				float avg = average(z+p_row, x+p_col);
+				float height = getHeight(index);
+				float xAbs = fabs((float)x/(float)p_radius);
+				float zAbs = fabs((float)z/(float)p_radius);
+				float amount = max( 0.0f, 1-(xAbs*xAbs + zAbs*zAbs) );
+				amount *= p_dt * p_speed;
+
+				if(height > avg)
+					height -= amount; //(p_speed/speedModifier) * p_dt;
+				else if(height < avg)
+					height += amount; //(p_speed/speedModifier) * p_dt;
+
+				m_vertices[index].position[Coords::Y] = height;
+			}
+		}
 	}
 }
 

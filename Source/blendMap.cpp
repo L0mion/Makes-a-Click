@@ -17,7 +17,8 @@ BlendMap::~BlendMap()
 void BlendMap::update(ID3D11DeviceContext* p_devcon,
 					  PivotPoint* p_pivot,
 					  HeightMap* p_heightMap,
-					  ManagementMenu::ToolPropertyIds toolProperty)
+					  ManagementMenu::ToolPropertyIds toolProperty,
+					  float p_dt)
 {
 	int col		 = p_heightMap->getCol(p_pivot->getPosition().x);
 	int row		 = p_heightMap->getRow(p_pivot->getPosition().z);

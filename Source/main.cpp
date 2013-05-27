@@ -65,7 +65,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	float fps = 0.0f;
 	initDebugGui( &dt, &fps );
 	XInputFetcher* xinput = new XInputFetcher();
-	xinput->calibrate(0.4);
+	xinput->calibrate(0.3);
 
 	//Detta är kanske typ nästan helt och hållet lite smått temporärt.
 	Mac mac;
@@ -123,13 +123,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if( !g_menuIsActive)
 			{
 				if(g_managementMenu->getActiveTool() == ManagementMenu::ToolIds_SAND)
-					heightMap->update( g_renderer->getD3DManagement(), pivot, dt );
+				{
+					heightMap->update( g_renderer->getD3DManagement(),
+					pivot,
+					dt,
+					g_managementMenu->getActiveProperty() );
+				}
 				else if(g_managementMenu->getActiveTool() == ManagementMenu::ToolIds_TEXTURE_BRUSH)
 				{
 					blendMap->update(g_renderer->getD3DManagement()->getDeviceContext(),
 						pivot,
 						heightMap,
-						g_managementMenu->getActiveProperty());
+						g_managementMenu->getActiveProperty(),
+						dt);
 				}
 
 				pivot->update( dt, cameraControl->getForward(), cameraControl->getRight() );

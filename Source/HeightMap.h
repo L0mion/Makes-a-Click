@@ -5,6 +5,7 @@
 using namespace std;
 
 #include "Vertex.h"
+#include "managementMenu.h"
 
 struct EntityBufferInfo;
 class ManagementD3D;
@@ -27,12 +28,18 @@ public:
 
 	EntityBufferInfo* getEntityBufferInfo();
 
-	void update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot, float p_dt );
+	void update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot,
+		float p_dt, ManagementMenu::ToolPropertyIds p_toolProperty );
 
 	int getCol( float p_x );
 	int getRow( float p_z );
 
 private:
+	void modifyHeight( int p_radius, int p_row, int p_col,
+		float p_speed, float p_lowLimit, float p_hightLimit, float p_dt);
+	void smoothHeight( int p_radius, int p_row, int p_col,
+		float p_speed, float p_dt );
+
 	// Heightmap specific
 	float getColDiff( float p_x );
 	float getColAsFloat( float p_x );

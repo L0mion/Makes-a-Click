@@ -814,10 +814,6 @@ void ManagementMenu::useSandPropertiesMenu(double p_analogStickX, double p_analo
 		sandPropertiesSector0();
 	if(insideSector1(p_analogStickX, p_analogStickY))
 		sandPropertiesSector1();
-	if(insideSector2(p_analogStickX, p_analogStickY))
-		sandPropertiesSector2();
-	if(insideSector3(p_analogStickX, p_analogStickY))
-		sandPropertiesSector3();
 
 	moveSpriteToSector(p_analogStickX, p_analogStickY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
@@ -825,7 +821,7 @@ void ManagementMenu::sandPropertiesSector0()
 {
 	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
 
-	std::wstring text = L"Sand Property 0";
+	std::wstring text = L"Add/Remove";
 	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
 
 	m_textStrings.push_back(
@@ -837,7 +833,7 @@ void ManagementMenu::sandPropertiesSector1()
 {
 	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_1;
 
-	std::wstring text = L"Sand Property 1";
+	std::wstring text = L"Smooth";
 	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
 
 	m_textStrings.push_back(
