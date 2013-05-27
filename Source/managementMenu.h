@@ -66,6 +66,9 @@ private:
 	void moveSpriteToSector(double p_analogStickX, double p_analogStickY, ManagementSprite::SpriteIds p_spriteId);
 	void setSpriteSector(ManagementSprite::SectorIds sectorId, ManagementSprite::SpriteIds p_spriteId);
 
+	void setToolIcon();
+	void setToolPropertyIcon();
+
 	bool insideSector0(double p_analogX, double p_analogY);
 	bool insideSector1(double p_analogX, double p_analogY);
 	bool insideSector2(double p_analogX, double p_analogY);

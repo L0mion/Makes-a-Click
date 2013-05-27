@@ -13,6 +13,8 @@ ManagementMenu::ManagementMenu(XInputFetcher* p_xinput)
 	m_managementSprite	= NULL;
 	m_managementWrite	= NULL;
 	m_activeTool		= ToolIds_SAND;
+	m_activeProperty	= ToolPropertyIds_PROPERTY_0;
+	m_tempSelectedProperty = ToolPropertyIds_NONE;
 	m_tempSelectedTool	= ToolIds_NONE;
 	m_textState			= TextStates_LOWER_CASE;
 
@@ -93,11 +95,15 @@ void ManagementMenu::setSelectedTool()
 {
 	if(m_tempSelectedTool != ToolIds_NONE)
 		m_activeTool = m_tempSelectedTool;
+
+	setToolIcon();
 }
 void ManagementMenu::setSelectedProperty()
 {
 	if(m_tempSelectedProperty != ToolPropertyIds_NONE)
 		m_activeProperty = m_tempSelectedProperty;
+
+	setToolPropertyIcon();
 }
 
 ManagementMenu::ToolIds			ManagementMenu::getActiveTool()
@@ -181,6 +187,53 @@ void ManagementMenu::setSpriteSector(ManagementSprite::SectorIds sectorId, Manag
 	DirectX::XMFLOAT2 pos = m_managementSprite->getSectorCoords(sectorId);
 	Sprite* highlighter = m_managementSprite->getSprite(p_spriteId);
 	highlighter->setPosition(pos.x, pos.y);
+}
+
+void ManagementMenu::setToolIcon()
+{
+	if(m_activeTool == ToolIds_SAND)
+	{
+		Sprite* sprite = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TOOL_ICON);
+		sprite->setTextureId(TextureIds::TextureIds_SANB_BUCKET);
+	}
+	else if(m_activeTool == ToolIds_OBJECT)
+	{
+		Sprite* sprite = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TOOL_ICON);
+		sprite->setTextureId(TextureIds::TextureIds_OBJECT);
+	}
+	else if(m_activeTool == ToolIds_TEXTURE_BRUSH)
+	{
+		Sprite* sprite = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TOOL_ICON);
+		sprite->setTextureId(TextureIds::TextureIds_TEXTURE_BRUSH);
+	}
+	setToolPropertyIcon();
+}
+void ManagementMenu::setToolPropertyIcon()
+{
+	Sprite* sprite = m_managementSprite->getSprite(ManagementSprite::SpriteIds_TOOL_PROPERTY_ICON);
+	if(m_activeTool == ToolIds_SAND)
+	{
+		if(m_activeProperty == ToolPropertyIds_PROPERTY_0)
+			sprite->setTextureId(TextureIds::TextureIds_SANB_BUCKET);
+		else if(m_activeProperty == ToolPropertyIds_PROPERTY_1)
+			sprite->setTextureId(TextureIds::TextureIds_SANB_BUCKET);
+	}
+	else if(m_activeTool == ToolIds_OBJECT)
+	{
+		if(m_activeProperty == ToolPropertyIds_PROPERTY_0)
+			sprite->setTextureId(TextureIds::TextureIds_OBJECT);
+		else if(m_activeProperty == ToolPropertyIds_PROPERTY_1)
+			sprite->setTextureId(TextureIds::TextureIds_OBJECT);
+	}
+	else if(m_activeTool == ToolIds_TEXTURE_BRUSH)
+	{
+		if(m_activeProperty == ToolPropertyIds_PROPERTY_0)
+			sprite->setTextureId(TextureIds::TextureIds_STONE);
+		else if(m_activeProperty == ToolPropertyIds_PROPERTY_1)
+			sprite->setTextureId(TextureIds::TextureIds_GRASS);
+		else if(m_activeProperty == ToolPropertyIds_PROPERTY_2)
+			sprite->setTextureId(TextureIds::TextureIds_GRAVEL);
+	}
 }
 
 bool ManagementMenu::insideSector0(double p_analogX, double p_analogY)

@@ -45,6 +45,10 @@ void ManagementSprite::setSpriteCollection(SpriteCollectionIds spriteCollection)
 		setSpriteCollectionNone();
 		break;
 	}
+
+	
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TOOL_ICON));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TOOL_PROPERTY_ICON));
 }
 
 std::vector<Sprite*>* ManagementSprite::getSprites()
@@ -153,6 +157,7 @@ void ManagementSprite::initSprites()
 						static_cast<float>(SCREEN_HEIGHT);
 
 	initPlaceHolderSprite();
+	initToolIconSprites(aspectRatio);
 	initMenuSprites(aspectRatio);
 
 	calcSectorCoords(aspectRatio);
@@ -176,6 +181,24 @@ void ManagementSprite::initPlaceHolderSprite()
 		0.20f,
 		0.20f,
 		TextureIds::TextureIds_PLACEHOLDER);
+}
+void ManagementSprite::initToolIconSprites(float p_aspectRatio)
+{
+	m_sprites->at(SpriteIds_TOOL_ICON) = new Sprite(-0.9f,
+						0.85f,
+						0.0f,
+						0.0f,
+						0.1f/p_aspectRatio,
+						0.1f,
+						TextureIds::TextureIds_SANB_BUCKET);
+
+	m_sprites->at(SpriteIds_TOOL_PROPERTY_ICON) = new Sprite(0.9f,
+						0.85f,
+						0.0f,
+						0.0f,
+						0.1f/p_aspectRatio,
+						0.1f,
+						TextureIds::TextureIds_SANB_BUCKET);
 }
 void ManagementSprite::initMenuSprites(float p_aspectRatio)
 {
@@ -299,32 +322,33 @@ void ManagementSprite::initObjectPropertySprites(Sprite* p_highlighter)
 }
 void ManagementSprite::initTextureBrushPropertySprites(Sprite* p_highlighter)
 {
+	float scaleFactor = 0.65f;
 	m_sprites->at(SpriteIds_TEXTURE_BRUSH_PROPERTY_0) = new Sprite(
 		m_sectorCoords[SectorIds_SECTOR_0].x,
 		m_sectorCoords[SectorIds_SECTOR_0].y,
 		0.0f,
 		0.0f,
-		p_highlighter->getScale().x,
-		p_highlighter->getScale().y,
-		TextureIds::TextureIds_TEXTURE_BRUSH);
+		p_highlighter->getScale().x * scaleFactor,
+		p_highlighter->getScale().y * scaleFactor,
+		TextureIds::TextureIds_STONE);
 
 	m_sprites->at(SpriteIds_TEXTURE_BRUSH_PROPERTY_1) = new Sprite(
 		m_sectorCoords[SectorIds_SECTOR_1].x,
 		m_sectorCoords[SectorIds_SECTOR_1].y,
 		0.0f,
 		0.0f,
-		p_highlighter->getScale().x,
-		p_highlighter->getScale().y,
-		TextureIds::TextureIds_TEXTURE_BRUSH);
+		p_highlighter->getScale().x * scaleFactor,
+		p_highlighter->getScale().y * scaleFactor,
+		TextureIds::TextureIds_GRASS);
 
 	m_sprites->at(SpriteIds_TEXTURE_BRUSH_PROPERTY_2) = new Sprite(
 		m_sectorCoords[SectorIds_SECTOR_2].x,
 		m_sectorCoords[SectorIds_SECTOR_2].y,
 		0.0f,
 		0.0f,
-		p_highlighter->getScale().x,
-		p_highlighter->getScale().y,
-		TextureIds::TextureIds_TEXTURE_BRUSH);
+		p_highlighter->getScale().x * scaleFactor,
+		p_highlighter->getScale().y * scaleFactor,
+		TextureIds::TextureIds_GRAVEL);
 }
 void ManagementSprite::initTextMenuSprites(Sprite* p_highlighter, Sprite* p_circleBackground)
 {

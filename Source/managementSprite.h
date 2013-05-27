@@ -39,6 +39,9 @@ public:
 		SpriteIds_TEXTURE_BRUSH_PROPERTY_1,
 		SpriteIds_TEXTURE_BRUSH_PROPERTY_2,
 
+		SpriteIds_TOOL_ICON,
+		SpriteIds_TOOL_PROPERTY_ICON,
+
 		SpriteIds_TEXT_BACK,
 		SpriteIds_TEXT_BACKGROUND,
 		SpriteIds_TEXT_HIGHLIGHTER,
@@ -96,6 +99,7 @@ private:
 
 	void initSprites();
 	void initPlaceHolderSprite();
+	void initToolIconSprites(float p_aspectRatio);
 	void initMenuSprites(float p_aspectRatio);
 	void initToolSprites(Sprite* p_highlighter);
 	void initSandPropertySprites(Sprite* p_highlighter);
