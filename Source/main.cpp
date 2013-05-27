@@ -7,6 +7,7 @@
 #include <crtdbg.h>
 #endif
 
+#include "blendMap.h"
 #include "CameraController.h"
 #include "CubeFactory.h"
 #include "DebugGUI.h"
@@ -40,7 +41,8 @@ Window* g_window;
 Renderer* g_renderer;
 Camera* g_camera;
 ManagementMenu* g_managementMenu;
-CameraController* g_cameraControl;
+//CameraController* g_cameraControl;
+bool g_menuIsActive;
 
 //Temp: Using whilst testing XML-Loader unt Writer-.
 //#include <LoaderXML.h>
@@ -63,7 +65,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	float fps = 0.0f;
 	initDebugGui( &dt, &fps );
 	XInputFetcher* xinput = new XInputFetcher();
-	xinput->calibrate(0.4);
+	xinput->calibrate(0.3);
 
 	//Detta är kanske typ nästan helt och hållet lite smått temporärt.
 	Mac mac;
@@ -71,23 +73,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	bool sucessfulLoad = loaderMAC->init( mac );
 	delete loaderMAC;
 
-	PivotPoint* pivot = new PivotPoint( xinput );
 
 	HeightMap* heightMap = new HeightMap(
 		g_renderer->getD3DManagement(),
 		mac.heightmap,
 		(float)std::atof(			mac.macDesc.heightmap.cellSize.c_str()	),	//Jag ska fixa detta. Lovar.
-		(float)std::atoi(			mac.macDesc.heightmap.cntCol.c_str()	),	//Jag ska fixa detta. Lovar.
+		(unsigned int)std::atoi(	mac.macDesc.heightmap.cntCol.c_str()	),	//Jag ska fixa detta. Lovar.
 		(unsigned int)std::atoi(	mac.macDesc.heightmap.cntRow.c_str()	));	//Jag ska fixa detta. Lovar.
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
 	g_renderer->addEntity( heightMapBuffers );
 
+	BlendMap* blendMap = new BlendMap();
+	blendMap->init(g_renderer->getD3DManagement()->getDevice(), 256, 256);
+	blendMap->psSetBlendMap(g_renderer->getD3DManagement()->getDeviceContext(), 4);
+
 	ObjFileReader reader;
 	EntityBufferInfo* blueberry = reader.readFile( "../../resources/",
 		"sphere.obj", false, g_renderer->getD3DManagement() );
+	blueberry->m_blendState = ManagementBS::BSTypes_ADDITIVE;
 	g_renderer->addEntity( blueberry );
+
+	PivotPoint* pivot = new PivotPoint( xinput, heightMap, blueberry );
 	
-	g_cameraControl = new CameraController( g_camera, xinput, heightMap, pivot );
+	CameraController* cameraControl = new CameraController( g_camera, xinput );
 
 	g_managementMenu = new ManagementMenu(xinput);
 		hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
@@ -110,17 +118,34 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			xinput->update();
 			handleInput(xinput, dt);
 
-			heightMap->update( g_renderer->getD3DManagement(), pivot );
+		
 
-			DirectX::XMFLOAT3 pivotPos = pivot->m_position;
-			blueberry->m_world._41 = pivotPos.x;
-			blueberry->m_world._42 = pivotPos.y;
-			blueberry->m_world._43 = pivotPos.z;
+			if( !g_menuIsActive)
+			{
+				if(g_managementMenu->getActiveTool() == ManagementMenu::ToolIds_SAND)
+				{
+					heightMap->update( g_renderer->getD3DManagement(),
+					pivot,
+					dt,
+					g_managementMenu->getActiveProperty() );
+				}
+				else if(g_managementMenu->getActiveTool() == ManagementMenu::ToolIds_TEXTURE_BRUSH)
+				{
+					blendMap->update(g_renderer->getD3DManagement()->getDeviceContext(),
+						pivot,
+						heightMap,
+						g_managementMenu->getActiveProperty(),
+						dt);
+				}
+
+				pivot->update( dt, cameraControl->getForward(), cameraControl->getRight() );
+				cameraControl->update( dt, pivot->getPosition() );
+			}
 
 			DirectX::XMFLOAT4X4 finalMatrix = MathHelper::multiplyMatrix( 
 				g_camera->getViewMatrix(), g_camera->getProjectionMatrix() );
 
-			g_renderer->update( finalMatrix, g_cameraControl->getPosition() );
+			g_renderer->update( finalMatrix, cameraControl->getPosition() );
 			g_renderer->beginRender();
 			g_renderer->renderEntities();
 			g_renderer->renderSprites(g_managementMenu->getManagementSprite());
@@ -135,10 +160,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	delete g_cameraControl;
+	delete cameraControl;
 	delete heightMap;
 	delete xinput;
 	delete pivot;
+	delete blendMap;
 
 	DebugGUI::getInstance()->terminate();
 	
@@ -195,7 +221,7 @@ void initDebugGui( float* p_dt, float* p_fps )
 
 void handleInput(XInputFetcher* xinput, float dt)
 {
-	bool menuIsActive = false;
+//	g_menuIsActive = false;
 	
 	static bool s_textInput		 = false;
 	static bool s_alreadyPressed = false;
@@ -221,25 +247,31 @@ void handleInput(XInputFetcher* xinput, float dt)
 	{
 		if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_L) == InputHelper::KeyStates_KEY_DOWN)
 		{
-			menuIsActive = true;
+			g_menuIsActive = true;
 			g_managementMenu->useToolsMenu();
 		}
 		else if(xinput->getBtnState(InputHelper::Xbox360Digitals_SHOULDER_PRESS_R) == InputHelper::KeyStates_KEY_DOWN)
 		{
-			menuIsActive = true;
+			g_menuIsActive = true;
 			g_managementMenu->useToolPropertiesMenu();
 		}
 		else
+		{
 			g_managementMenu->useNoMenu();
+			g_menuIsActive = false;
+		}
 		
-		if(!menuIsActive)
+		if(!g_menuIsActive)
 		{
 			g_managementMenu->setSelectedTool();
-			g_cameraControl->update( dt );
+			g_managementMenu->setSelectedProperty();
 		}
 	}
 	else
+	{
+		g_menuIsActive = true;
 		g_managementMenu->useTextMenu();
+	}
 }
 
 void clean()

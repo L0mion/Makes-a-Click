@@ -38,6 +38,9 @@ void ManagementSprite::setSpriteCollection(SpriteCollectionIds spriteCollection)
 	case SpriteCollectionIds_OBJECT_PROPERTIES_MENU:
 		setSpriteCollectionObjectPropertiesMenu();
 		break;
+	case SpriteCollectionIds_TEXTURE_BRUSH_PROPERTIES_MENU:
+		setSpriteCollectionTextureBrushPropertiesMenu();
+		break;
 	default:
 		setSpriteCollectionNone();
 		break;
@@ -156,7 +159,8 @@ void ManagementSprite::initSprites()
 
 	initToolSprites(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
 	initSandPropertySprites(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
-	initObjectPropertySprites(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));	
+	initObjectPropertySprites(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
+	initTextureBrushPropertySprites(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
 	
 	initTextMenuSprites(
 		m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT),
@@ -212,6 +216,14 @@ void ManagementSprite::initToolSprites(Sprite* p_highlighter)
 		p_highlighter->getScale().x,
 		p_highlighter->getScale().y,
 		TextureIds::TextureIds_OBJECT);
+
+	m_sprites->at(SpriteIds_TEXTURE_BRUSH) = new Sprite(m_sectorCoords[SectorIds_SECTOR_2].x,
+		m_sectorCoords[SectorIds_SECTOR_2].y,
+		0.0f,
+		0.0f,
+		p_highlighter->getScale().x,
+		p_highlighter->getScale().y,
+		TextureIds::TextureIds_TEXTURE_BRUSH);
 }
 void ManagementSprite::initSandPropertySprites(Sprite* p_highlighter)
 {
@@ -285,6 +297,35 @@ void ManagementSprite::initObjectPropertySprites(Sprite* p_highlighter)
 		p_highlighter->getScale().y,
 		TextureIds::TextureIds_OBJECT);
 }
+void ManagementSprite::initTextureBrushPropertySprites(Sprite* p_highlighter)
+{
+	m_sprites->at(SpriteIds_TEXTURE_BRUSH_PROPERTY_0) = new Sprite(
+		m_sectorCoords[SectorIds_SECTOR_0].x,
+		m_sectorCoords[SectorIds_SECTOR_0].y,
+		0.0f,
+		0.0f,
+		p_highlighter->getScale().x,
+		p_highlighter->getScale().y,
+		TextureIds::TextureIds_TEXTURE_BRUSH);
+
+	m_sprites->at(SpriteIds_TEXTURE_BRUSH_PROPERTY_1) = new Sprite(
+		m_sectorCoords[SectorIds_SECTOR_1].x,
+		m_sectorCoords[SectorIds_SECTOR_1].y,
+		0.0f,
+		0.0f,
+		p_highlighter->getScale().x,
+		p_highlighter->getScale().y,
+		TextureIds::TextureIds_TEXTURE_BRUSH);
+
+	m_sprites->at(SpriteIds_TEXTURE_BRUSH_PROPERTY_2) = new Sprite(
+		m_sectorCoords[SectorIds_SECTOR_2].x,
+		m_sectorCoords[SectorIds_SECTOR_2].y,
+		0.0f,
+		0.0f,
+		p_highlighter->getScale().x,
+		p_highlighter->getScale().y,
+		TextureIds::TextureIds_TEXTURE_BRUSH);
+}
 void ManagementSprite::initTextMenuSprites(Sprite* p_highlighter, Sprite* p_circleBackground)
 {
 	m_sprites->at(SpriteIds_TEXT_BACK) = new Sprite(
@@ -332,6 +373,18 @@ void ManagementSprite::initTextMenuSprites(Sprite* p_highlighter, Sprite* p_circ
 		0.1f,
 		TextureIds::TextureIds_TEXT_OUTPUT_BACKGROUND);
 
+	float cursorHeight = 24.0f;
+	float cursorWidth = 1.0f;
+	m_sprites->at(SpriteIds_TEXT_CURSOR) = new Sprite(
+		m_sprites->at(SpriteIds_TEXT_OUTPUT_BACKGROUND)->getPosition().x,
+		m_sprites->at(SpriteIds_TEXT_OUTPUT_BACKGROUND)->getPosition().y,
+		0.0f,
+		0.0f,
+		cursorWidth/SCREEN_WIDTH,
+		cursorHeight/SCREEN_HEIGHT,
+		TextureIds::TextureIds_TEXT_CURSOR);
+
+
 }
 void ManagementSprite::initSpriteCollection()
 {
@@ -372,6 +425,7 @@ void ManagementSprite::setSpriteCollectionToolsMenu()
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_SAND_BUCKET));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXTURE_BRUSH));
 }
 void ManagementSprite::setSpriteCollectionSandPropertiesMenu()
 {
@@ -381,8 +435,6 @@ void ManagementSprite::setSpriteCollectionSandPropertiesMenu()
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_SAND_PROPERTY_0));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_SAND_PROPERTY_1));
-	m_spriteCollection->push_back(m_sprites->at(SpriteIds_SAND_PROPERTY_2));
-	m_spriteCollection->push_back(m_sprites->at(SpriteIds_SAND_PROPERTY_3));
 }
 void ManagementSprite::setSpriteCollectionObjectPropertiesMenu()
 {
@@ -395,6 +447,15 @@ void ManagementSprite::setSpriteCollectionObjectPropertiesMenu()
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT_PROPERTY_2));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT_PROPERTY_3));
 }
+void ManagementSprite::setSpriteCollectionTextureBrushPropertiesMenu()
+{
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_BACKGROUND));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXTURE_BRUSH_PROPERTY_0));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXTURE_BRUSH_PROPERTY_1));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXTURE_BRUSH_PROPERTY_2));
+
+}
 void ManagementSprite::setSpriteCollectionTextMenu()
 {
 	m_spriteCollection->clear();
@@ -406,6 +467,7 @@ void ManagementSprite::setSpriteCollectionTextMenu()
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXT));
 
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXT_OUTPUT_BACKGROUND));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXT_CURSOR));
 }
 void ManagementSprite::setSpriteCollectionNone()
 {

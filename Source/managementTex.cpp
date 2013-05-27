@@ -40,11 +40,23 @@ HRESULT ManagementTex::init(ID3D11Device* p_device)
 		hr = loadTexture(p_device, L"../../Textures/heightmap/sand/Sand_4_Diffuse.dds",
 			TextureIds::TextureIds_HEIGHTMAP);
 	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/grass.dds",
+			TextureIds::TextureIds_GRASS);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/gravel.dds",
+			TextureIds::TextureIds_GRAVEL);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/stone.dds",
+			TextureIds::TextureIds_STONE);
+	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Textures/sand-bucket-icon.dds",
 			TextureIds::TextureIds_SANB_BUCKET);
 	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Textures/object-icon.dds",
 			TextureIds::TextureIds_OBJECT);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/brush-icon.dds",
+			TextureIds::TextureIds_TEXTURE_BRUSH);
 	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Textures/textOutputBackground.dds",
 			TextureIds::TextureIds_TEXT_OUTPUT_BACKGROUND);
@@ -69,6 +81,9 @@ HRESULT ManagementTex::init(ID3D11Device* p_device)
 	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Textures/textNumbers.dds",
 			TextureIds::TextureIds_TEXT_NUMBERS);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/cursor.dds",
+			TextureIds::TextureIds_TEXT_CURSOR);
 
 	return hr;
 }

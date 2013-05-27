@@ -3,6 +3,7 @@
 #include "utility.h"
 #include "textureIds.h"
 #include "DirectXMath.h"
+#include "managementBS.h"
 
 class ManagementD3D;
 
@@ -17,6 +18,9 @@ struct EntityBufferInfo
 
 	ID3D11Buffer* m_vertexBuffer;
 	ID3D11Buffer* m_indexBuffer;
+
+	// States
+	ManagementBS::BSTypes m_blendState;
 
 	EntityBufferInfo();
 	~EntityBufferInfo();

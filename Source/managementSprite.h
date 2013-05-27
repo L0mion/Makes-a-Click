@@ -34,10 +34,16 @@ public:
 		SpriteIds_OBJECT_PROPERTY_2,
 		SpriteIds_OBJECT_PROPERTY_3,
 
+		SpriteIds_TEXTURE_BRUSH,
+		SpriteIds_TEXTURE_BRUSH_PROPERTY_0,
+		SpriteIds_TEXTURE_BRUSH_PROPERTY_1,
+		SpriteIds_TEXTURE_BRUSH_PROPERTY_2,
+
 		SpriteIds_TEXT_BACK,
 		SpriteIds_TEXT_BACKGROUND,
 		SpriteIds_TEXT_HIGHLIGHTER,
 		SpriteIds_TEXT,
+		SpriteIds_TEXT_CURSOR,
 		SpriteIds_TEXT_OUTPUT_BACKGROUND,
 
 		SpriteIds_COUNT
@@ -48,6 +54,7 @@ public:
 		SpriteCollectionIds_TOOLS_MENU,
 		SpriteCollectionIds_SAND_PROPERTIES_MENU,
 		SpriteCollectionIds_OBJECT_PROPERTIES_MENU,
+		SpriteCollectionIds_TEXTURE_BRUSH_PROPERTIES_MENU,
 		SpriteCollectionIds_TEXT_MENU
 	};
 	enum SectorIds
@@ -93,6 +100,7 @@ private:
 	void initToolSprites(Sprite* p_highlighter);
 	void initSandPropertySprites(Sprite* p_highlighter);
 	void initObjectPropertySprites(Sprite* p_highlighter);
+	void initTextureBrushPropertySprites(Sprite* p_highlighter);
 	void initTextMenuSprites(Sprite* p_highlighter, Sprite* p_circleBackground);
 	void initSpriteCollection();
 
@@ -102,8 +110,10 @@ private:
 	void setSpriteCollectionToolsMenu();
 	void setSpriteCollectionSandPropertiesMenu();
 	void setSpriteCollectionObjectPropertiesMenu();
+	void setSpriteCollectionTextureBrushPropertiesMenu();
 	void setSpriteCollectionTextMenu();
 	void setSpriteCollectionNone();
+	
 
 	void calcSectorCoords(float p_aspectRatio);
 

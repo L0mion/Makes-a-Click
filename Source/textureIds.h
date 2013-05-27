@@ -9,8 +9,12 @@ struct TextureIds
 		TextureIds_CIRCLE_BACKGROUND,
 		TextureIds_CIRCLE_HIGHLIGHT,
 		TextureIds_HEIGHTMAP,
+		TextureIds_GRASS,
+		TextureIds_GRAVEL,
+		TextureIds_STONE,
 		TextureIds_SANB_BUCKET,
 		TextureIds_OBJECT,
+		TextureIds_TEXTURE_BRUSH,
 		TextureIds_TEXT_OUTPUT_BACKGROUND,
 		TextureIds_TEXT_BACK,
 		TextureIds_TEXT_BACKGROUND,
@@ -19,6 +23,7 @@ struct TextureIds
 		TextureIds_TEXT,
 		TextureIds_TEXT_CAPS,
 		TextureIds_TEXT_NUMBERS,
+		TextureIds_TEXT_CURSOR,
 		TextureIds_COUNT
 	};
 };

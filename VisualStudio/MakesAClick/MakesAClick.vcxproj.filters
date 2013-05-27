@@ -77,6 +77,12 @@
     <ClCompile Include="..\..\Source\PivotPoint.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\blendMap.cpp">
+      <Filter>Logic</Filter>
+	</ClCompile>
+    <ClCompile Include="..\..\Source\DigitalSmoothControl.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\camera.h">
@@ -171,6 +177,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\PivotPoint.h">
       <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\blendMap.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\texel.h">
+      <Filter>Utilties</Filter>
+	</ClInclude>
+    <ClInclude Include="..\..\Source\DigitalSmoothControl.h">
+      <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

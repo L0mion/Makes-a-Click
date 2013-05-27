@@ -11,9 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\blendMap.cpp" />
     <ClCompile Include="..\..\Source\camera.cpp" />
     <ClCompile Include="..\..\Source\CubeFactory.cpp" />
     <ClCompile Include="..\..\Source\DebugGUI.cpp" />
+    <ClCompile Include="..\..\Source\DigitalSmoothControl.cpp" />
     <ClCompile Include="..\..\Source\EntityBufferInfo.cpp" />
     <ClCompile Include="..\..\Source\HeightMap.cpp" />
     <ClCompile Include="..\..\Source\CameraController.cpp" />
@@ -39,10 +41,12 @@
     <ClCompile Include="..\..\Source\XInputFetcher.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\blendMap.h" />
     <ClInclude Include="..\..\Source\camera.h" />
     <ClInclude Include="..\..\Source\cbDesc.h" />
     <ClInclude Include="..\..\Source\CubeFactory.h" />
     <ClInclude Include="..\..\Source\DebugGUI.h" />
+    <ClInclude Include="..\..\Source\DigitalSmoothControl.h" />
     <ClInclude Include="..\..\Source\EntityBufferInfo.h" />
     <ClInclude Include="..\..\Source\HeightMap.h" />
     <ClInclude Include="..\..\Source\inputDesc.h" />
@@ -64,6 +68,7 @@
     <ClInclude Include="..\..\Source\PivotPoint.h" />
     <ClInclude Include="..\..\Source\renderer.h" />
     <ClInclude Include="..\..\Source\sprite.h" />
+    <ClInclude Include="..\..\Source\texel.h" />
     <ClInclude Include="..\..\Source\text.h" />
     <ClInclude Include="..\..\Source\textureIds.h" />
     <ClInclude Include="..\..\Source\utility.h" />

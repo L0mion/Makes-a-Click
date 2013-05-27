@@ -21,7 +21,7 @@ public:
 	{
 		ToolIds_NONE,
 		ToolIds_SAND,
-		ToolIds_ROAD,
+		ToolIds_TEXTURE_BRUSH,
 		ToolIds_OBJECT
 	};
 	enum ToolPropertyIds
@@ -61,6 +61,7 @@ public:
 	HRESULT init(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon);
 private:
 	HRESULT initManagementSprite(ID3D11Device* p_device);
+	void initManagementWrite(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon);
 
 	void moveSpriteToSector(double p_analogStickX, double p_analogStickY, ManagementSprite::SpriteIds p_spriteId);
 	void setSpriteSector(ManagementSprite::SectorIds sectorId, ManagementSprite::SpriteIds p_spriteId);
@@ -77,6 +78,9 @@ private:
 
 	void textMenuSwitchHighlighter(double p_analogX, double p_analogY);
 	void textMenuSwitchCase();
+	void textMenuMoveCursor();
+	void textMenuCalcCursorPos();
+	void textMenuInputText(double p_analogX, double p_analogY);
 	void textMenuSector0();
 	void textMenuSector1();
 	void textMenuSector2();
@@ -119,6 +123,17 @@ private:
 	void objectPropertiesSector7();
 	void objectPropertiesSectorNone();
 
+	void useTextureBrushPropertiesMenu(double p_analogStickX, double p_analogStickY);
+	void textureBrushPropertiesSector0();
+	void textureBrushPropertiesSector1();
+	void textureBrushPropertiesSector2();
+	void textureBrushPropertiesSector3();
+	void textureBrushPropertiesSector4();
+	void textureBrushPropertiesSector5();
+	void textureBrushPropertiesSector6();
+	void textureBrushPropertiesSector7();
+	void textureBrushPropertiesSectorNone();
+
 	DirectX::XMFLOAT2 calcTextPosForCenter(std::wstring p_text);
 	DirectX::XMFLOAT2 calcTextMenuOutPos(std::wstring p_text);
 
@@ -126,12 +141,15 @@ private:
 	DirectX::XMFLOAT4	m_textColor;
 	std::vector<Text*>	m_textStrings;
 	ManagementSprite*	m_managementSprite;
+	ManagementWrite*	m_managementWrite;
 	ToolIds				m_activeTool;
 	ToolIds				m_tempSelectedTool;
 	ToolPropertyIds		m_tempSelectedProperty;
 	ToolPropertyIds		m_activeProperty;
 	TextStates			m_textState;
 	XInputFetcher*		m_xinput;
+
+	int m_cursorIndex;
 
 	double		m_analogActive;
 };

@@ -55,6 +55,9 @@ void Renderer::beginRender()
 	managementD3D_->setBackBuffer();
 
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_HEIGHTMAP);
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_STONE, 1);
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_GRASS, 2);
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_GRAVEL, 3);
 	//managementShader_->setShader(devcon, ManagementShader::ShaderIds_DEFAULT);
 }
 
@@ -113,6 +116,8 @@ void Renderer::renderEntities()
 void Renderer::renderEntityBufferInfo( EntityBufferInfo* p_info )
 {
 	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
+
+	managementBS_->setBlendState( devcon, p_info->m_blendState );
 
 	managementCB_->vsSetCB(devcon, CBTypes_OBJECT);
 	managementCB_->updateCBObject( devcon, p_info->m_world );
