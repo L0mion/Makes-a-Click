@@ -19,7 +19,8 @@ public:
 	void update(ID3D11DeviceContext* p_devcon,
 		PivotPoint* p_pivot,
 		HeightMap* p_heightMap,
-		ManagementMenu::ToolPropertyIds toolProperty);
+		ManagementMenu::ToolPropertyIds toolProperty,
+		float p_dt);
 
 	void setTexel(ID3D11DeviceContext* p_devcon, Texel p_texel, int p_x, int p_y);
 	void setAllTexels(ID3D11DeviceContext* p_devcon, Texel p_texel);
