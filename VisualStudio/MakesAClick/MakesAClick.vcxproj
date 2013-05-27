@@ -32,6 +32,8 @@
     <ClCompile Include="..\..\Source\managementTex.cpp" />
     <ClCompile Include="..\..\Source\managementWrite.cpp" />
     <ClCompile Include="..\..\Source\mathHelper.cpp" />
+    <ClCompile Include="..\..\Source\ObjectMold.cpp" />
+    <ClCompile Include="..\..\Source\ObjectTool.cpp" />
     <ClCompile Include="..\..\Source\ObjFileReader.cpp" />
     <ClCompile Include="..\..\Source\PivotPoint.cpp" />
     <ClCompile Include="..\..\Source\renderer.cpp" />
@@ -64,6 +66,8 @@
     <ClInclude Include="..\..\Source\managementTex.h" />
     <ClInclude Include="..\..\Source\managementWrite.h" />
     <ClInclude Include="..\..\Source\mathHelper.h" />
+    <ClInclude Include="..\..\Source\ObjectMold.h" />
+    <ClInclude Include="..\..\Source\ObjectTool.h" />
     <ClInclude Include="..\..\Source\ObjFileReader.h" />
     <ClInclude Include="..\..\Source\PivotPoint.h" />
     <ClInclude Include="..\..\Source\renderer.h" />
