@@ -149,6 +149,9 @@ private:
 	ToolIds				m_tempSelectedTool;
 	ToolPropertyIds		m_tempSelectedProperty;
 	ToolPropertyIds		m_activeProperty;
+	ToolPropertyIds		m_sandProperty;
+	ToolPropertyIds		m_objectProperty;
+	ToolPropertyIds		m_textureProperty;
 	TextStates			m_textState;
 	XInputFetcher*		m_xinput;
 

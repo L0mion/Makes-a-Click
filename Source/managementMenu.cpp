@@ -9,14 +9,17 @@ ManagementMenu::ManagementMenu(XInputFetcher* p_xinput)
 {
 	m_xinput = p_xinput;
 
-	m_textColor			= DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	m_managementSprite	= NULL;
-	m_managementWrite	= NULL;
-	m_activeTool		= ToolIds_SAND;
-	m_activeProperty	= ToolPropertyIds_PROPERTY_0;
-	m_tempSelectedProperty = ToolPropertyIds_NONE;
-	m_tempSelectedTool	= ToolIds_NONE;
-	m_textState			= TextStates_LOWER_CASE;
+	m_textColor				= DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	m_managementSprite		= NULL;
+	m_managementWrite		= NULL;
+	m_activeTool			= ToolIds_SAND;
+	m_activeProperty		= ToolPropertyIds_PROPERTY_0;
+	m_sandProperty			= ToolPropertyIds_PROPERTY_0;
+	m_objectProperty		= ToolPropertyIds_PROPERTY_0;
+	m_textureProperty		= ToolPropertyIds_PROPERTY_0;
+	m_tempSelectedProperty  = ToolPropertyIds_NONE;
+	m_tempSelectedTool		= ToolIds_NONE;
+	m_textState				= TextStates_LOWER_CASE;
 
 	m_cursorIndex		= 0;
 
@@ -96,12 +99,41 @@ void ManagementMenu::setSelectedTool()
 	if(m_tempSelectedTool != ToolIds_NONE)
 		m_activeTool = m_tempSelectedTool;
 
+	switch(m_activeTool)
+	{
+	case ToolIds_SAND:
+		m_activeProperty = m_sandProperty;
+		break;
+	case ToolIds_OBJECT:
+		m_activeProperty = m_objectProperty;
+		break;
+	case ToolIds_TEXTURE_BRUSH:
+		m_activeProperty = m_textureProperty;
+		break;
+	default:
+		m_activeProperty = ToolPropertyIds_PROPERTY_0;
+		break;
+	}
+
 	setToolIcon();
 }
 void ManagementMenu::setSelectedProperty()
 {
 	if(m_tempSelectedProperty != ToolPropertyIds_NONE)
 		m_activeProperty = m_tempSelectedProperty;
+
+	switch(m_activeTool)
+	{
+	case ToolIds_SAND:
+		m_sandProperty = m_activeProperty;
+		break;
+	case ToolIds_OBJECT:
+		m_objectProperty = m_activeProperty;
+		break;
+	case ToolIds_TEXTURE_BRUSH:
+		m_textureProperty = m_activeProperty;
+		break;
+	}
 
 	setToolPropertyIcon();
 }
@@ -802,7 +834,7 @@ void ManagementMenu::textMenuSectorNone()
 void ManagementMenu::toolsMenuSector0()
 {
 	m_tempSelectedTool = ToolIds_SAND;
-	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
+	//m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
 	
 	std::wstring text = L"Sand Tool";
 	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
@@ -815,7 +847,7 @@ void ManagementMenu::toolsMenuSector0()
 void ManagementMenu::toolsMenuSector1()
 {
 	m_tempSelectedTool = ToolIds_OBJECT;
-	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
+	//m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
 	
 	std::wstring text = L"Object Tool";
 	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
@@ -828,7 +860,7 @@ void ManagementMenu::toolsMenuSector1()
 void ManagementMenu::toolsMenuSector2()
 {
 	m_tempSelectedTool = ToolIds_TEXTURE_BRUSH;
-	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
+	//m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
 	
 	std::wstring text = L"Texture Brush";
 	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
