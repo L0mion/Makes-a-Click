@@ -3,10 +3,10 @@
 
 struct Texel
 {
-	byte m_red;
-	byte m_green;
-	byte m_blue;
-	byte m_alpha;
+	float m_red;
+	float m_green;
+	float m_blue;
+	float m_alpha;
 
 	Texel()
 	{
@@ -15,7 +15,7 @@ struct Texel
 		m_blue	= 0;
 		m_alpha = 0;
 	}
-	Texel(byte p_red, byte p_green, byte p_blue, byte p_alpha)
+	Texel(float p_red, float p_green, float p_blue, float p_alpha)
 	{
 		m_red	= p_red;
 		m_green = p_green;

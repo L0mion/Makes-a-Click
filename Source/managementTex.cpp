@@ -52,6 +52,12 @@ HRESULT ManagementTex::init(ID3D11Device* p_device)
 		hr = loadTexture(p_device, L"../../Textures/sand-bucket-icon.dds",
 			TextureIds::TextureIds_SANB_BUCKET);
 	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/AddRemove.dds",
+			TextureIds::TextureIds_ADD_REMOVE);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Textures/Smooth.dds",
+			TextureIds::TextureIds_SMOOTH);
+	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Textures/object-icon.dds",
 			TextureIds::TextureIds_OBJECT);
 	if(SUCCEEDED(hr))

@@ -37,9 +37,7 @@ private:
 
 	HRESULT updateTexture(ID3D11DeviceContext* p_devcon);
 
-	void modifyRed(float p_value, int p_index);
-	void modifyGreen(float p_value, int p_index);
-	void modifyBlue(float p_value, int p_index);
+	void modifyTexelChannel(float* p_channel, float p_value);
 
 	bool insideCircle(float p_radius, int p_x, int p_z, int p_col, int p_row);
 

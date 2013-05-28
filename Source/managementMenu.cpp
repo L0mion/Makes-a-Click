@@ -68,6 +68,9 @@ void ManagementMenu::useToolsMenu()
 	else
 		toolsMenuSectorNone();
 
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+		setSelectedTool();
+
 	moveSpriteToSector(analogX, analogY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
 void ManagementMenu::useToolPropertiesMenu()
@@ -246,9 +249,9 @@ void ManagementMenu::setToolPropertyIcon()
 	if(m_activeTool == ToolIds_SAND)
 	{
 		if(m_activeProperty == ToolPropertyIds_PROPERTY_0)
-			sprite->setTextureId(TextureIds::TextureIds_SANB_BUCKET);
+			sprite->setTextureId(TextureIds::TextureIds_ADD_REMOVE);
 		else if(m_activeProperty == ToolPropertyIds_PROPERTY_1)
-			sprite->setTextureId(TextureIds::TextureIds_SANB_BUCKET);
+			sprite->setTextureId(TextureIds::TextureIds_SMOOTH);
 	}
 	else if(m_activeTool == ToolIds_OBJECT)
 	{
@@ -912,6 +915,9 @@ void ManagementMenu::useSandPropertiesMenu(double p_analogStickX, double p_analo
 	if(insideSector1(p_analogStickX, p_analogStickY))
 		sandPropertiesSector1();
 
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+		setSelectedProperty();
+
 	moveSpriteToSector(p_analogStickX, p_analogStickY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
 void ManagementMenu::sandPropertiesSector0()
@@ -976,6 +982,8 @@ void ManagementMenu::sandPropertiesSector7()
 }
 void ManagementMenu::sandPropertiesSectorNone()
 {
+	m_tempSelectedTool = ToolIds_NONE;
+	m_tempSelectedProperty = ToolPropertyIds_NONE;
 }
 
 void ManagementMenu::useObjectPropertiesMenu(double p_analogStickX, double p_analogStickY)
@@ -998,6 +1006,9 @@ void ManagementMenu::useObjectPropertiesMenu(double p_analogStickX, double p_ana
 		objectPropertiesSector6();
 	if(insideSector7(p_analogStickX, p_analogStickY))
 		objectPropertiesSector7();
+
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+		setSelectedProperty();
 
 	moveSpriteToSector(p_analogStickX, p_analogStickY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
@@ -1099,6 +1110,8 @@ void ManagementMenu::objectPropertiesSector7()
 }
 void ManagementMenu::objectPropertiesSectorNone()
 {
+	m_tempSelectedTool = ToolIds_NONE;
+	m_tempSelectedProperty = ToolPropertyIds_NONE;
 }
 
 void ManagementMenu::useTextureBrushPropertiesMenu(double p_analogStickX, double p_analogStickY)
@@ -1111,6 +1124,9 @@ void ManagementMenu::useTextureBrushPropertiesMenu(double p_analogStickX, double
 		textureBrushPropertiesSector1();
 	if(insideSector2(p_analogStickX, p_analogStickY))
 		textureBrushPropertiesSector2();
+
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+		setSelectedProperty();
 
 	moveSpriteToSector(p_analogStickX, p_analogStickY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
