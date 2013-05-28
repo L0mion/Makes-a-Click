@@ -8,4 +8,5 @@
 struct Mac {
 	Util::Mac macDesc;
 	std::vector<float> heightmap;
+	std::vector<Util::Texel> blendmap;
 };

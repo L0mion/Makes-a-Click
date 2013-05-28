@@ -32,7 +32,6 @@ namespace Writer_XML {
 		m_xml = new XmlDoc();
 		XmlNode* n;
 		XmlNode* p;
-		XmlAtt* a;
 
 		//Create the original node:	
 		n = allocNode( Util::Node_MAC );

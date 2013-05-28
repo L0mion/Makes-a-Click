@@ -167,7 +167,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// Save lvl
 	heightMap->updateHeightmap();
-	mac.heightmap = heightMap->getHeightmap();
+	mac.heightmap	= heightMap->getHeightmap();
+
+	mac.blendmap	= blendMap->getTexels();
+	mac.macDesc.blendmap.width = Util::UtilString::Int2Std(blendMap->getWidth());
+	mac.macDesc.blendmap.height = Util::UtilString::Int2Std(blendMap->getHeight());
+	
 	WriterMAC* writerMAC = new WriterMAC( mac );
 	bool okSave = writerMAC->init();
 

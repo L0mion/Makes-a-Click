@@ -19,7 +19,8 @@ namespace Util {
 	static const std::string Att_Resource_Offset	= "Offset"	;
 
 	//Expected types
-	static const std::string Resource_Type_Heightmap = "Heightmap";
+	static const std::string Resource_Type_Heightmap	= "Heightmap";
+	static const std::string Resource_Type_Blendmap		= "Blendmap";
 
 	struct MacHeightmap {
 		std::string name;
@@ -31,11 +32,19 @@ namespace Util {
 		std::string scale;
 		std::string offset;
 	};
+
+	struct MacBlendmap {
+		std::string name;
+		std::string width;
+		std::string height;
+	};
 	
 	struct Mac {
 		std::string name;
 		std::string version;
 	
+		// Resources
 		MacHeightmap heightmap;
+		MacBlendmap blendmap;
 	};
 }
