@@ -1,4 +1,5 @@
 #include <stdlib.h> //atoi
+#include <cstdlib> //atof
 
 #include <LoaderXML.h>
 #include <Util.h>
@@ -89,11 +90,13 @@ void LoaderMAC::uglyRawToBlendmap( std::vector<unsigned char>& p_raw, unsigned i
 
 	io_bm.resize(numTexels);
 
-	for( unsigned int i = 0; i < numTexels; i++ ) {
-		io_bm[i] = Util::Texel(
-			p_raw[i],
-			p_raw[i+1],
-			p_raw[i+2],
-			p_raw[i+3]);
+	int t = 0;
+	for( unsigned int i = 0; i < numTexels * 4; i+=4 ) {
+		io_bm[t] = Util::Texel(
+			(float)p_raw[i]		/ 255.0f,
+			(float)p_raw[i+1]	/ 255.0f,
+			(float)p_raw[i+2]	/ 255.0f,
+			(float)p_raw[i+3]	/ 255.0f);
+		t++;
 	}
 }

@@ -15,7 +15,7 @@ namespace Writer_XML {
 	public:
 		Wtr(
 			const char* p_filename,
-			const char* p_data,
+			const unsigned char* p_data,
 			unsigned long p_dataCnt);
 		~Wtr();
 
@@ -26,7 +26,7 @@ namespace Writer_XML {
 		void getWtrStatus( WtrStatuses& p_wtrStatus );
 
 		const char* m_filename;
-		const char* m_data;
+		const unsigned char* m_data;
 		unsigned long m_dataCnt;
 
 		//std::string* m_fileName;

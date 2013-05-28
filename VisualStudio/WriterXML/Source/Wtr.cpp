@@ -3,7 +3,7 @@
 namespace Writer_XML {
 	Wtr::Wtr( 
 		const char* p_filename,
-		const char* p_data,
+		const unsigned char* p_data,
 		unsigned long p_dataCnt) : m_filename(p_filename), m_data(p_data) {
 		m_dataCnt = p_dataCnt;
 
@@ -44,7 +44,7 @@ namespace Writer_XML {
 	}
 
 	void Wtr::wt() {
-		m_outputStream->write( m_data, m_dataCnt );
+		m_outputStream->write( (char*)m_data, m_dataCnt );
 	}
 
 	void Wtr::getWtrStatus( WtrStatuses& p_wtrStatus ) {

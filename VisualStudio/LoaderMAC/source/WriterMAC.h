@@ -16,12 +16,12 @@ private:
 		std::vector<float>& p_heightmap, 
 		float p_scale, 
 		float p_offset, 
-		std::vector<char>& io_raw );
+		std::vector<unsigned char>& io_raw );
 	void uglyBlendmapToRaw(
 		std::vector<Util::Texel>& p_blendmap,
 		unsigned int p_row,
 		unsigned int p_col,
-		std::vector<char>& io_raw);
+		std::vector<unsigned char>& io_raw);
 
 	Mac* m_mac;
 };
