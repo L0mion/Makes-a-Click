@@ -6,6 +6,7 @@
 #include "managementBS.h"
 
 class ManagementD3D;
+struct ObjectMold;
 
 struct EntityBufferInfo
 {
@@ -24,6 +25,8 @@ struct EntityBufferInfo
 
 	EntityBufferInfo();
 	~EntityBufferInfo();
+
+	HRESULT setFromMold( const ObjectMold* p_mold, const ManagementD3D* p_managementD3D  );
 
 	HRESULT setVertexBuffer( const int p_vertexSize, const int p_verticesCnt,
 		const void* p_vertices, const ManagementD3D* p_managementD3D );

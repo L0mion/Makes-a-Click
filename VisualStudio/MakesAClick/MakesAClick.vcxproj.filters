@@ -79,9 +79,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\blendMap.cpp">
       <Filter>Logic</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\Source\DigitalSmoothControl.cpp">
       <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ObjectTool.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ObjectMold.cpp">
+      <Filter>Factories</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -183,9 +189,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\texel.h">
       <Filter>Utilties</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\Source\DigitalSmoothControl.h">
       <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ObjectTool.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ObjectMold.h">
+      <Filter>Factories</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

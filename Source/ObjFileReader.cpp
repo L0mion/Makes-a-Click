@@ -2,6 +2,7 @@
 #include "vertex.h"
 #include "EntityBufferInfo.h"
 #include "managementD3D.h"
+#include "ObjectMold.h"
 
 ObjFileReader::ObjFileReader()
 {
@@ -18,7 +19,9 @@ ObjFileReader::ObjFileReader()
 
 ObjFileReader::~ObjFileReader()
 {
-	// Nothing to implement yet.
+	for( unsigned int i=0; i<m_molds.size(); i++ ) {
+		SAFE_DELETE( m_molds[i] );
+	}
 }
 
 /*vector<Model> ObjFileReader::readFile(string pFolder, string pFileName, bool p_startAtZero)
@@ -107,99 +110,133 @@ ObjFileReader::~ObjFileReader()
 	return models;
 }*/
 
-EntityBufferInfo* ObjFileReader::readFile( string pFolder, string pFileName,
-	bool p_startAtZero , ManagementD3D* p_d3d )
+EntityBufferInfo* ObjFileReader::ebiFromFilename( string p_folder,
+	string p_fileName, bool p_startAtZero , ManagementD3D* p_d3d )
 {
-	// Clean from earlier uses of this object
-	/*currModel.clear();
-	models.clear();*/
-	numIndices = 0;
-	readNorm.clear();
-	readPos.clear();
-	readTexCoord.clear();
-	/*materials.clear();*/
-	
-	// Create the object
-	fileName = pFileName;
-	folder = pFolder;
-	startAtZero = p_startAtZero;
-
-	string objFilePath = folder + fileName;
-	fstream objFile(objFilePath);
-
-	if(objFile)
-	{
-		deque<string> lines;
-		string tmp;
-		while(!objFile.eof())
-		{
-			getline(objFile,tmp);
-			lines.push_back(tmp);
-		}
-
-		int count = 0;
-		string line;
-		// Words at a line is all characters that are grouped together and
-		// separated from other words by ' '.
-		vector<string> lineWords;
-		//string prefix; // first word on a line
-		for(unsigned int i=0; i<lines.size(); i++)
-		{
-			count++;
-
-			line = lines[i];
-			if(line.size() > 0) // protect from empty line
-			{
-
-				lineWords = split(line,' ');
-				lineWords.erase(lineWords.begin());
-
-				// Roughly sorted in number of occurences in .obj-files
-				if(line[0] == 'v')
-				{
-					if(line[1] == 't') // vt = tex coords
-						readTextureUV(lineWords);
-					else if (line[1] == 'n') // vn = normals
-						readNormals(lineWords);
-					else	// v = pos coords
-						readVertices(lineWords);
-				}
-				else if(line[0] == 'f')
-				{
-					readFaces(lineWords);
-				}
-				else if(line[0] == 'g')
-				{
-					/*createModel();*/
-					int korv = 0;
-				}
-				else if(line[0] == 'm') // mtllib = file containing material definitions
-				{
-					//readMtlFile(lineWords);
-				}
-				else if(line[0] == 'u') // usemtl = which material to use
-				{
-					/*for(unsigned int i=0; i<materials.size(); i++)
-					{
-					if(materials[i].mtlName == lineWords.front())
-					currModel.addMaterial(materials[i]);
-					}*/
-				}
-
-				//lineWords.clear(); //clear the deque from old entries
-			}
-		}
-		/*createModel();*/
-	}
-	/*return models;*/
+	ObjectMold* mold = omFromFilename( p_folder, p_fileName, p_startAtZero,
+		p_d3d ); 
 
 	EntityBufferInfo* bufferInfo = new EntityBufferInfo();
-	bufferInfo->setVertexBuffer( sizeof(Vertex_PNT), m_vertices.size(),
-		&m_vertices[0], p_d3d );
-	bufferInfo->setIndexBuffer( numIndices, &m_indices[0], p_d3d );
-	bufferInfo->m_textureId = TextureIds::TextureIds_CIRCLE_HIGHLIGHT;
+	bufferInfo->setVertexBuffer( sizeof(Vertex_PNT), mold->m_vertices.size(),
+		&mold->m_vertices[0], p_d3d );
+	bufferInfo->setIndexBuffer( mold->m_indices.size(), &mold->m_indices[0], p_d3d );
+	bufferInfo->m_textureId = mold->m_textureId;
 
 	return bufferInfo;
+}
+
+
+ObjectMold* ObjFileReader::omFromFilename( string p_folder,
+	string p_fileName, bool p_startAtZero, ManagementD3D* p_d3d )
+{
+	string objName = p_folder+p_fileName;
+	int moldIdx = findMold( objName );
+	if( moldIdx == -1 ) {
+		moldIdx = readFile( p_folder, p_fileName, p_startAtZero, p_d3d );
+	}
+
+	return m_molds[moldIdx]; 
+}
+
+int ObjFileReader::readFile( string p_folder, string p_fileName,
+	bool p_startAtZero, ManagementD3D* p_d3d )
+{
+	// Create the object
+	fileName = p_fileName;
+	folder = p_folder;
+	string objFilePath = folder + fileName;
+
+	int moldIdx = findMold( objFilePath );
+
+	// Read file if the file hasn't been read
+	if( moldIdx == -1 ) {
+		fstream objFile(objFilePath);
+
+		startAtZero = p_startAtZero;
+
+		// Clean from earlier uses of this object
+		/*currModel.clear();
+		models.clear();*/
+		numIndices = 0;
+		readNorm.clear();
+		readPos.clear();
+		readTexCoord.clear();
+		/*materials.clear();*/
+		if(objFile)
+		{
+			deque<string> lines;
+			string tmp;
+			while(!objFile.eof())
+			{
+				getline(objFile,tmp);
+				lines.push_back(tmp);
+			}
+
+			int count = 0;
+			string line;
+			// Words at a line is all characters that are grouped together and
+			// separated from other words by ' '.
+			vector<string> lineWords;
+			//string prefix; // first word on a line
+			for(unsigned int i=0; i<lines.size(); i++)
+			{
+				count++;
+
+				line = lines[i];
+				if(line.size() > 0) // protect from empty line
+				{
+
+					lineWords = split(line,' ');
+					lineWords.erase(lineWords.begin());
+
+					// Roughly sorted in number of occurences in .obj-files
+					if(line[0] == 'v')
+					{
+						if(line[1] == 't') // vt = tex coords
+							readTextureUV(lineWords);
+						else if (line[1] == 'n') // vn = normals
+							readNormals(lineWords);
+						else	// v = pos coords
+							readVertices(lineWords);
+					}
+					else if(line[0] == 'f')
+					{
+						readFaces(lineWords);
+					}
+					else if(line[0] == 'g')
+					{
+						/*createModel();*/
+						int korv = 0;
+					}
+					else if(line[0] == 'm') // mtllib = file containing material definitions
+					{
+						//readMtlFile(lineWords);
+					}
+					else if(line[0] == 'u') // usemtl = which material to use
+					{
+						/*for(unsigned int i=0; i<materials.size(); i++)
+						{
+						if(materials[i].mtlName == lineWords.front())
+						currModel.addMaterial(materials[i]);
+						}*/
+					}
+
+					//lineWords.clear(); //clear the deque from old entries
+				}
+			}
+			/*createModel();*/
+		}
+		/*return models;*/
+		ObjectMold* mold = new ObjectMold();
+		mold->m_filePath = objFilePath;
+		mold->m_vertices = m_vertices;
+		mold->m_indices = m_indices;
+		mold->m_textureId = TextureIds::TextureIds_PLACEHOLDER;
+
+		m_molds.push_back( mold );
+		moldIdx = m_molds.size()-1;
+	}
+	return moldIdx;
 }
 
 /*void ObjFileReader::readMtlFile(vector<string> p_lineWords)
@@ -415,4 +452,15 @@ vector<string> ObjFileReader::triFromQuad(vector<string> p_lineWords, int p_triN
 		newLineWords.push_back(p_lineWords[3]);
 	}
 	return newLineWords;
+}
+
+int ObjFileReader::findMold( string p_filePath )
+{
+	for( unsigned int i=0; i<m_molds.size(); i++ ) {
+		if( m_molds[i]->m_filePath == p_filePath ) {
+			return i;
+		}
+	}
+
+	return -1;
 }

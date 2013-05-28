@@ -1,6 +1,9 @@
 #include "EntityBufferInfo.h"
+
+#include "ObjectMold.h"
 #include "managementD3D.h"
 #include "mathHelper.h"
+#include "vertex.h"
 
 EntityBufferInfo::~EntityBufferInfo()
 {
@@ -25,6 +28,21 @@ EntityBufferInfo::EntityBufferInfo()
 
 	m_blendState = ManagementBS::BSTypes_DEFAULT;
 }
+
+HRESULT EntityBufferInfo::setFromMold( const ObjectMold* p_mold,
+	const ManagementD3D* p_managementD3D )
+{
+	HRESULT hr;
+
+	hr = setVertexBuffer( sizeof(Vertex_PNT), p_mold->m_vertices.size(),
+		&p_mold->m_vertices[0], p_managementD3D );
+	hr = setIndexBuffer( p_mold->m_indices.size(), &p_mold->m_indices[0],
+		p_managementD3D );
+	m_textureId = p_mold->m_textureId;
+
+	return hr;
+}
+
 
 HRESULT EntityBufferInfo::setVertexBuffer( const int p_vertexSize, const int p_verticesCnt,
 	const void* p_vertices, const ManagementD3D* p_managementD3D )

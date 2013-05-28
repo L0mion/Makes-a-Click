@@ -30,10 +30,11 @@ private:
 	float getThumbLY( const float p_dt );
 
 public:
+	EntityBufferInfo* m_avatar;
+
 private:
 	XInputFetcher* m_xinput;
 	HeightMap* m_heightmap;
-	EntityBufferInfo* m_avatar;
 	DigitalSmoothControl* m_sizeControl;
 
 	float m_sensitivity;

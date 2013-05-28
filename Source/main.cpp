@@ -7,15 +7,17 @@
 #include <crtdbg.h>
 #endif
 
-#include "blendMap.h"
 #include "CameraController.h"
 #include "CubeFactory.h"
 #include "DebugGUI.h"
+#include "EntityBufferInfo.h"
 #include "HeightMap.h"
 #include "InputHelper.h"
 #include "ManagementDebug.h"
 #include "ObjFileReader.h"
+#include "PivotPoint.h"
 #include "XInputFetcher.h"
+#include "blendMap.h"
 #include "camera.h"
 #include "inputDesc.h"
 #include "keyCodes.h"
@@ -26,11 +28,10 @@
 #include "renderer.h"
 #include "utility.h"
 #include "window.h"
-#include "EntityBufferInfo.h"
-#include "PivotPoint.h"
 
 //Loading
 #include <LoaderMAC.h>
+#include "ObjectTool.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
 void initDebugGui( float* p_dt, float* p_fps );
@@ -88,7 +89,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	blendMap->psSetBlendMap(g_renderer->getD3DManagement()->getDeviceContext(), 4);
 
 	ObjFileReader reader;
-	EntityBufferInfo* blueberry = reader.readFile( "../../resources/",
+	EntityBufferInfo* blueberry = reader.ebiFromFilename( "../../resources/",
 		"sphere.obj", false, g_renderer->getD3DManagement() );
 	blueberry->m_blendState = ManagementBS::BSTypes_ADDITIVE;
 	g_renderer->addEntity( blueberry );
@@ -98,8 +99,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	CameraController* cameraControl = new CameraController( g_camera, xinput );
 
 	g_managementMenu = new ManagementMenu(xinput);
-		hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
-			g_renderer->getD3DManagement()->getDeviceContext());
+	hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
+		g_renderer->getD3DManagement()->getDeviceContext());
+
+	ObjectTool objectTool( g_renderer );
 
 	if(SUCCEEDED(hr))
 	{
@@ -136,6 +139,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 						heightMap,
 						g_managementMenu->getActiveProperty(),
 						dt);
+				} else if( g_managementMenu->getActiveTool() == ManagementMenu::ToolIds_OBJECT ) {
+					objectTool.placeObject( g_renderer, ObjectTool::ObjectTypes_BARRELL, pivot );
 				}
 
 				pivot->update( dt, cameraControl->getForward(), cameraControl->getRight() );
@@ -224,16 +229,16 @@ void handleInput(XInputFetcher* xinput, float dt)
 //	g_menuIsActive = false;
 	
 	static bool s_textInput		 = false;
-	static bool s_alreadyPressed = false;
-	static float s_timer		 = 0.0f;
+	/*static bool s_alreadyPressed = false;
+	static float s_timer		 = 0.0f;*/
 
-	float leftAnalogSens  = 64.0f;
-	float rightAnalogSens = 2.0f;
+	/*float leftAnalogSens  = 64.0f;
+	float rightAnalogSens = 2.0f;*/
 
-	double walkDistance		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE);
+	/*double walkDistance		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LY_NEGATIVE);
 	double strafeDistance	= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_LX_NEGATIVE);
 	double yawAngle			= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RX_NEGATIVE);
-	double pitchAngle		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);
+	double pitchAngle		= xinput->getCalibratedAnalog(InputHelper::Xbox360Analogs_THUMB_RY_NEGATIVE);*/
 	
 	if(xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_BACK) == InputHelper::KeyStates_KEY_PRESSED)
 	{

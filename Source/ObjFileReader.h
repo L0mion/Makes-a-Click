@@ -16,9 +16,10 @@
 
 using namespace std;
 
-struct EntityBufferInfo;
-
 class ManagementD3D;
+struct EntityBufferInfo;
+struct ObjectMold;
+
 
 class ObjFileReader
 {
@@ -27,8 +28,11 @@ public:
 	~ObjFileReader();
 
 	//vector<Model> readFile(string pFolder, string pFileName, bool p_startAtZero);
-	EntityBufferInfo* readFile(string pFolder, string pFileName,
+	EntityBufferInfo* ebiFromFilename(string pFolder, string pFileName,
 		bool p_startAtZero, ManagementD3D* p_d3d);
+	ObjectMold* omFromFilename(string pFolder, string pFileName,
+		bool p_startAtZero, ManagementD3D* p_d3d);
+	int readFile( string p_folder, string p_fileName, bool p_startAtZero, ManagementD3D* p_d3d );
 
 private:
 	void readObjFile();
@@ -43,12 +47,16 @@ private:
 	vector<string> triFromQuad(vector<string> p_lineWords, int p_triNum);
 	vector<string> split(string p_str, char p_delim);
 
+	/// \return -1 if the requested mold doesn't exist 
+	int findMold( string p_filePath );
+
 private:
 	//Model currModel;
 	//vector<Model> models;
 
 	vector<Vertex_PNT> m_vertices;
 	vector<int> m_indices;
+	vector<ObjectMold*> m_molds;
 
 	string fileName;
 	string folder;
