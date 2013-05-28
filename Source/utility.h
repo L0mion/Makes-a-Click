@@ -8,7 +8,9 @@
 #define NULL 0
 #endif //NULL
 
-static const unsigned int SCREEN_WIDTH	= 1280;
-static const unsigned int SCREEN_HEIGHT = 720;
+//#define MAC_FULLSCREEN
+
+static unsigned int SCREEN_WIDTH	= 1280;
+static unsigned int SCREEN_HEIGHT	= 720;
 
 #endif //UTILITY_H
