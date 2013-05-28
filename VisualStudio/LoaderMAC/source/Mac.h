@@ -6,6 +6,7 @@
 #include <vector>
 
 struct Mac {
-	Util::Mac macDesc;
+	Util::MacDesc macDesc;
 	std::vector<float> heightmap;
+	std::vector<Util::Texel> blendmap;
 };

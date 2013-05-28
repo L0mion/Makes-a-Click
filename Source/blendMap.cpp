@@ -3,10 +3,12 @@
 #include "PivotPoint.h"
 #include "utility.h"
 
-BlendMap::BlendMap()
+BlendMap::BlendMap( std::vector<Util::Texel> p_texels )
 {
 	m_texBlendMap = NULL;
 	m_srvBlendMap = NULL;
+
+	m_texels = p_texels;
 }
 BlendMap::~BlendMap()
 {
@@ -61,12 +63,12 @@ void BlendMap::update(ID3D11DeviceContext* p_devcon,
 	}
 }
 
-void BlendMap::setTexel(ID3D11DeviceContext* p_devcon, Texel p_texel, int p_x, int p_y)
+void BlendMap::setTexel(ID3D11DeviceContext* p_devcon, Util::Texel p_texel, int p_x, int p_y)
 {
 	m_texels[p_x * m_width + p_y] = p_texel;
 	updateTexture(p_devcon);
 }
-void BlendMap::setAllTexels(ID3D11DeviceContext* p_devcon, Texel p_texel)
+void BlendMap::setAllTexels(ID3D11DeviceContext* p_devcon, Util::Texel p_texel)
 {
 	for(unsigned int i=0; i<m_texels.size(); i++)
 		m_texels[i] = p_texel;
@@ -88,17 +90,19 @@ ID3D11ShaderResourceView* BlendMap::getSrvBlendMap() const
 	return m_srvBlendMap;
 }
 
-HRESULT BlendMap::init(ID3D11Device* p_device, int p_width, int p_height)
+HRESULT BlendMap::init(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon, int p_width, int p_height)
 {
 	m_width		= p_width;
 	m_height	= p_height;
 	m_numTexels = m_width * m_height;
-	m_texels.resize(p_width*p_height, Texel(0, 0, 0, 0));
+	//m_texels.resize(p_width*p_height, Util::Texel(0, 0, 0, 0));
 
 	HRESULT hr = S_OK;
 	hr = initTexBlendMap(p_device, p_width, p_height);
 	if(SUCCEEDED(hr))
 		hr = initSrvBlendMap(p_device);
+	if( SUCCEEDED(hr) )
+		hr = updateTexture(p_devcon);
 
 	return hr;
 }

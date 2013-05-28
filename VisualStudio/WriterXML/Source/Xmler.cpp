@@ -10,7 +10,7 @@
 #include "Xmler.h"
 
 namespace Writer_XML {
-	Xmler::Xmler( std::string& p_pathMac, Util::Mac& p_mac ) {
+	Xmler::Xmler( std::string& p_pathMac, Util::MacDesc& p_mac ) {
 		m_pathMac	= &p_pathMac;
 		m_mac		= &p_mac;
 
@@ -32,7 +32,6 @@ namespace Writer_XML {
 		m_xml = new XmlDoc();
 		XmlNode* n;
 		XmlNode* p;
-		XmlAtt* a;
 
 		//Create the original node:	
 		n = allocNode( Util::Node_MAC );
@@ -51,6 +50,15 @@ namespace Writer_XML {
 		appendAtt( n, Util::Att_Resource_CellSize,	m_mac->heightmap.cellSize		);
 		appendAtt( n, Util::Att_Resource_Scale,		m_mac->heightmap.scale			);
 		appendAtt( n, Util::Att_Resource_Offset,	m_mac->heightmap.offset			);
+		p->append_node( n );
+
+		// Link blendmap
+		n = allocNode( Util::Node_Resource );
+		appendAtt( n, Util::Att_Resource_Type,		Util::Resource_Type_Blendmap	);
+		appendAtt( n, Util::Att_Resource_Name,		m_mac->blendmap.name			);
+		appendAtt( n, Util::Att_Resource_Ending,	m_mac->blendmap.ending			);
+		appendAtt( n, Util::Att_Resource_CntRow,	m_mac->blendmap.width			);
+		appendAtt( n, Util::Att_Resource_CntCol,	m_mac->blendmap.height			);
 		p->append_node( n );
 
 		getXmlAsString( io_xml );

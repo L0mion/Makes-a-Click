@@ -1,9 +1,11 @@
 #include <stdlib.h> //atoi
+#include <cstdlib> //atof
 
 #include <LoaderXML.h>
 #include <Util.h>
 
 #include "LoaderHeightmap.h"
+#include "LoaderRaw.h"
 
 #include "LoaderMAC.h"
 
@@ -16,6 +18,7 @@ LoaderMAC::LoaderMAC() :
 	m_recursiveSearch	( true							) {
 	m_loaderXML = nullptr;
 	m_loaderHM	= nullptr;
+	m_loaderBM = nullptr;
 }
 LoaderMAC::~LoaderMAC() {
 	if( m_loaderXML!=nullptr ) {
@@ -24,6 +27,10 @@ LoaderMAC::~LoaderMAC() {
 	if( m_loaderHM!=nullptr ) {
 		delete m_loaderHM;
 	}
+	if( m_loaderBM!=nullptr ) {
+		delete m_loaderBM;
+	}
+
 }
 
 bool LoaderMAC::init( Mac& io_result ) {
@@ -54,7 +61,42 @@ bool LoaderMAC::init( Mac& io_result ) {
 			(float)std::atof( scale.c_str()	),
 			(float)std::atof( offset.c_str()));
 		sucessfulLoad = m_loaderHM->init( io_result.heightmap );
+
+		//Load blendmap
+		if( sucessfulLoad==true ) {
+			std::string bmName = io_result.macDesc.blendmap.name;
+			unsigned int bmRow = std::atoi(io_result.macDesc.blendmap.width.c_str());
+			unsigned int bmCol = std::atoi(io_result.macDesc.blendmap.height.c_str());
+		
+			std::vector<unsigned char> raw;
+		
+			Util::UtilString::W2Std(m_filePathToSearch, path);
+			path += bmName + '.' + "map";
+			m_loaderBM = new LoaderRaw( 
+				path, 
+				bmRow * 2, 
+				bmCol * 2);
+			sucessfulLoad = m_loaderBM->init( raw );
+		
+			uglyRawToBlendmap( raw, bmRow, bmCol, io_result.blendmap );
+		}
 	}
 
 	return sucessfulLoad;
+}
+
+void LoaderMAC::uglyRawToBlendmap( std::vector<unsigned char>& p_raw, unsigned int p_row, unsigned int p_col, std::vector<Util::Texel>& io_bm ) {
+	unsigned int numTexels= p_row * p_col;
+
+	io_bm.resize(numTexels);
+
+	int t = 0;
+	for( unsigned int i = 0; i < numTexels * 4; i+=4 ) {
+		io_bm[t] = Util::Texel(
+			(float)p_raw[i]		/ 255.0f,
+			(float)p_raw[i+1]	/ 255.0f,
+			(float)p_raw[i+2]	/ 255.0f,
+			(float)p_raw[i+3]	/ 255.0f);
+		t++;
+	}
 }

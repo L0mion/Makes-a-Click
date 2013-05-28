@@ -84,8 +84,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
 	g_renderer->addEntity( heightMapBuffers );
 
-	BlendMap* blendMap = new BlendMap();
-	blendMap->init(g_renderer->getD3DManagement()->getDevice(), 256, 256);
+	BlendMap* blendMap = new BlendMap(mac.blendmap);
+	blendMap->init(g_renderer->getD3DManagement()->getDevice(), g_renderer->getD3DManagement()->getDeviceContext(), 256, 256);
 	blendMap->psSetBlendMap(g_renderer->getD3DManagement()->getDeviceContext(), 4);
 
 	ObjFileReader reader;
@@ -167,7 +167,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// Save lvl
 	heightMap->updateHeightmap();
-	mac.heightmap = heightMap->getHeightmap();
+	mac.heightmap	= heightMap->getHeightmap();
+
+	mac.blendmap	= blendMap->getTexels();
+	mac.macDesc.blendmap.name = "TestLvl";
+	mac.macDesc.blendmap.ending = "map";
+	mac.macDesc.blendmap.width = Util::UtilString::Int2Std(blendMap->getWidth());
+	mac.macDesc.blendmap.height = Util::UtilString::Int2Std(blendMap->getHeight());
+	
 	WriterMAC* writerMAC = new WriterMAC( mac );
 	bool okSave = writerMAC->init();
 

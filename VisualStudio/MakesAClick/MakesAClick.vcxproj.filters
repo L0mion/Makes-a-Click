@@ -187,9 +187,6 @@
     <ClInclude Include="..\..\Source\blendMap.h">
       <Filter>Logic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\texel.h">
-      <Filter>Utilties</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\DigitalSmoothControl.h">
       <Filter>Input</Filter>
     </ClInclude>

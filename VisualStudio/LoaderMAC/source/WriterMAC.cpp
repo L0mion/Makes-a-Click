@@ -2,8 +2,9 @@
 #include <Wtr.h>
 #include <stdlib.h>
 #include <cstdlib>
-
+#include <stdio.h>
 #include <Tartar.h> //awwwyeah
+#include <string>
 
 #include "Mac.h"
 
@@ -17,23 +18,32 @@ WriterMAC::~WriterMAC() {
 }
 
 bool WriterMAC::init() {
-	Util::Mac macmac = m_mac->macDesc;
+	Util::MacDesc macmac = m_mac->macDesc;
 	
 	// Get xml
 	std::string xml;
 	Writer_XML::WriterXML* writerXML = new Writer_XML::WriterXML( macmac );
 	writerXML->init( xml );
 	
-	// Get raw
-	std::vector<char> raw;
+	// Get raw heightmap
+	std::vector<unsigned char> rawHM;
 	uglyHeightmapToRaw( 
 		m_mac->heightmap, 
 		(float)std::atof(macmac.heightmap.scale.c_str()),  //HAHA
 		(float)std::atof(macmac.heightmap.offset.c_str()), //HAHA 
-		raw );
+		rawHM );
+
+	// Get raw blendmap
+	std::vector<unsigned char> rawBM;
+	uglyBlendmapToRaw(
+		m_mac->blendmap, 
+		std::atof(macmac.blendmap.width.c_str()), 
+		std::atof(macmac.blendmap.height.c_str()), 
+		rawBM);
 
 	std::string xmlName = m_mac->macDesc.name + ".xml";
-	std::string rawName = macmac.heightmap.name;
+	std::string hmName = macmac.heightmap.name;
+	std::string bmName = macmac.blendmap.name;
 
 	std::string path	= "../../Resources/Levels/";
 
@@ -49,12 +59,17 @@ bool WriterMAC::init() {
 	//bool ok = wtr->init( true );
 
 	std::string pathxml = path + xmlName;
-	Writer_XML::Wtr* wtr = new Writer_XML::Wtr( pathxml.c_str(), xml.c_str(), xml.size() );
+	Writer_XML::Wtr* wtr = new Writer_XML::Wtr( pathxml.c_str(), (unsigned char*)xml.c_str(), xml.size() );
 	bool ok = wtr->init(true);
 	delete wtr;
 
-	std::string pathraw = path + rawName + ".raw";
-	wtr = new Writer_XML::Wtr( pathraw.c_str(), &raw[0], raw.size() );
+	std::string pathhm = path + hmName + ".raw";
+	wtr = new Writer_XML::Wtr( pathhm.c_str(), &rawHM[0], rawHM.size() );
+	ok = wtr->init(true);
+	delete wtr;
+
+	std::string pathbm = path + bmName + ".map";
+	wtr = new Writer_XML::Wtr( pathbm.c_str(), &rawBM[0], rawBM.size() );
 	ok = wtr->init(true);
 	delete wtr;
 
@@ -64,11 +79,36 @@ bool WriterMAC::init() {
 	return ok;
 }
 
-void WriterMAC::uglyHeightmapToRaw( std::vector<float>& p_heightmap, float p_scale, float p_offset, std::vector<char>& io_raw ) {
+void WriterMAC::uglyHeightmapToRaw( std::vector<float>& p_heightmap, float p_scale, float p_offset, std::vector<unsigned char>& io_raw ) {
 	unsigned int numVertices = p_heightmap.size(); 
 
 	io_raw.resize( numVertices );
 	for( unsigned int i = 0; i < numVertices; i++ ) {
 		io_raw[i] = p_heightmap[i] / p_scale - p_offset;
 	}
+}
+
+void WriterMAC::uglyBlendmapToRaw(
+	std::vector<Util::Texel>& p_blendmap,
+	unsigned int p_row,
+	unsigned int p_col,
+	std::vector<unsigned char>& io_raw) {
+		unsigned int numTexels = p_row * p_col;
+
+		io_raw.resize(numTexels * 4);
+		int t = 0;
+		for( unsigned int i = 0; i < numTexels*4; i+=4 ) {
+			int r = (int)(p_blendmap[t].m_red	* 255.0f);
+			int g = (int)(p_blendmap[t].m_green	* 255.0f);
+			int b = (int)(p_blendmap[t].m_blue	* 255.0f);
+			int a = (int)(p_blendmap[t].m_alpha	* 255.0f);
+			t++;
+
+			std::memcpy(&io_raw[i] ,	&r,	sizeof(unsigned char));
+			std::memcpy(&io_raw[i+1],	&g,	sizeof(unsigned char));
+			std::memcpy(&io_raw[i+2],	&b,	sizeof(unsigned char));
+			std::memcpy(&io_raw[i+3],	&a,	sizeof(unsigned char));
+		}	 
+
+		std::string temp = "";
 }

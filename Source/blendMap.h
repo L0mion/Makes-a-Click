@@ -13,7 +13,7 @@ class HeightMap;
 class BlendMap
 {
 public:
-	BlendMap();
+	BlendMap( std::vector<Util::Texel> p_texels );
 	~BlendMap();
 
 	void update(ID3D11DeviceContext* p_devcon,
@@ -22,15 +22,19 @@ public:
 		ManagementMenu::ToolPropertyIds toolProperty,
 		float p_dt);
 
-	void setTexel(ID3D11DeviceContext* p_devcon, Texel p_texel, int p_x, int p_y);
-	void setAllTexels(ID3D11DeviceContext* p_devcon, Texel p_texel);
+	void setTexel(ID3D11DeviceContext* p_devcon, Util::Texel p_texel, int p_x, int p_y);
+	void setAllTexels(ID3D11DeviceContext* p_devcon, Util::Texel p_texel);
 
 	void psSetBlendMap(ID3D11DeviceContext* p_devcon, unsigned int startSlott);
 
 	ID3D11Texture2D* getTexBlendMap() const;
 	ID3D11ShaderResourceView* getSrvBlendMap() const;
 
-	HRESULT init(ID3D11Device* p_device, int p_width, int p_height);
+	HRESULT init(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon, int p_width, int p_height);
+
+	std::vector<Util::Texel>& getTexels() { return m_texels; }
+	int getWidth() { return m_width; }
+	int getHeight() { return m_height; }
 private:
 	HRESULT initTexBlendMap(ID3D11Device* p_device, int p_width, int p_height);
 	HRESULT initSrvBlendMap(ID3D11Device* p_device);
@@ -44,7 +48,7 @@ private:
 	int m_width;
 	int m_height;
 	int m_numTexels;
-	std::vector<Texel> m_texels;
+	std::vector<Util::Texel> m_texels;
 
 	ID3D11Texture2D*			m_texBlendMap;
 	ID3D11ShaderResourceView*	m_srvBlendMap;

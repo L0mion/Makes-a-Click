@@ -10,7 +10,7 @@ namespace Loader_XML {
 		//Do nothing.
 	}
 
-	bool InterpreterXML::init( Util::Mac& io_result ) {
+	bool InterpreterXML::init( Util::MacDesc& io_result ) {
 		bool sucessfulInterpret = false;
 
 		rapidxml::xml_node<>* curNode = m_toInterpret->first_node( Util::Node_MAC.c_str() );
@@ -21,76 +21,107 @@ namespace Loader_XML {
 			if( sucessfulInterpret==true ) {
 				io_result.name = macName;
 
-				//Proceed to get resource-data:
-				sucessfulInterpret = interpretResource( io_result, curNode );
+				// Resources
+				rapidxml::xml_node<>* node = curNode;
+				for(rapidxml::xml_node<>* child = node->first_node(); child; child = child->next_sibling()) {
+					interpretResource( io_result, child );
+				}
 			}
 		}
 
 		return sucessfulInterpret;
 	}
 
-	bool InterpreterXML::interpretResource( Util::Mac& io_result, rapidxml::xml_node<>* p_curNode ) {
-		bool validResource = nextNode( &p_curNode, Util::Node_Resource );
+	bool InterpreterXML::interpretResource( Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode ) {
+		//bool validResource = nextNode( &p_curNode, Util::Node_Resource );
+		std::string resourceType;
+		bool validResource = getAttVal( p_curNode, Util::Att_Resource_Type, resourceType );
 		if( validResource==true ) {
-			//Get MAC-attributes:
-			std::string resourceType;
-			validResource = getAttVal( p_curNode, Util::Att_Resource_Type, resourceType );
-			if( validResource==true ) {
-				//Depending on resource-type, parse the correct whatevs.
-				if( resourceType==Util::Resource_Type_Heightmap ) {
-					interpretHeightmap( io_result, p_curNode );
-				} //else if( resourceType==Util::Resource_Type_Texture... )
+			//Depending on resource-type, parse the correct whatevs.
+			if( resourceType==Util::Resource_Type_Heightmap ) {
+				interpretHeightmap( io_result, p_curNode );
+			} else if( resourceType==Util::Resource_Type_Blendmap ) {
+				interpretBlendmap( io_result, p_curNode );
 			}
 		}
 
 		return validResource;
 	}
 
-	bool InterpreterXML::interpretHeightmap( Util::Mac& io_result, rapidxml::xml_node<>* p_curNode ) {
+	bool InterpreterXML::interpretHeightmap( Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode ) {
 		//Name
 		std::string val;
-		bool validHeightMap = getAttVal( p_curNode, Util::Att_Resource_Name, val );
-		if( validHeightMap==true ) {
+		bool validHM = getAttVal( p_curNode, Util::Att_Resource_Name, val );
+		if( validHM==true ) {
 			io_result.heightmap.name = val;
 		}
 
 		//Ending
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_Ending, val );
-		if( validHeightMap==true ) {
+		validHM = validHM && getAttVal( p_curNode, Util::Att_Resource_Ending, val );
+		if( validHM==true ) {
 			io_result.heightmap.ending = val;
 		}
 
 		//CntCol
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_CntCol, val );
-		if( validHeightMap==true ) {
+		validHM = validHM && getAttVal( p_curNode, Util::Att_Resource_CntCol, val );
+		if( validHM==true ) {
 			io_result.heightmap.cntCol = val;
 		}
 
 		//CntRow
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_CntRow, val );
-		if( validHeightMap==true ) {
+		validHM = validHM && getAttVal( p_curNode, Util::Att_Resource_CntRow, val );
+		if( validHM==true ) {
 			io_result.heightmap.cntRow = val;
 		}
 
 		//CellSize
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_CellSize, val );
-		if( validHeightMap==true ) {
+		validHM = validHM && getAttVal( p_curNode, Util::Att_Resource_CellSize, val );
+		if( validHM==true ) {
 			io_result.heightmap.cellSize = val;
 		}
 
 		//Scale
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_Scale, val );
-		if( validHeightMap==true ) {
+		validHM = validHM && getAttVal( p_curNode, Util::Att_Resource_Scale, val );
+		if( validHM==true ) {
 			io_result.heightmap.scale = val;
 		}
 
 		//Offset
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_Offset, val );
-		if( validHeightMap==true ) {
+		validHM = validHM && getAttVal( p_curNode, Util::Att_Resource_Offset, val );
+		if( validHM==true ) {
 			io_result.heightmap.offset = val;
 		}
 
-		return validHeightMap;
+		return validHM;
+	}
+
+	bool InterpreterXML::interpretBlendmap(	Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode ) {
+		//Name
+		std::string val;
+		bool validBM = getAttVal( p_curNode, Util::Att_Resource_Name, val );
+		if( validBM==true ) {
+			io_result.blendmap.name = val;
+		}
+
+		//Ending
+		validBM = validBM && getAttVal( p_curNode, Util::Att_Resource_Ending, val );
+		if( validBM==true ) {
+			io_result.blendmap.ending = val;
+		}
+
+		//CntCol
+		validBM = validBM && getAttVal( p_curNode, Util::Att_Resource_CntCol, val );
+		if( validBM==true ) {
+			io_result.blendmap.height = val;
+		}
+
+		//CntRow
+		validBM = validBM && getAttVal( p_curNode, Util::Att_Resource_CntRow, val );
+		if( validBM==true ) {
+			io_result.blendmap.width = val;
+		}
+
+		return validBM;
 	}
 
 	bool InterpreterXML::getAttVal( 

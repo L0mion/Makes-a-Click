@@ -6,6 +6,7 @@
   <ItemGroup>
     <ClInclude Include="Source\UtilString.h" />
     <ClInclude Include="Source\Util.h" />
-    <ClInclude Include="Source\Mac.h" />
+    <ClInclude Include="Source\texel.h" />
+    <ClInclude Include="Source\MacDesc.h" />
   </ItemGroup>
 </Project>
