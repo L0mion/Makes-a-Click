@@ -17,6 +17,7 @@ public:
 
 	void present();
 	
+	void setFullscreen(bool fullscreen);
 	void setBackBuffer();
 	void setBackBufferNoDepth();
 	void clearBackBuffer();
