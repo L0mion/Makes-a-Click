@@ -19,7 +19,9 @@ namespace Loader_XML {
 	private:
 		bool interpretResource(		Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode );
 		bool interpretHeightmap(	Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode );
+		bool interpretObject(		Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode );
 		bool interpretBlendmap(		Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode );
+
 
 		bool getAttVal( 
 			rapidxml::xml_node<>*	p_curNode,

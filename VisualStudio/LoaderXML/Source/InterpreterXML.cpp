@@ -42,6 +42,8 @@ namespace Loader_XML {
 				interpretHeightmap( io_result, p_curNode );
 			} else if( resourceType==Util::Resource_Type_Blendmap ) {
 				interpretBlendmap( io_result, p_curNode );
+			} else if( resourceType==Util::Resource_Type_Object ) {
+				interpretObject( io_result, p_curNode );
 			}
 		}
 
@@ -122,6 +124,33 @@ namespace Loader_XML {
 		}
 
 		return validBM;
+	}
+
+	bool InterpreterXML::interpretObject( Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode )
+	{
+		io_result.objects.push_back(Util::MacObject());
+		std::string val;
+		bool validObject = getAttVal( p_curNode, Util::Att_Resource_Name, val );
+		if( validObject ) {
+			io_result.objects.back().name = val;
+		}
+
+		validObject = validObject && getAttVal( p_curNode, Util::Att_Resource_Pos_X, val );
+		if( validObject ) {
+			io_result.objects.back().posX = ::atof(val.c_str());
+		}
+
+		validObject = validObject && getAttVal( p_curNode, Util::Att_Resource_Pos_Y, val );
+		if( validObject ) {
+			io_result.objects.back().posY = ::atof(val.c_str());
+		}
+
+		validObject = validObject && getAttVal( p_curNode, Util::Att_Resource_Pos_Z, val );
+		if( validObject ) {
+			io_result.objects.back().posZ = ::atof(val.c_str());
+		}
+
+		return validObject;
 	}
 
 	bool InterpreterXML::getAttVal( 
