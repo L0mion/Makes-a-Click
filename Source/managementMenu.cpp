@@ -68,6 +68,9 @@ void ManagementMenu::useToolsMenu()
 	else
 		toolsMenuSectorNone();
 
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+		setSelectedTool();
+
 	moveSpriteToSector(analogX, analogY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
 void ManagementMenu::useToolPropertiesMenu()
@@ -900,6 +903,9 @@ void ManagementMenu::useSandPropertiesMenu(double p_analogStickX, double p_analo
 	if(insideSector1(p_analogStickX, p_analogStickY))
 		sandPropertiesSector1();
 
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+		setSelectedProperty();
+
 	moveSpriteToSector(p_analogStickX, p_analogStickY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
 void ManagementMenu::sandPropertiesSector0()
@@ -964,6 +970,8 @@ void ManagementMenu::sandPropertiesSector7()
 }
 void ManagementMenu::sandPropertiesSectorNone()
 {
+	m_tempSelectedTool = ToolIds_NONE;
+	m_tempSelectedProperty = ToolPropertyIds_NONE;
 }
 
 void ManagementMenu::useObjectPropertiesMenu(double p_analogStickX, double p_analogStickY)
@@ -978,6 +986,9 @@ void ManagementMenu::useObjectPropertiesMenu(double p_analogStickX, double p_ana
 		objectPropertiesSector2();
 	if(insideSector3(p_analogStickX, p_analogStickY))
 		objectPropertiesSector3();
+
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+		setSelectedProperty();
 
 	moveSpriteToSector(p_analogStickX, p_analogStickY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
@@ -1043,6 +1054,8 @@ void ManagementMenu::objectPropertiesSector7()
 }
 void ManagementMenu::objectPropertiesSectorNone()
 {
+	m_tempSelectedTool = ToolIds_NONE;
+	m_tempSelectedProperty = ToolPropertyIds_NONE;
 }
 
 void ManagementMenu::useTextureBrushPropertiesMenu(double p_analogStickX, double p_analogStickY)
@@ -1055,6 +1068,9 @@ void ManagementMenu::useTextureBrushPropertiesMenu(double p_analogStickX, double
 		textureBrushPropertiesSector1();
 	if(insideSector2(p_analogStickX, p_analogStickY))
 		textureBrushPropertiesSector2();
+
+	if(m_xinput->getBtnState(InputHelper::Xbox360Digitals_BTN_A) == InputHelper::KeyStates_KEY_PRESSED)
+		setSelectedProperty();
 
 	moveSpriteToSector(p_analogStickX, p_analogStickY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
