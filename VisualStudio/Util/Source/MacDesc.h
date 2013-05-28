@@ -39,7 +39,7 @@ namespace Util {
 		std::string height;
 	};
 	
-	struct Mac {
+	struct MacDesc {
 		std::string name;
 		std::string version;
 	

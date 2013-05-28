@@ -18,7 +18,7 @@ WriterMAC::~WriterMAC() {
 }
 
 bool WriterMAC::init() {
-	Util::Mac macmac = m_mac->macDesc;
+	Util::MacDesc macmac = m_mac->macDesc;
 	
 	// Get xml
 	std::string xml;
@@ -42,7 +42,8 @@ bool WriterMAC::init() {
 		rawBM);
 
 	std::string xmlName = m_mac->macDesc.name + ".xml";
-	std::string rawName = macmac.heightmap.name;
+	std::string hmName = macmac.heightmap.name;
+	std::string bmName = macmac.blendmap.name;
 
 	std::string path	= "../../Resources/Levels/";
 
@@ -62,8 +63,13 @@ bool WriterMAC::init() {
 	bool ok = wtr->init(true);
 	delete wtr;
 
-	std::string pathraw = path + rawName + ".raw";
-	wtr = new Writer_XML::Wtr( pathraw.c_str(), &rawHM[0], rawHM.size() );
+	std::string pathhm = path + hmName + ".raw";
+	wtr = new Writer_XML::Wtr( pathhm.c_str(), &rawHM[0], rawHM.size() );
+	ok = wtr->init(true);
+	delete wtr;
+
+	std::string pathbm = path + bmName + ".map";
+	wtr = new Writer_XML::Wtr( pathbm.c_str(), &rawBM[0], rawBM.size() );
 	ok = wtr->init(true);
 	delete wtr;
 
@@ -89,23 +95,17 @@ void WriterMAC::uglyBlendmapToRaw(
 	std::vector<char>& io_raw) {
 		unsigned int numTexels = p_row * p_col;
 
-		std::string test;
-		float lol = 0.46f;
-		int lolint = lol * 256;
-		
-		char derp;
-		std::memcpy(&derp, &lolint, sizeof(char));
-
 		io_raw.resize(numTexels * 4);
 		for( unsigned int i = 0; i < numTexels; i++ ) {
-			p_blendmap[i].m_red		*= 256;
-			p_blendmap[i].m_green	*= 256;
-			p_blendmap[i].m_blue	*= 256;
-			p_blendmap[i].m_alpha	*= 256;
+			int rgba[4];
+			rgba[0] = int(p_blendmap[i].m_red	* 256);
+			rgba[1] = int(p_blendmap[i].m_green	* 256);
+			rgba[2] = int(p_blendmap[i].m_blue	* 256);
+			rgba[3] = int(p_blendmap[i].m_alpha	* 256);
 
-			std::memcpy(&io_raw[i]		,	&p_blendmap[i], sizeof(char) );
-			std::memcpy(&io_raw[i+1]	,	&p_blendmap[i], sizeof(char) );
-			std::memcpy(&io_raw[i+2]	,	&p_blendmap[i], sizeof(char) );
-			std::memcpy(&io_raw[i+3]	,	&p_blendmap[i], sizeof(char) );
+			std::memcpy(&io_raw[i],		&rgba[0], sizeof(char));
+			std::memcpy(&io_raw[i+1],	&rgba[1], sizeof(char));
+			std::memcpy(&io_raw[i+2],	&rgba[2], sizeof(char));
+			std::memcpy(&io_raw[i+3],	&rgba[3], sizeof(char));
 		}
 }

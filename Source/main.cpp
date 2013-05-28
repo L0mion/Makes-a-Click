@@ -170,6 +170,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	mac.heightmap	= heightMap->getHeightmap();
 
 	mac.blendmap	= blendMap->getTexels();
+	mac.macDesc.blendmap.name = "TestLvl";
 	mac.macDesc.blendmap.width = Util::UtilString::Int2Std(blendMap->getWidth());
 	mac.macDesc.blendmap.height = Util::UtilString::Int2Std(blendMap->getHeight());
 	

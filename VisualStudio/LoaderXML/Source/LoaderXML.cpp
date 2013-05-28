@@ -29,7 +29,7 @@ namespace Loader_XML {
 		}
 	}
 
-	bool LoaderXML::init( Util::Mac& inout_result ) {
+	bool LoaderXML::init( Util::MacDesc& inout_result ) {
 		m_winDetective = new WinDetective(
 			m_filePathToSearch, 
 			m_fileEnding, 
@@ -44,7 +44,7 @@ namespace Loader_XML {
 		return sucessfulLoad;
 	}
 
-	bool LoaderXML::parse( Util::Mac& inout_result ) {
+	bool LoaderXML::parse( Util::MacDesc& inout_result ) {
 		std::vector<WinDetective::Culprit> foundFiles;
 		foundFiles = m_winDetective->getLocatedCulprits();
 
@@ -69,7 +69,7 @@ namespace Loader_XML {
 		const std::wstring filePath, 
 		const std::wstring fileName, 
 		const std::wstring fileEnding,
-		Util::Mac& inout_result ) {
+		Util::MacDesc& inout_result ) {
 			std::string filePathStd; 
 			std::string fileNameStd;
 			filePathStd = Util::UtilString::W2Std(filePath, filePathStd);

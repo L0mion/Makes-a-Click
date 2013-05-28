@@ -7,7 +7,7 @@ namespace Parser_XML {
 	class DocXML;
 }
 namespace Util {
-	struct Mac;
+	struct MacDesc;
 }
 
 #include <string>
@@ -26,15 +26,15 @@ namespace Loader_XML {
 			bool			p_recursiveSearch);
 		~LoaderXML();
 
-		bool init( Util::Mac& inout_result );
+		bool init( Util::MacDesc& inout_result );
 	protected:
 	private:
-		bool parse( Util::Mac& inout_result );
+		bool parse( Util::MacDesc& inout_result );
 		bool parseXML(
 			const std::wstring filePath, 
 			const std::wstring fileName, 
 			const std::wstring fileEnding,
-			Util::Mac& inout_result );
+			Util::MacDesc& inout_result );
 
 		std::wstring m_filePathToSearch;
 		std::wstring m_fileEnding;

@@ -10,7 +10,7 @@ typedef rapidxml::xml_document<WriterXMLCharType> XmlDoc;
 typedef rapidxml::xml_attribute<WriterXMLCharType> XmlAtt;
 
 namespace Util {
-	struct Mac;
+	struct MacDesc;
 }
 
 namespace Writer_XML {
@@ -20,7 +20,7 @@ namespace Writer_XML {
 namespace Writer_XML {
 	class Xmler {
 	public:
-		Xmler( std::string& p_pathMac, Util::Mac& p_mac );
+		Xmler( std::string& p_pathMac, Util::MacDesc& p_mac );
 		~Xmler();
 
 		void init( std::string& io_xml );
@@ -36,7 +36,7 @@ namespace Writer_XML {
 		Wtr* m_wtr;
 
 		std::string* m_pathMac;
-		Util::Mac* m_mac;
+		Util::MacDesc* m_mac;
 		rapidxml::xml_document<>* m_xml;
 	};
 }

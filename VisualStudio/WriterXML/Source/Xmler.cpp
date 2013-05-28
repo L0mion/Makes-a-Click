@@ -10,7 +10,7 @@
 #include "Xmler.h"
 
 namespace Writer_XML {
-	Xmler::Xmler( std::string& p_pathMac, Util::Mac& p_mac ) {
+	Xmler::Xmler( std::string& p_pathMac, Util::MacDesc& p_mac ) {
 		m_pathMac	= &p_pathMac;
 		m_mac		= &p_mac;
 
