@@ -29,8 +29,9 @@
 #include "utility.h"
 #include "window.h"
 
-//Loading
+//io
 #include <LoaderMAC.h>
+#include <WriterMAC.h>
 #include "ObjectTool.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
@@ -73,7 +74,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	LoaderMAC* loaderMAC = new LoaderMAC();
 	bool sucessfulLoad = loaderMAC->init( mac );
 	delete loaderMAC;
-
 
 	HeightMap* heightMap = new HeightMap(
 		g_renderer->getD3DManagement(),
@@ -164,6 +164,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			//Sleep(8);
 		}
 	}
+
+	// Save lvl
+	heightMap->updateHeightmap();
+	mac.heightmap	= heightMap->getHeightmap();
+
+	mac.blendmap	= blendMap->getTexels();
+	mac.macDesc.blendmap.width = Util::UtilString::Int2Std(blendMap->getWidth());
+	mac.macDesc.blendmap.height = Util::UtilString::Int2Std(blendMap->getHeight());
+	
+	WriterMAC* writerMAC = new WriterMAC( mac );
+	bool okSave = writerMAC->init();
 
 	delete cameraControl;
 	delete heightMap;

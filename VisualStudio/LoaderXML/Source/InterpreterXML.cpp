@@ -17,7 +17,7 @@ namespace Loader_XML {
 		if( curNode!=NULL ) {
 			//Get MAC-attributes
 			std::string macName;
-			sucessfulInterpret = getAttVal( curNode, Util::MAC_Name, macName );
+			sucessfulInterpret = getAttVal( curNode, Util::Att_MAC_Name, macName );
 			if( sucessfulInterpret==true ) {
 				io_result.name = macName;
 
@@ -34,7 +34,7 @@ namespace Loader_XML {
 		if( validResource==true ) {
 			//Get MAC-attributes:
 			std::string resourceType;
-			validResource = getAttVal( p_curNode, Util::Resource_Type, resourceType );
+			validResource = getAttVal( p_curNode, Util::Att_Resource_Type, resourceType );
 			if( validResource==true ) {
 				//Depending on resource-type, parse the correct whatevs.
 				if( resourceType==Util::Resource_Type_Heightmap ) {
@@ -49,43 +49,43 @@ namespace Loader_XML {
 	bool InterpreterXML::interpretHeightmap( Util::Mac& io_result, rapidxml::xml_node<>* p_curNode ) {
 		//Name
 		std::string val;
-		bool validHeightMap = getAttVal( p_curNode, Util::Resource_Name, val );
+		bool validHeightMap = getAttVal( p_curNode, Util::Att_Resource_Name, val );
 		if( validHeightMap==true ) {
 			io_result.heightmap.name = val;
 		}
 
 		//Ending
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Resource_Ending, val );
+		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_Ending, val );
 		if( validHeightMap==true ) {
 			io_result.heightmap.ending = val;
 		}
 
 		//CntCol
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Resource_CntCol, val );
+		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_CntCol, val );
 		if( validHeightMap==true ) {
 			io_result.heightmap.cntCol = val;
 		}
 
 		//CntRow
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Resource_CntRow, val );
+		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_CntRow, val );
 		if( validHeightMap==true ) {
 			io_result.heightmap.cntRow = val;
 		}
 
 		//CellSize
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Resource_CellSize, val );
+		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_CellSize, val );
 		if( validHeightMap==true ) {
 			io_result.heightmap.cellSize = val;
 		}
 
 		//Scale
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Resource_Scale, val );
+		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_Scale, val );
 		if( validHeightMap==true ) {
 			io_result.heightmap.scale = val;
 		}
 
 		//Offset
-		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Resource_Offset, val );
+		validHeightMap = validHeightMap && getAttVal( p_curNode, Util::Att_Resource_Offset, val );
 		if( validHeightMap==true ) {
 			io_result.heightmap.offset = val;
 		}
