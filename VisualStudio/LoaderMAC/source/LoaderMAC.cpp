@@ -27,10 +27,9 @@ LoaderMAC::~LoaderMAC() {
 }
 
 bool LoaderMAC::init( Mac& io_result ) {
-	
 	//TOTALLY TEMP
-	WriterZlib writerZlib;
-	bool result = writerZlib.init();
+	//WriterZlib writerZlib;
+	//bool result = writerZlib.init();
 
 	//Load xml
 	m_loaderXML = new Loader_XML::LoaderXML(
