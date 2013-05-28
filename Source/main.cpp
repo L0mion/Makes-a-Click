@@ -84,7 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
 	g_renderer->addEntity( heightMapBuffers );
 
-	BlendMap* blendMap = new BlendMap();
+	BlendMap* blendMap = new BlendMap(mac.blendmap);
 	blendMap->init(g_renderer->getD3DManagement()->getDevice(), 256, 256);
 	blendMap->psSetBlendMap(g_renderer->getD3DManagement()->getDeviceContext(), 4);
 
@@ -171,6 +171,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	mac.blendmap	= blendMap->getTexels();
 	mac.macDesc.blendmap.name = "TestLvl";
+	mac.macDesc.blendmap.ending = "map";
 	mac.macDesc.blendmap.width = Util::UtilString::Int2Std(blendMap->getWidth());
 	mac.macDesc.blendmap.height = Util::UtilString::Int2Std(blendMap->getHeight());
 	

@@ -62,23 +62,23 @@ bool LoaderMAC::init( Mac& io_result ) {
 		sucessfulLoad = m_loaderHM->init( io_result.heightmap );
 
 		//Load blendmap
-		//if( sucessfulLoad==true ) {
-		//	std::string bmName = io_result.macDesc.blendmap.name;
-		//	unsigned int bmRow = std::atoi(io_result.macDesc.blendmap.width.c_str());
-		//	unsigned int bmCol = std::atoi(io_result.macDesc.blendmap.height.c_str());
-		//
-		//	std::vector<unsigned char> raw;
-		//
-		//	Util::UtilString::W2Std(m_filePathToSearch, path);
-		//	path += bmName + '.' + "map";
-		//	m_loaderBM = new LoaderRaw( 
-		//		path, 
-		//		bmRow, 
-		//		bmCol);
-		//	sucessfulLoad = m_loaderBM->init( raw );
-		//
-		//	uglyRawToBlendmap( raw, bmRow, bmCol, io_result.blendmap );
-		//}
+		if( sucessfulLoad==true ) {
+			std::string bmName = io_result.macDesc.blendmap.name;
+			unsigned int bmRow = std::atoi(io_result.macDesc.blendmap.width.c_str());
+			unsigned int bmCol = std::atoi(io_result.macDesc.blendmap.height.c_str());
+		
+			std::vector<unsigned char> raw;
+		
+			Util::UtilString::W2Std(m_filePathToSearch, path);
+			path += bmName + '.' + "map";
+			m_loaderBM = new LoaderRaw( 
+				path, 
+				bmRow * 2, 
+				bmCol * 2);
+			sucessfulLoad = m_loaderBM->init( raw );
+		
+			uglyRawToBlendmap( raw, bmRow, bmCol, io_result.blendmap );
+		}
 	}
 
 	return sucessfulLoad;
@@ -90,6 +90,10 @@ void LoaderMAC::uglyRawToBlendmap( std::vector<unsigned char>& p_raw, unsigned i
 	io_bm.resize(numTexels);
 
 	for( unsigned int i = 0; i < numTexels; i++ ) {
-
+		io_bm[i] = Util::Texel(
+			p_raw[i],
+			p_raw[i+1],
+			p_raw[i+2],
+			p_raw[i+3]);
 	}
 }

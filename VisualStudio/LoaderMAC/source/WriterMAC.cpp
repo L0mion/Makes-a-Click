@@ -98,14 +98,14 @@ void WriterMAC::uglyBlendmapToRaw(
 		io_raw.resize(numTexels * 4);
 		for( unsigned int i = 0; i < numTexels; i++ ) {
 			int rgba[4];
-			rgba[0] = int(p_blendmap[i].m_red	* 256);
-			rgba[1] = int(p_blendmap[i].m_green	* 256);
-			rgba[2] = int(p_blendmap[i].m_blue	* 256);
-			rgba[3] = int(p_blendmap[i].m_alpha	* 256);
+			rgba[0] = int(p_blendmap[i].m_red	* 255);
+			rgba[1] = int(p_blendmap[i].m_green	* 255);
+			rgba[2] = int(p_blendmap[i].m_blue	* 255);
+			rgba[3] = int(p_blendmap[i].m_alpha * 255);
 
-			std::memcpy(&io_raw[i],		&rgba[0], sizeof(char));
+			std::memcpy(&io_raw[i] ,	&rgba[0],	sizeof(char));
 			std::memcpy(&io_raw[i+1],	&rgba[1], sizeof(char));
 			std::memcpy(&io_raw[i+2],	&rgba[2], sizeof(char));
 			std::memcpy(&io_raw[i+3],	&rgba[3], sizeof(char));
-		}
+		}	 
 }

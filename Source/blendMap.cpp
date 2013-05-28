@@ -3,10 +3,12 @@
 #include "PivotPoint.h"
 #include "utility.h"
 
-BlendMap::BlendMap()
+BlendMap::BlendMap( std::vector<Util::Texel> p_texels )
 {
 	m_texBlendMap = NULL;
 	m_srvBlendMap = NULL;
+
+	m_texels = p_texels;
 }
 BlendMap::~BlendMap()
 {
@@ -93,7 +95,7 @@ HRESULT BlendMap::init(ID3D11Device* p_device, int p_width, int p_height)
 	m_width		= p_width;
 	m_height	= p_height;
 	m_numTexels = m_width * m_height;
-	m_texels.resize(p_width*p_height, Util::Texel(0, 0, 0, 0));
+	//m_texels.resize(p_width*p_height, Util::Texel(0, 0, 0, 0));
 
 	HRESULT hr = S_OK;
 	hr = initTexBlendMap(p_device, p_width, p_height);

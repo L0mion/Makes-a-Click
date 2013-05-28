@@ -35,6 +35,7 @@ namespace Util {
 
 	struct MacBlendmap {
 		std::string name;
+		std::string ending;
 		std::string width;
 		std::string height;
 	};

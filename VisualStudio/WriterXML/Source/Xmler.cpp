@@ -52,6 +52,15 @@ namespace Writer_XML {
 		appendAtt( n, Util::Att_Resource_Offset,	m_mac->heightmap.offset			);
 		p->append_node( n );
 
+		// Link blendmap
+		n = allocNode( Util::Node_Resource );
+		appendAtt( n, Util::Att_Resource_Type,		Util::Resource_Type_Blendmap	);
+		appendAtt( n, Util::Att_Resource_Name,		m_mac->blendmap.name			);
+		appendAtt( n, Util::Att_Resource_Ending,	m_mac->blendmap.ending			);
+		appendAtt( n, Util::Att_Resource_CntRow,	m_mac->blendmap.width			);
+		appendAtt( n, Util::Att_Resource_CntCol,	m_mac->blendmap.height			);
+		p->append_node( n );
+
 		getXmlAsString( io_xml );
 	}
 

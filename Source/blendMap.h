@@ -13,7 +13,7 @@ class HeightMap;
 class BlendMap
 {
 public:
-	BlendMap();
+	BlendMap( std::vector<Util::Texel> p_texels );
 	~BlendMap();
 
 	void update(ID3D11DeviceContext* p_devcon,
