@@ -46,9 +46,13 @@ void ManagementSprite::setSpriteCollection(SpriteCollectionIds spriteCollection)
 		break;
 	}
 
-	
-	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TOOL_ICON));
-	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TOOL_PROPERTY_ICON));
+	if(spriteCollection != SpriteCollectionIds_TEXT_MENU)
+	{
+		m_spriteCollection->push_back(m_sprites->at(SpriteIds_TOOL_ICON_BACKGROUND));
+		m_spriteCollection->push_back(m_sprites->at(SpriteIds_TOOL_PROPERTY_ICON_BACKGROUND));
+		m_spriteCollection->push_back(m_sprites->at(SpriteIds_TOOL_ICON));
+		m_spriteCollection->push_back(m_sprites->at(SpriteIds_TOOL_PROPERTY_ICON));
+	}
 }
 
 std::vector<Sprite*>* ManagementSprite::getSprites()
@@ -199,6 +203,22 @@ void ManagementSprite::initToolIconSprites(float p_aspectRatio)
 						0.1f/p_aspectRatio,
 						0.1f,
 						TextureIds::TextureIds_ADD_REMOVE);
+
+	m_sprites->at(SpriteIds_TOOL_ICON_BACKGROUND) = new Sprite(-0.9f,
+						0.85f,
+						0.0f,
+						0.0f,
+						0.15f/p_aspectRatio,
+						0.15f,
+						TextureIds::TextureIds_CIRCLE_HIGHLIGHT);
+
+	m_sprites->at(SpriteIds_TOOL_PROPERTY_ICON_BACKGROUND) = new Sprite(0.9f,
+						0.85f,
+						0.0f,
+						0.0f,
+						0.15f/p_aspectRatio,
+						0.15f,
+						TextureIds::TextureIds_CIRCLE_HIGHLIGHT);
 }
 void ManagementSprite::initMenuSprites(float p_aspectRatio)
 {
@@ -473,6 +493,8 @@ void ManagementSprite::setSpriteCollectionObjectPropertiesMenu()
 }
 void ManagementSprite::setSpriteCollectionTextureBrushPropertiesMenu()
 {
+	m_spriteCollection->clear();
+
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_BACKGROUND));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_CIRCLE_HIGHLIGHT));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_TEXTURE_BRUSH_PROPERTY_0));
