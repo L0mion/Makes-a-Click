@@ -13,6 +13,8 @@ struct TextureIds
 		TextureIds_GRAVEL,
 		TextureIds_STONE,
 		TextureIds_SANB_BUCKET,
+		TextureIds_ADD_REMOVE,
+		TextureIds_SMOOTH,
 		TextureIds_OBJECT,
 		TextureIds_TEXTURE_BRUSH,
 		TextureIds_TEXT_OUTPUT_BACKGROUND,

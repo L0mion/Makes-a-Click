@@ -41,6 +41,8 @@ public:
 
 		SpriteIds_TOOL_ICON,
 		SpriteIds_TOOL_PROPERTY_ICON,
+		SpriteIds_TOOL_ICON_BACKGROUND,
+		SpriteIds_TOOL_PROPERTY_ICON_BACKGROUND,
 
 		SpriteIds_TEXT_BACK,
 		SpriteIds_TEXT_BACKGROUND,

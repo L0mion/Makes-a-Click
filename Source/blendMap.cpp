@@ -24,33 +24,41 @@ void BlendMap::update(ID3D11DeviceContext* p_devcon,
 	int row		 = p_heightMap->getRow(p_pivot->getPosition().z);
 	float radius = p_pivot->getSize();
 	float speed  = p_pivot->getSpeed();
+	float strength = 10.0f*p_dt;
 
 	int lowX  = col - static_cast<int>(radius);
 	int highX = col + static_cast<int>(radius);
 	int lowZ  = row - static_cast<int>(radius);
 	int highZ = row + static_cast<int>(radius);
-
-	for( int x=lowX; x<highX; x++ )
+	if(fabs(speed) > 0)
 	{
-		for( int z=lowZ; z<highZ; z++ ) 
-		{	
-			
-			if(insideCircle(radius, x, z, col, row))
+		for( int x=-radius; x<radius; x++ ) 
+		{
+			for( int z=-radius; z<radius; z++ ) 
 			{
-				int index = z*m_width + x;
-				if(index >= 0 && index < m_numTexels)
+				int index = (z+row)*m_width + (x + col);
+				if(index < m_numTexels)
 				{
-					if(toolProperty == ManagementMenu::ToolPropertyIds_PROPERTY_0)
-						modifyRed(speed, index);
-					else if(toolProperty == ManagementMenu::ToolPropertyIds_PROPERTY_1)
-						modifyGreen(speed, index);
-					else if(toolProperty == ManagementMenu::ToolPropertyIds_PROPERTY_2)
-						modifyBlue(speed, index);
+					float amount = (float)radius - sqrt((float)(x*x+z*z));
+					amount = amount / (float)radius;
+					if(amount < 0.0f)
+						amount = 0.0f;
+					amount *= strength * speed;
+
+					if(index >= 0 && index < m_numTexels)
+					{
+						if(toolProperty == ManagementMenu::ToolPropertyIds_PROPERTY_0)
+							modifyTexelChannel(&(m_texels[index].m_red), amount);
+						else if(toolProperty == ManagementMenu::ToolPropertyIds_PROPERTY_1)
+							modifyTexelChannel(&(m_texels[index].m_green), amount);
+						else if(toolProperty == ManagementMenu::ToolPropertyIds_PROPERTY_2)
+							modifyTexelChannel(&(m_texels[index].m_blue), amount);
+					}
 				}
 			}
 		}
+		updateTexture(p_devcon);
 	}
-	updateTexture(p_devcon);
 }
 
 void BlendMap::setTexel(ID3D11DeviceContext* p_devcon, Texel p_texel, int p_x, int p_y)
@@ -105,7 +113,7 @@ HRESULT BlendMap::initTexBlendMap(ID3D11Device* p_device, int p_width, int p_hei
 	texDesc.Height				= p_height;
 	texDesc.MipLevels			= 1;
 	texDesc.ArraySize			= 1;
-	texDesc.Format				= DXGI_FORMAT_R8G8B8A8_UNORM;
+	texDesc.Format				= DXGI_FORMAT_R32G32B32A32_FLOAT;
 	texDesc.SampleDesc.Count	= 1;
 	texDesc.SampleDesc.Quality	= 0;
 	texDesc.Usage				= D3D11_USAGE_DYNAMIC;
@@ -126,7 +134,7 @@ HRESULT BlendMap::initSrvBlendMap(ID3D11Device* p_device)
 	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 	ZeroMemory(&srvDesc, sizeof(srvDesc));
 
-	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	srvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	srvDesc.Texture2D.MipLevels = 1;
@@ -155,38 +163,13 @@ HRESULT BlendMap::updateTexture(ID3D11DeviceContext* p_devcon)
 	return hr;
 }
 
-void BlendMap::modifyRed(float p_value, int p_index)
+void BlendMap::modifyTexelChannel(float* p_channel, float p_value)
 {
-	int newValue = m_texels[p_index].m_red;
-	newValue += static_cast<int>(p_value);
-	if(newValue > 254)
-		newValue = 254;
-	else if(newValue < 0)
-		newValue = 0;
-	
-	m_texels[p_index].m_red = newValue;
-}
-void BlendMap::modifyGreen(float p_value, int p_index)
-{
-	int newValue = m_texels[p_index].m_green;
-	newValue += static_cast<int>(p_value);
-	if(newValue > 254)
-		newValue = 254;
-	else if(newValue < 0)
-		newValue = 0;
-	
-	m_texels[p_index].m_green = newValue;
-}
-void BlendMap::modifyBlue(float p_value, int p_index)
-{
-	int newValue = m_texels[p_index].m_blue;
-	newValue += static_cast<int>(p_value);
-	if(newValue > 254)
-		newValue = 254;
-	else if(newValue < 0)
-		newValue = 0;
-	
-	m_texels[p_index].m_blue = newValue;
+	(*p_channel) += p_value;
+	if((*p_channel) > 1.0f)
+		(*p_channel) = 1.0f;
+	if((*p_channel) < 0.0f)
+		(*p_channel) = 0.0f;
 }
 
 bool BlendMap::insideCircle(float p_radius, int p_x, int p_z, int p_col, int p_row)

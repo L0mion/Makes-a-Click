@@ -246,9 +246,9 @@ void ManagementMenu::setToolPropertyIcon()
 	if(m_activeTool == ToolIds_SAND)
 	{
 		if(m_activeProperty == ToolPropertyIds_PROPERTY_0)
-			sprite->setTextureId(TextureIds::TextureIds_SANB_BUCKET);
+			sprite->setTextureId(TextureIds::TextureIds_ADD_REMOVE);
 		else if(m_activeProperty == ToolPropertyIds_PROPERTY_1)
-			sprite->setTextureId(TextureIds::TextureIds_SANB_BUCKET);
+			sprite->setTextureId(TextureIds::TextureIds_SMOOTH);
 	}
 	else if(m_activeTool == ToolIds_OBJECT)
 	{
