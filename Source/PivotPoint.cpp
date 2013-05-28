@@ -28,6 +28,7 @@ PivotPoint::PivotPoint( XInputFetcher* p_xinput, HeightMap* p_heightmap,
 PivotPoint::~PivotPoint()
 {
 	delete m_sizeControl;
+	delete m_avatar;
 }
 
 void PivotPoint::update( const float p_dt, const XMFLOAT3& p_forward,

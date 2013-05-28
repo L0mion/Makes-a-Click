@@ -4,94 +4,182 @@
 #include "PivotPoint.h"
 #include "renderer.h"
 #include "ObjectMold.h"
+#include <cstdlib>
+#include <ctime>
+#include "HeightMap.h"
+#include <DirectXMath.h>
 
 ObjectTool::ObjectTool( Renderer* p_renderer )
 {
 	m_timeSinceLastPlacement = 0.0f;
 
 	readObjects( p_renderer );
+
+	srand((unsigned int)time(NULL));
 }
 
 ObjectTool::~ObjectTool()
 {
 	//done by reader
 	//delete m_barrelMold;
+	for( int i=0; i<ObjectTypes_CNT; i++ ) {
+		for( unsigned int j=0; j<m_molds[ObjectTypes_CNT].size(); j++ ) {
+			SAFE_DELETE(m_molds[i][j]);
+		}
+	}
+
 }
 
-void ObjectTool::update( float p_dt, Renderer* p_renderer, const int p_objectType, const PivotPoint* p_pivot )
+void ObjectTool::update( float p_dt, Renderer* p_renderer,
+	const int p_objectType, const PivotPoint* p_pivot, const HeightMap* p_heightmap )
 {
 	float placeSpeed = 0.2f;
 
 	m_timeSinceLastPlacement += p_dt;
 
 	if( m_timeSinceLastPlacement > placeSpeed ){
-		if( p_pivot->getSpeed() > 0.5f ) {
-			placeObject( p_renderer, (ObjectTypes)p_objectType, p_pivot );
-			m_timeSinceLastPlacement = 0.0f;
-		}
+		placeObject( p_renderer, (ObjectTypes)p_objectType, p_pivot, p_heightmap );
+		m_timeSinceLastPlacement = 0.0f;
 	}
 }
 
-void ObjectTool::placeObject( Renderer* p_renderer, const ObjectTypes p_objectType, const PivotPoint* p_pivot )
+void ObjectTool::placeObject( Renderer* p_renderer,
+	const ObjectTypes p_objectType, const PivotPoint* p_pivot,
+	const HeightMap* p_heightmap )
 {
-		EntityBufferInfo* barrel = new EntityBufferInfo();
-		barrel->setFromMold( m_molds[p_objectType], p_renderer->getD3DManagement() );
 
-		XMFLOAT3 pivotPos = p_pivot->getPosition();
-		barrel->setSize( p_pivot->getSize() );
-		barrel->setPosition( pivotPos );
-		p_renderer->addEntity( barrel );
+		if( m_molds[p_objectType].size() > 0 )
+		{
+			float diameter = p_pivot->getSize()*2;
+			float area = diameter * DirectX::XM_PI; 
+			int numObjsToPlace = (int) area * p_pivot->getSpeed();
+			for( int i=0; i<numObjsToPlace; i++ ) {
+				int idx = rand() % m_molds[p_objectType].size();
+
+				EntityBufferInfo* obj = new EntityBufferInfo();
+				obj->setFromMold( m_molds[p_objectType][idx], p_renderer->getD3DManagement() );
+
+				XMFLOAT3 pos = getRandomPos( p_heightmap, p_pivot->getPosition(), p_pivot->getSize() );
+				obj->setPosition( pos );
+				/*obj->setSize( p_pivot->getSize() );*/
+				p_renderer->addEntity( obj );
+			}
+		}
 }
 
 void ObjectTool::readObjects( Renderer* p_renderer )
 {
-	m_molds.resize( ObjectTypes_CNT );
-
-	m_molds[ObjectTypes_FLOWER] = m_reader.omFromFilename( 
-		"../../resources/objects/flower/", "trop_shrub_01.obj",
-		false, p_renderer->getD3DManagement() );
-	m_molds[ObjectTypes_FLOWER]->m_textureId =
-		TextureIds::TextureIds_OBJ_FLOWER;
-
-	m_molds[ObjectTypes_HEMP] = m_reader.omFromFilename( 
-		"../../resources/objects/hemp/", "hemp.obj",
-		false, p_renderer->getD3DManagement() );
-	m_molds[ObjectTypes_HEMP]->m_textureId =
-		TextureIds::TextureIds_OBJ_HEMP;
-
-	m_molds[ObjectTypes_HESCO] = m_reader.omFromFilename( 
-		"../../resources/objects/hesco/", "hesco_scraps.obj",
-		false, p_renderer->getD3DManagement() );
-	m_molds[ObjectTypes_HESCO]->m_textureId =
-		TextureIds::TextureIds_OBJ_HESCO;
-
-	m_molds[ObjectTypes_MONEY] = m_reader.omFromFilename( 
-		"../../resources/objects/money/", "box.obj",
-		false, p_renderer->getD3DManagement() );
-	m_molds[ObjectTypes_MONEY]->m_textureId =
-		TextureIds::TextureIds_OBJ_MONEY;
-
-	m_molds[ObjectTypes_PALM] = m_reader.omFromFilename( 
-		"../../resources/objects/palm/", "palm_straight.obj",
-		false, p_renderer->getD3DManagement() );
-	m_molds[ObjectTypes_PALM]->m_textureId =
-		TextureIds::TextureIds_OBJ_PALM;
-
-	m_molds[ObjectTypes_PLASTIC_BARRELL] = m_reader.omFromFilename( 
-		"../../resources/objects/plasticBarrel/", "plastic_barrel_scaled.obj",
-		false, p_renderer->getD3DManagement() );
-	m_molds[ObjectTypes_PLASTIC_BARRELL]->m_textureId =
-		TextureIds::TextureIds_OBJ_PLASTIC_BARREL;
-
-	m_molds[ObjectTypes_SHRUB1] = m_reader.omFromFilename( 
-		"../../resources/objects/shrub1/", "trop_shrub_05.obj",
-		false, p_renderer->getD3DManagement() );
-	m_molds[ObjectTypes_SHRUB1]->m_textureId =
-		TextureIds::TextureIds_OBJ_SHRUB1;
-
-	m_molds[ObjectTypes_SHRUB2] = m_reader.omFromFilename( 
-		"../../resources/objects/shrub2/", "trop_shrub_03.obj",
-		false, p_renderer->getD3DManagement() );
-	m_molds[ObjectTypes_SHRUB2]->m_textureId =
-		TextureIds::TextureIds_OBJ_SHRUB2;
+	readHemp( p_renderer );
+	readShrubs( p_renderer ); 
+	readMoney( p_renderer );
+	readStones( p_renderer ); //hesco
+	readPalms( p_renderer );
+	readBarrels( p_renderer );
 } 
+
+void ObjectTool::readHemp( Renderer* p_renderer )
+{
+	addMold( ObjectTypes_HEMPS, TextureIds::TextureIds_OBJ_HEMP, 
+		"../../resources/objects/hemps/", "hemp.obj", 2.0f, p_renderer );
+	addMold( ObjectTypes_HEMPS, TextureIds::TextureIds_OBJ_HEMP, 
+		"../../resources/objects/hemps/", "hemp_flowering.obj", 4.0f, p_renderer );
+}
+
+void ObjectTool::readShrubs( Renderer* p_renderer )
+{
+	addMold( ObjectTypes_SHRUBS, TextureIds::TextureIds_OBJ_SHRUB1, 
+		"../../resources/objects/shrubs/", "trop_shrub_01.obj", 0.3f, p_renderer );
+	addMold( ObjectTypes_SHRUBS, TextureIds::TextureIds_OBJ_SHRUB2, 
+		"../../resources/objects/shrubs/", "trop_shrub_02.obj", 0.3f, p_renderer );
+	addMold( ObjectTypes_SHRUBS, TextureIds::TextureIds_OBJ_SHRUB3, 
+		"../../resources/objects/shrubs/", "trop_shrub_03.obj", 0.7f, p_renderer );
+	addMold( ObjectTypes_SHRUBS, TextureIds::TextureIds_OBJ_SHRUB4, 
+		"../../resources/objects/shrubs/", "trop_shrub_04.obj", 0.6f, p_renderer );
+	addMold( ObjectTypes_SHRUBS, TextureIds::TextureIds_OBJ_SHRUB5, 
+		"../../resources/objects/shrubs/", "trop_shrub_05.obj", 0.5f, p_renderer );
+}
+
+void ObjectTool::readMoney( Renderer* p_renderer )
+{
+	addMold( ObjectTypes_MONEY, TextureIds::TextureIds_OBJ_MONEY, 
+		"../../resources/objects/money/", "batch_clean.obj", 0.15f, p_renderer );
+	addMold( ObjectTypes_MONEY, TextureIds::TextureIds_OBJ_MONEY, 
+		"../../resources/objects/money/", "batch_used.obj", 0.15f, p_renderer );
+	addMold( ObjectTypes_MONEY, TextureIds::TextureIds_OBJ_MONEY, 
+		"../../resources/objects/money/", "box.obj", 1.0f, p_renderer );
+	addMold( ObjectTypes_MONEY, TextureIds::TextureIds_OBJ_MONEY, 
+		"../../resources/objects/money/", "pack.obj", 1.5f, p_renderer );
+	addMold( ObjectTypes_MONEY, TextureIds::TextureIds_OBJ_MONEY, 
+		"../../resources/objects/money/", "single_burned.obj", 0.15f, p_renderer );
+	addMold( ObjectTypes_MONEY, TextureIds::TextureIds_OBJ_MONEY, 
+		"../../resources/objects/money/", "single_burned_bended.obj", 0.12f, p_renderer );
+	addMold( ObjectTypes_MONEY, TextureIds::TextureIds_OBJ_MONEY, 
+		"../../resources/objects/money/", "single_clean.obj", 0.15f, p_renderer );
+	addMold( ObjectTypes_MONEY, TextureIds::TextureIds_OBJ_MONEY, 
+		"../../resources/objects/money/", "single_clean_bended.obj", 0.12f, p_renderer );
+}
+
+void ObjectTool::readStones( Renderer* p_renderer )
+{
+	addMold( ObjectTypes_HESCO, TextureIds::TextureIds_OBJ_HESCO, 
+		"../../resources/objects/hesco/", "hesco_custom.obj", 1.0f, p_renderer );
+	addMold( ObjectTypes_HESCO, TextureIds::TextureIds_OBJ_HESCO, 
+		"../../resources/objects/hesco/", "hesco_empty.obj", 1.0f, p_renderer );
+	addMold( ObjectTypes_HESCO, TextureIds::TextureIds_OBJ_HESCO, 
+		"../../resources/objects/hesco/", "hesco_sand.obj", 1.0f, p_renderer );
+	addMold( ObjectTypes_HESCO, TextureIds::TextureIds_OBJ_HESCO, 
+		"../../resources/objects/hesco/", "hesco_scraps.obj", 1.0f, p_renderer );
+	addMold( ObjectTypes_HESCO, TextureIds::TextureIds_OBJ_HESCO, 
+		"../../resources/objects/hesco/", "hesco_stones.obj", 1.0f, p_renderer );
+}
+
+void ObjectTool::readPalms( Renderer* p_renderer )
+{
+	addMold( ObjectTypes_PALM, TextureIds::TextureIds_OBJ_PALM, 
+		"../../resources/objects/palms/", "palm_bend.obj", 2.0f, p_renderer );
+	addMold( ObjectTypes_PALM, TextureIds::TextureIds_OBJ_PALM, 
+		"../../resources/objects/palms/", "palm_dual.obj", 3.5f, p_renderer );
+	addMold( ObjectTypes_PALM, TextureIds::TextureIds_OBJ_PALM, 
+		"../../resources/objects/palms/", "palm_dual_bend.obj", 2.5f, p_renderer );
+	addMold( ObjectTypes_PALM, TextureIds::TextureIds_OBJ_PALM, 
+		"../../resources/objects/palms/", "palm_straight.obj", 5.0f, p_renderer );
+	addMold( ObjectTypes_PALM, TextureIds::TextureIds_OBJ_PALM, 
+		"../../resources/objects/palms/", "palm_trio.obj", 2.0f, p_renderer );
+}
+
+void ObjectTool::readBarrels( Renderer* p_renderer )
+{
+	addMold( ObjectTypes_BARRELS, TextureIds::TextureIds_OBJ_PLASTIC_BARREL, 
+		"../../resources/objects/plasticBarrel/", "plastic_barrel_scaled.obj", 1.0f, p_renderer );
+}
+
+void ObjectTool::addMold( const ObjectTypes p_type,
+	const TextureIds::Id p_texture, const string& p_folder,
+	const string& p_fileName, const float p_stdSize, Renderer* p_renderer )
+{
+	ObjectMold* mold = m_reader.omFromFilename( 
+		p_folder, p_fileName,
+		false, p_renderer->getD3DManagement() );
+	mold->m_textureId = p_texture;
+	mold->m_stdSize = p_stdSize;
+	m_molds[p_type].push_back(mold); 
+}
+
+DirectX::XMFLOAT3 ObjectTool::getRandomPos( const HeightMap* p_heightmap,
+	const XMFLOAT3& p_centerPos, const float p_size )
+{
+	int degrees = rand()%360;
+	float rads = DirectX::XMConvertToRadians((float)degrees);
+	float resMult = 100.0f;
+	float hiResSize = (int)p_size*resMult;
+	float hiResOffset = (float)( rand() % (int)hiResSize );
+	float offset = hiResOffset/resMult;
+
+	XMFLOAT3 pos;
+	pos.x = p_centerPos.x + cos(rads)*offset;
+	pos.z = p_centerPos.z + sin(rads)*offset;
+	float height = p_heightmap->getHeight( (float)pos.x, (float)pos.z );
+	pos.y = height;
+
+	return pos;
+}

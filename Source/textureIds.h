@@ -28,19 +28,21 @@ struct TextureIds
 		TextureIds_TEXT_CURSOR,
 
 		//Objects
-		TextureIds_OBJ_FLOWER,
 		TextureIds_OBJ_HEMP,
+		TextureIds_OBJ_SHRUB1,
+		TextureIds_OBJ_SHRUB2,
+		TextureIds_OBJ_SHRUB3,
+		TextureIds_OBJ_SHRUB4,
+		TextureIds_OBJ_SHRUB5,
 		TextureIds_OBJ_HESCO,
 		TextureIds_OBJ_MONEY,
 		TextureIds_OBJ_PALM,
 		TextureIds_OBJ_PLASTIC_BARREL,
-		TextureIds_OBJ_SHRUB1,
-		TextureIds_OBJ_SHRUB2,
 		TextureIds_OBJ_SPHERE,
 
 		// Object previews
-		TextureIds_PREVIEW_FLOWER,
-		TextureIds_PREVIEW_HEMP,
+		TextureIds_PREVIEW_SHRUBS,
+		TextureIds_PREVIEW_HEMPS,
 		TextureIds_PREVIEW_HESCO,
 		TextureIds_PREVIEW_MONEY,
 		TextureIds_PREVIEW_PALM,

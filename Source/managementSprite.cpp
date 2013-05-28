@@ -311,7 +311,7 @@ void ManagementSprite::initObjectPropertySprites(Sprite* p_highlighter)
 		0.0f,
 		p_highlighter->getScale().x,
 		p_highlighter->getScale().y,
-		TextureIds::TextureIds_PREVIEW_FLOWER);
+		TextureIds::TextureIds_PREVIEW_SHRUBS);
 
 	m_sprites->at(SpriteIds_OBJECT_PROPERTY_1) = new Sprite(
 		m_sectorCoords[SectorIds_SECTOR_1].x,
@@ -320,7 +320,7 @@ void ManagementSprite::initObjectPropertySprites(Sprite* p_highlighter)
 		0.0f,
 		p_highlighter->getScale().x,
 		p_highlighter->getScale().y,
-		TextureIds::TextureIds_PREVIEW_HEMP);
+		TextureIds::TextureIds_PREVIEW_HEMPS);
 
 	m_sprites->at(SpriteIds_OBJECT_PROPERTY_2) = new Sprite(
 		m_sectorCoords[SectorIds_SECTOR_2].x,

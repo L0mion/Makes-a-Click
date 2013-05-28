@@ -256,9 +256,9 @@ void ManagementMenu::setToolPropertyIcon()
 	else if(m_activeTool == ToolIds_OBJECT)
 	{
 		if(m_activeProperty == ToolPropertyIds_PROPERTY_0)
-			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_FLOWER);
+			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_SHRUBS);
 		else if(m_activeProperty == ToolPropertyIds_PROPERTY_1)
-			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_HEMP);
+			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_HEMPS);
 		else if(m_activeProperty == ToolPropertyIds_PROPERTY_2)
 			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_HESCO);
 		else if(m_activeProperty == ToolPropertyIds_PROPERTY_3)

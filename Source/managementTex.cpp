@@ -93,69 +93,76 @@ HRESULT ManagementTex::init(ID3D11Device* p_device)
 
 	// Objects
 	if(SUCCEEDED(hr))
-		hr = loadTexture(p_device, L"../../Resources/objects/flower/flower.dds",
-		TextureIds::TextureIds_OBJ_FLOWER);
-
-	if(SUCCEEDED(hr))
-		hr = loadTexture(p_device, L"../../Resources/objects/hemp/hemp.dds",
+		hr = loadTexture(p_device, L"../../Resources/objects/hemps/hemp.dds",
 		TextureIds::TextureIds_OBJ_HEMP);
 
-	/*if(SUCCEEDED(hr)) // Fails for some unknown reason, HR_ERROR_NOT_SUPPORTED
-		hr = loadTexture(p_device, L"../../Resources/objects/hesco/hesco.dds",
-		TextureIds::TextureIds_OBJ_HESCO);*/
-	if(SUCCEEDED(hr)) // TEMPORARY
-		hr = loadTexture(p_device, L"../../Resources/objects/money/money.dds",
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/shrubs/trop_shrub_01.dds",
+		TextureIds::TextureIds_OBJ_SHRUB1);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/shrubs/trop_shrub_02.dds",
+		TextureIds::TextureIds_OBJ_SHRUB2);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/shrubs/trop_shrub_03.dds",
+		TextureIds::TextureIds_OBJ_SHRUB3);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/shrubs/trop_shrub_04.dds",
+		TextureIds::TextureIds_OBJ_SHRUB4);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/shrubs/trop_shrub_05.dds",
+		TextureIds::TextureIds_OBJ_SHRUB5);
+
+	if(SUCCEEDED(hr)) // Fails for some unknown reason, HR_ERROR_NOT_SUPPORTED
+		hr = loadTexture(p_device, L"../../Resources/objects/hesco/diffuse.dds",
 		TextureIds::TextureIds_OBJ_HESCO);
+	//if(SUCCEEDED(hr)) // TEMPORARY
+	//	hr = loadTexture(p_device, L"../../Resources/objects/money/money.dds",
+	//	TextureIds::TextureIds_OBJ_HESCO);
 
 	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Resources/objects/money/money.dds",
 		TextureIds::TextureIds_OBJ_MONEY);
 	if(SUCCEEDED(hr))
-		hr = loadTexture(p_device, L"../../Resources/objects/palm/palm.dds",
+		hr = loadTexture(p_device, L"../../Resources/objects/palms/palm.dds",
 		TextureIds::TextureIds_OBJ_PALM);
 	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Resources/objects/plasticBarrel/plastic_barrel.dds",
 		TextureIds::TextureIds_OBJ_PLASTIC_BARREL);
-	if(SUCCEEDED(hr))
-		hr = loadTexture(p_device, L"../../Resources/objects/shrub1/shrub1.dds",
-		TextureIds::TextureIds_OBJ_SHRUB1);
-	if(SUCCEEDED(hr))
-		hr = loadTexture(p_device, L"../../Resources/objects/shrub2/shrub2.dds",
-		TextureIds::TextureIds_OBJ_SHRUB2);
+	
 	if(SUCCEEDED(hr)) //HACK: use barrel's texture as sphere doesn't have one.
 		hr = loadTexture(p_device, L"../../Resources/objects/plasticBarrel/plastic_barrel.dds",
 		TextureIds::TextureIds_OBJ_SPHERE);
 
 	// Previews
 	if(SUCCEEDED(hr))
-		hr = loadTexture(p_device, L"../../Resources/objects/flower/flower.dds",
-		TextureIds::TextureIds_PREVIEW_FLOWER);
+		hr = loadTexture(p_device, L"../../Resources/objects/shrubs/preview.dds",
+		TextureIds::TextureIds_PREVIEW_SHRUBS);
 
 	if(SUCCEEDED(hr))
-		hr = loadTexture(p_device, L"../../Resources/objects/hemp/hemp.dds",
-		TextureIds::TextureIds_PREVIEW_HEMP);
+		hr = loadTexture(p_device, L"../../Resources/objects/hemps/preview.dds",
+		TextureIds::TextureIds_PREVIEW_HEMPS);
 
-	/*if(SUCCEEDED(hr)) // Fails for some unknown reason, HR_ERROR_NOT_SUPPORTED
-		hr = loadTexture(p_device, L"../../Resources/objects/hesco/hesco.dds",
-		TextureIds::TextureIds_OBJ_HESCO);*/
-	if(SUCCEEDED(hr)) // TEMPORARY
-		hr = loadTexture(p_device, L"../../Resources/objects/money/money.dds",
+	if(SUCCEEDED(hr)) // Fails for some unknown reason, HR_ERROR_NOT_SUPPORTED
+		hr = loadTexture(p_device, L"../../Resources/objects/hesco/preview.dds",
 		TextureIds::TextureIds_PREVIEW_HESCO);
+	//if(SUCCEEDED(hr)) // TEMPORARY
+	//	hr = loadTexture(p_device, L"../../Resources/objects/money/preview.dds",
+	//	TextureIds::TextureIds_PREVIEW_HESCO);
 
 	if(SUCCEEDED(hr))
-		hr = loadTexture(p_device, L"../../Resources/objects/money/money.dds",
+		hr = loadTexture(p_device, L"../../Resources/objects/money/preview.dds",
 		TextureIds::TextureIds_PREVIEW_MONEY);
 	if(SUCCEEDED(hr))
-		hr = loadTexture(p_device, L"../../Resources/objects/palm/palm.dds",
+		hr = loadTexture(p_device, L"../../Resources/objects/palms/preview.dds",
 		TextureIds::TextureIds_PREVIEW_PALM);
 	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Resources/objects/plasticBarrel/plastic_barrel.dds",
 		TextureIds::TextureIds_PREVIEW_PLASTIC_BARREL);
 	if(SUCCEEDED(hr))
-		hr = loadTexture(p_device, L"../../Resources/objects/shrub1/shrub1.dds",
+		hr = loadTexture(p_device, L"../../Resources/objects/shrubs/trop_shrub_05.dds",
 		TextureIds::TextureIds_PREVIEW_SHRUB1);
 	if(SUCCEEDED(hr))
-		hr = loadTexture(p_device, L"../../Resources/objects/shrub2/shrub2.dds",
+		hr = loadTexture(p_device, L"../../Resources/objects/shrubs/trop_shrub_03.dds",
 		TextureIds::TextureIds_PREVIEW_SHRUB2);
 	if(SUCCEEDED(hr)) //HACK: use barrel's texture as sphere doesn't have one.
 		hr = loadTexture(p_device, L"../../Resources/objects/plasticBarrel/plastic_barrel.dds",

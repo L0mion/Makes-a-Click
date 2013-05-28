@@ -142,7 +142,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 						dt);
 				} else if( g_managementMenu->getActiveTool() == ManagementMenu::ToolIds_OBJECT ) {
 					//ManagementMenu;
-					objectTool.update( dt, g_renderer, g_managementMenu->getActiveProperty(), pivot );
+					objectTool.update( dt, g_renderer,
+						g_managementMenu->getActiveProperty(), pivot, heightMap );
 				}
 
 				pivot->update( dt, cameraControl->getForward(), cameraControl->getRight() );

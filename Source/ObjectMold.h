@@ -12,6 +12,7 @@ struct ObjectMold
 {
 	string m_filePath;
 	TextureIds::Id m_textureId;
+	float m_stdSize;
 
 	vector<Vertex_PNT> m_vertices;
 	vector<int> m_indices;

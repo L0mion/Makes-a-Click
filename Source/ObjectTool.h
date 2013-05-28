@@ -2,9 +2,11 @@
 
 #include <DirectXMath.h>
 #include "ObjFileReader.h"
+#include "textureIds.h"
 
 using namespace DirectX;
 
+class HeightMap;
 class PivotPoint;
 class Renderer;
 struct ObjectMold;
@@ -14,12 +16,12 @@ class ObjectTool
 public:
 
 	enum ObjectTypes {
-		ObjectTypes_FLOWER,
-		ObjectTypes_HEMP,
+		ObjectTypes_SHRUBS,
+		ObjectTypes_HEMPS,
 		ObjectTypes_HESCO,
 		ObjectTypes_MONEY,
 		ObjectTypes_PALM,
-		ObjectTypes_PLASTIC_BARRELL,
+		ObjectTypes_BARRELS,
 		ObjectTypes_SHRUB1,
 		ObjectTypes_SHRUB2,
 		ObjectTypes_CNT
@@ -28,17 +30,32 @@ public:
 	ObjectTool(  Renderer* p_renderer );
 	virtual ~ObjectTool();
 
-	void update( float p_dt, Renderer* p_renderer, const int p_objectType, const PivotPoint* p_pivot );
+	void update( float p_dt, Renderer* p_renderer, const int p_objectType,
+		const PivotPoint* p_pivot, const HeightMap* p_heightmap);
 
 private:
-	void placeObject( Renderer* p_renderer,
-		const ObjectTypes p_objectType, const PivotPoint* p_pivot );
+	void placeObject( Renderer* p_renderer, const ObjectTypes p_objectType,
+		const PivotPoint* p_pivot, const HeightMap* p_heightmap );
 	void readObjects( Renderer* p_renderer );
+
+	void readHemp( Renderer* p_renderer );
+	void readShrubs( Renderer* p_renderer );
+	void readMoney( Renderer* p_renderer );
+	void readStones( Renderer* p_renderer );
+	void readPalms( Renderer* p_renderer );
+	void readBarrels( Renderer* p_renderer );
+
+	void addMold( const ObjectTypes p_type, const TextureIds::Id p_texture,
+		const string& p_folder, const string& p_fileName,
+		const float p_stdSize, Renderer* p_renderer );
+
+	XMFLOAT3 getRandomPos( const HeightMap* p_heightmap,
+		const XMFLOAT3& p_centerPos, const float p_size );
 
 
 private:
 	ObjFileReader m_reader;
-	vector<ObjectMold*> m_molds;
+	vector<ObjectMold*> m_molds[ObjectTypes_CNT];
 	//ObjectMold* m_barrelMold;
 	float m_timeSinceLastPlacement;
 

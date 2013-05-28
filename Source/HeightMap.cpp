@@ -97,7 +97,7 @@ vector<Model> HeightMap::createModels(/*int pTechNr, int pPassNr, int maxSize)
 }
 */
 
-float HeightMap::getHeight( float p_x, float p_z )
+float HeightMap::getHeight( float p_x, float p_z ) const
 {
 	if((p_x > (m_colCnt-1)*m_cellSize*0.5f) || (p_x < -1*(m_colCnt-1)*m_cellSize*0.5f))
 		return 5.0f; //HACK:
@@ -135,13 +135,13 @@ float HeightMap::getHeight( float p_x, float p_z )
 	}
 }
 
-float HeightMap::getHeight( int p_col, int p_row )
+float HeightMap::getHeight( int p_col, int p_row ) const
 {
 	toInBounds( &p_col, &p_row );
 	return getHeight( p_row*m_colCnt + p_col );
 }
 
-float HeightMap::getHeight( int p_idx )
+float HeightMap::getHeight( int p_idx ) const
 {
 	if( p_idx < 0 ){
 		p_idx = 0; //throw exception?
@@ -266,35 +266,35 @@ void HeightMap::smoothHeight(int p_radius, int p_row, int p_col,
 	}
 }
 
-float HeightMap::getColDiff( float p_x )
+float HeightMap::getColDiff( float p_x ) const
 {
 	return getColAsFloat( p_x ) - (float)getCol( p_x );
 }
 
-int HeightMap::getCol( float p_x )
+int HeightMap::getCol( float p_x ) const
 {
 	// Transform from terrain local space to "cell" space.
 	float col = getColAsFloat( p_x );
 	return (int)floorf(col);
 }
 
-float HeightMap::getColAsFloat( float p_x )
+float HeightMap::getColAsFloat( float p_x ) const
 {
 	return (p_x + 0.5f*(m_colCnt-1)*m_cellSize) / m_cellSize;
 }
 
-float HeightMap::getRowDiff( float p_z )
+float HeightMap::getRowDiff( float p_z ) const
 {
 	return getRowAsFloat( p_z ) - (float)getRow( p_z );
 }
 
-int HeightMap::getRow( float p_z )
+int HeightMap::getRow( float p_z ) const
 {
 	float row = getRowAsFloat( p_z );
 	return (int)floorf(row);
 }
 
-float HeightMap::getRowAsFloat( float p_z )
+float HeightMap::getRowAsFloat( float p_z ) const
 {
 	return (p_z - 0.5f*(m_rowCnt-1)*m_cellSize) / -m_cellSize;
 }
@@ -366,7 +366,7 @@ void HeightMap::toInBounds( int* inout_colBegin, int* inout_colEnd,
 	toInBounds( inout_colEnd, inout_rowEnd );
 }
 
-void HeightMap::toInBounds( int* inout_col, int* inout_row )
+void HeightMap::toInBounds( int* inout_col, int* inout_row ) const
 {
 	if( *inout_col < 0 ) {
 		*inout_col = 0;

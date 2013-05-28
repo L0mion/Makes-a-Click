@@ -58,6 +58,7 @@ HRESULT EntityBufferInfo::setFromMold( const ObjectMold* p_mold,
 		p_managementD3D );
 	m_textureId = p_mold->m_textureId;
 	m_blendState = ManagementBS::BSTypes_TRANSPARENCY;
+	setSize( p_mold->m_stdSize );
 
 	return hr;
 }
