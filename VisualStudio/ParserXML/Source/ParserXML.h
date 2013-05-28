@@ -9,7 +9,7 @@ namespace Parser_XML {
 namespace Parser_XML {
 	class ParserXML {
 	public:
-		ParserXML(std::string p_filePath, std::string p_fileName);
+		ParserXML(char* p_xml);
 		~ParserXML();
 
 		bool init();
@@ -19,9 +19,7 @@ namespace Parser_XML {
 	private:
 		bool parse(std::string p_txtToParse);
 
-		std::string m_filePath;
-		std::string m_fileName;
-		std::string m_filePathFull;
+		char* m_xml;
 
 		Parser_XML::DocXML* m_docXML;
 		bool m_memManagement; //Whether mem. responsibility lie with ParserXML.

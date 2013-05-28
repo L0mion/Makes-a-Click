@@ -20,26 +20,12 @@ namespace Util {
 namespace Loader_XML {
 	class LoaderXML {
 	public:
-		LoaderXML(
-			std::wstring	p_filePathToSearch,
-			std::wstring	p_fileEnding,
-			bool			p_recursiveSearch);
+		LoaderXML( char* p_xml );
 		~LoaderXML();
 
 		bool init( Util::MacDesc& inout_result );
 	protected:
 	private:
-		bool parse( Util::MacDesc& inout_result );
-		bool parseXML(
-			const std::wstring filePath, 
-			const std::wstring fileName, 
-			const std::wstring fileEnding,
-			Util::MacDesc& inout_result );
-
-		std::wstring m_filePathToSearch;
-		std::wstring m_fileEnding;
-		bool m_recursiveSearch;
-
-		Loader_XML::WinDetective* m_winDetective;
+		char* m_xml;
 	};
 }

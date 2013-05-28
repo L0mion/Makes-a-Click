@@ -48,30 +48,38 @@ bool WriterMAC::init() {
 	std::string path	= "../../Resources/Levels/";
 
 	std::string tarpath = path + m_mac->macDesc.name + ".tar";
+	bool oktar = false;
 
-	// Archive into tar
-	//Tartar::File f;
-	//Tartar::TarCookMem* tarcook = new Tartar::TarCookMem( f );
-	//tarcook->cook( xmlName.c_str(), xml.c_str(), xml.size() );
-	//tarcook->cook( rawName.c_str(), &raw[0], raw.size() );
-	//
+	Tartar::File f;
+	Tartar::TarCookMem* tarcook = new Tartar::TarCookMem( f );
+	oktar = tarcook->cook( xmlName.c_str(), xml.c_str(), xml.size() );
+	oktar = tarcook->cook( hmName.c_str(), (char*)&rawHM[0], rawHM.size() );
+	oktar = tarcook->cook( bmName.c_str(), (char*)&rawBM[0], rawBM.size() );
+
+	Writer_XML::Wtr* wtr = new Writer_XML::Wtr( tarpath.c_str(), (unsigned char*)f.fileData, f.fileSize );
+	bool ok = wtr->init(true);
+
+	delete tarcook;
+	delete wtr;
+
+
 	//Writer_XML::Wtr* wtr = new Writer_XML::Wtr( tarpath.c_str(), f.fileData, f.fileSize );
 	//bool ok = wtr->init( true );
 
-	std::string pathxml = path + xmlName;
-	Writer_XML::Wtr* wtr = new Writer_XML::Wtr( pathxml.c_str(), (unsigned char*)xml.c_str(), xml.size() );
-	bool ok = wtr->init(true);
-	delete wtr;
-
-	std::string pathhm = path + hmName + ".raw";
-	wtr = new Writer_XML::Wtr( pathhm.c_str(), &rawHM[0], rawHM.size() );
-	ok = wtr->init(true);
-	delete wtr;
-
-	std::string pathbm = path + bmName + ".map";
-	wtr = new Writer_XML::Wtr( pathbm.c_str(), &rawBM[0], rawBM.size() );
-	ok = wtr->init(true);
-	delete wtr;
+	//std::string pathxml = path + xmlName;
+	//Writer_XML::Wtr* wtr = new Writer_XML::Wtr( pathxml.c_str(), (unsigned char*)xml.c_str(), xml.size() );
+	//bool ok = wtr->init(true);
+	//delete wtr;
+	//
+	//std::string pathhm = path + hmName + ".raw";
+	//wtr = new Writer_XML::Wtr( pathhm.c_str(), &rawHM[0], rawHM.size() );
+	//ok = wtr->init(true);
+	//delete wtr;
+	//
+	//std::string pathbm = path + bmName + ".map";
+	//wtr = new Writer_XML::Wtr( pathbm.c_str(), &rawBM[0], rawBM.size() );
+	//ok = wtr->init(true);
+	//delete wtr;
 
 	//delete tarcook;
 	delete writerXML;
