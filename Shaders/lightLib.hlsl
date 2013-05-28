@@ -34,7 +34,7 @@ float3 parallelLight(SurfaceInfo surface, LightInfo light, float3 eyePos, float3
 	// the line of site of the light.
 
 	float diffuseFactor = dot(lightVec, normal);
-	[branch]
+	/*[branch]*/
 	if( diffuseFactor > 0.0f )
 	{
 		float specPower  = max(surface.spec.a, 1.0f);
@@ -73,7 +73,7 @@ float3 pointLight(SurfaceInfo surface, LightInfo light, float3 eyePos, float3 no
 	// the line of site of the light.
 
 	float diffuseFactor = dot(lightVec, normal);
-	[branch]
+	/*[branch]*/
 	if( diffuseFactor > 0.0f )
 	{
 		float specPower  = max(surface.spec.a, 1.0f);

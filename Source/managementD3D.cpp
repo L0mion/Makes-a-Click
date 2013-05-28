@@ -26,6 +26,10 @@ void ManagementD3D::present()
 		swapChain_->Present(0, 0);
 }
 
+void ManagementD3D::setFullscreen(bool fullscreen)
+{
+	swapChain_->SetFullscreenState(fullscreen, NULL);
+}
 void ManagementD3D::setBackBuffer()
 {
 	devcon_->OMSetRenderTargets(1, &rtvBackBuffer_, dsvDepthBuffer_);

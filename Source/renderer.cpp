@@ -31,6 +31,8 @@ Renderer::Renderer()
 
 Renderer::~Renderer()
 {
+	managementD3D_->setFullscreen(false);
+
 	SAFE_DELETE(managementD3D_);
 	SAFE_DELETE(managementShader_);
 	SAFE_DELETE(managementCB_);
@@ -174,6 +176,11 @@ HRESULT Renderer::init(HWND windowHandle)
 		hr = initManagementBS(managementD3D_->getDevice());
 	if(SUCCEEDED(hr))
 		initManagementWrite(managementD3D_->getDevice(), managementD3D_->getDeviceContext());
+
+#if !defined( DEBUG ) && !defined( _DEBUG )
+	if(SUCCEEDED(hr))
+		managementD3D_->setFullscreen(true);
+#endif
 
 	return hr;
 }

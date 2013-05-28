@@ -37,7 +37,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -56,6 +56,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)\..\Tartar\src\;$(SolutionDir)\WriterXML\Source\;$(SolutionDir)\LoaderXML\Source\;$(SolutionDir)\..\External\zlib128-dll\include\;$(SolutionDir)\Util\Source\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\..\Tartar\lib\$(Configuration)\;$(SolutionDir)\..\External\zlib128-dll\lib\;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)\LoaderXML\Source\;$(SolutionDir)\..\External\zlib128-dll\include\;$(SolutionDir)\Util\Source\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\External\zlib128-dll\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

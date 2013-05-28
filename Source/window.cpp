@@ -80,6 +80,11 @@ HRESULT Window::createWindow()
 	static const int windowBorderX = 16;
 	static const int windowBorderY = 39;
 
+#if !defined( DEBUG ) && !defined( _DEBUG )
+	SCREEN_WIDTH  = GetSystemMetrics(SM_CXSCREEN);
+	SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
+#endif
+
 	windowHandle_ = CreateWindowEx(NULL,
 								   L"WindowClass",
 								   L"Makes a Click",
