@@ -13,8 +13,8 @@ PivotPoint::PivotPoint( XInputFetcher* p_xinput, HeightMap* p_heightmap,
 
 	m_sensitivity = 64.0f;
 
-	m_position = XMFLOAT3( .0f, .0f, .0f );
-	m_size = 1.0f;
+	/*m_position = XMFLOAT3( .0f, .0f, .0f );
+	m_size = 1.0f;*/
 	m_speed = 0.0f;
 
 	int sizes[] = { 1, 3, 5, 10, 25, 50 };
@@ -51,19 +51,21 @@ void PivotPoint::update( const float p_dt, const XMFLOAT3& p_forward,
 
 void PivotPoint::setSize( const float p_size )
 {
-	m_size = p_size;
-	m_avatar->m_world._44 = 1.0f/p_size;
+	/*m_size = p_size;
+	m_avatar->m_world._44 = 1.0f/p_size;*/
+	m_avatar->setSize( p_size );
 }
-float PivotPoint::getSize() const { return m_size; }
+float PivotPoint::getSize() const { /*return m_size;*/ return m_avatar->getSize(); }
 
 void PivotPoint::setPosition( const DirectX::XMFLOAT3& p_pos )
 {
-	m_position = p_pos;
+	/*m_position = p_pos;
 	m_avatar->m_world._41 = m_position.x/m_size;
 	m_avatar->m_world._42 = m_position.y/m_size;
-	m_avatar->m_world._43 = m_position.z/m_size;
+	m_avatar->m_world._43 = m_position.z/m_size;*/
+	m_avatar->setPosition( p_pos );
 }
-DirectX::XMFLOAT3 PivotPoint::getPosition() const { return m_position; }
+DirectX::XMFLOAT3 PivotPoint::getPosition() const { /*return m_position;*/ return m_avatar->getPosition(); }
 
 void PivotPoint::setSpeed( const float p_speed ) { m_speed = p_speed; }
 float PivotPoint::getSpeed() const { return m_speed; }
@@ -71,6 +73,7 @@ float PivotPoint::getSpeed() const { return m_speed; }
 void PivotPoint::movePivot( const XMFLOAT3& p_forward, const float p_x,
 						   const XMFLOAT3& p_right, const float p_y )
 {
+	XMFLOAT3 m_position = m_avatar->getPosition();
 	m_position.x += p_forward.x * p_y;
 	m_position.z += p_forward.z * p_y;
 
@@ -78,7 +81,7 @@ void PivotPoint::movePivot( const XMFLOAT3& p_forward, const float p_x,
 	m_position.z += p_right.z * p_x;
 
 	m_position.y = m_heightmap->getHeight( m_position.x, m_position.z );
-	setPosition( m_position );
+	m_avatar->setPosition( m_position );
 }
 
 float PivotPoint::getThumbLX( const float p_dt )

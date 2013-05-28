@@ -89,10 +89,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	blendMap->psSetBlendMap(g_renderer->getD3DManagement()->getDeviceContext(), 4);
 
 	ObjFileReader reader;
-	EntityBufferInfo* blueberry = reader.ebiFromFilename( "../../resources/",
+	EntityBufferInfo* blueberry = reader.ebiFromFilename( "../../resources/objects/sphere/",
 		"sphere.obj", false, g_renderer->getD3DManagement() );
 	blueberry->m_blendState = ManagementBS::BSTypes_ADDITIVE;
-	g_renderer->addEntity( blueberry );
 
 	PivotPoint* pivot = new PivotPoint( xinput, heightMap, blueberry );
 	
@@ -103,6 +102,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		g_renderer->getD3DManagement()->getDeviceContext());
 
 	ObjectTool objectTool( g_renderer );
+
+	DebugGUI::getInstance()->hideAllBars();
 
 	if(SUCCEEDED(hr))
 	{
@@ -140,7 +141,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 						g_managementMenu->getActiveProperty(),
 						dt);
 				} else if( g_managementMenu->getActiveTool() == ManagementMenu::ToolIds_OBJECT ) {
-					objectTool.placeObject( g_renderer, ObjectTool::ObjectTypes_BARRELL, pivot );
+					//ManagementMenu;
+					objectTool.update( dt, g_renderer, g_managementMenu->getActiveProperty(), pivot );
 				}
 
 				pivot->update( dt, cameraControl->getForward(), cameraControl->getRight() );
@@ -153,6 +155,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			g_renderer->update( finalMatrix, cameraControl->getPosition() );
 			g_renderer->beginRender();
 			g_renderer->renderEntities();
+			g_renderer->renderEntityBufferInfo(blueberry);
 			g_renderer->renderSprites(g_managementMenu->getManagementSprite());
 			g_renderer->renderText(g_managementMenu->getTextStrings());
 			g_renderer->endRender();

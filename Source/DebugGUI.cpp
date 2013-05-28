@@ -53,6 +53,41 @@ void DebugGUI::setPosition( string p_barName, int p_x, int p_y )
 	result = TwDefine(stringFromParams( p_barName, "", "position", p_x, p_y ).c_str());
 }
 
+
+void DebugGUI::hideAllBars()
+{
+	/*bool moreBars = true;
+	while( moreBars ) {*/
+
+	int numBars = TwGetBarCount();
+
+	for( int i=0; i<numBars; i++ )
+	{
+		TwBar* bar = TwGetBarByIndex(i);
+		if( bar != NULL ){
+			string barName( TwGetBarName(bar) );
+
+			// if the bar name contains space, add '.
+			if( barName.find( " ", 1 ) != barName.npos ) {
+				barName.insert( 0,"'" );
+				barName.append( "'" );
+			}
+			hideBar(barName);
+		}
+	}
+}
+
+
+void DebugGUI::hideBar( string p_barName )
+{
+	stringstream ss;
+	ss << p_barName;
+	ss << " iconified=true";
+
+	int result;
+	result = TwDefine( ss.str().c_str() );
+}
+
 void DebugGUI::draw()
 {
 	TwDraw();

@@ -85,6 +85,77 @@ HRESULT ManagementTex::init(ID3D11Device* p_device)
 		hr = loadTexture(p_device, L"../../Textures/cursor.dds",
 			TextureIds::TextureIds_TEXT_CURSOR);
 
+	// Objects
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/flower/flower.dds",
+		TextureIds::TextureIds_OBJ_FLOWER);
+
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/hemp/hemp.dds",
+		TextureIds::TextureIds_OBJ_HEMP);
+
+	/*if(SUCCEEDED(hr)) // Fails for some unknown reason, HR_ERROR_NOT_SUPPORTED
+		hr = loadTexture(p_device, L"../../Resources/objects/hesco/hesco.dds",
+		TextureIds::TextureIds_OBJ_HESCO);*/
+	if(SUCCEEDED(hr)) // TEMPORARY
+		hr = loadTexture(p_device, L"../../Resources/objects/money/money.dds",
+		TextureIds::TextureIds_OBJ_HESCO);
+
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/money/money.dds",
+		TextureIds::TextureIds_OBJ_MONEY);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/palm/palm.dds",
+		TextureIds::TextureIds_OBJ_PALM);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/plasticBarrel/plastic_barrel.dds",
+		TextureIds::TextureIds_OBJ_PLASTIC_BARREL);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/shrub1/shrub1.dds",
+		TextureIds::TextureIds_OBJ_SHRUB1);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/shrub2/shrub2.dds",
+		TextureIds::TextureIds_OBJ_SHRUB2);
+	if(SUCCEEDED(hr)) //HACK: use barrel's texture as sphere doesn't have one.
+		hr = loadTexture(p_device, L"../../Resources/objects/plasticBarrel/plastic_barrel.dds",
+		TextureIds::TextureIds_OBJ_SPHERE);
+
+	// Previews
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/flower/flower.dds",
+		TextureIds::TextureIds_PREVIEW_FLOWER);
+
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/hemp/hemp.dds",
+		TextureIds::TextureIds_PREVIEW_HEMP);
+
+	/*if(SUCCEEDED(hr)) // Fails for some unknown reason, HR_ERROR_NOT_SUPPORTED
+		hr = loadTexture(p_device, L"../../Resources/objects/hesco/hesco.dds",
+		TextureIds::TextureIds_OBJ_HESCO);*/
+	if(SUCCEEDED(hr)) // TEMPORARY
+		hr = loadTexture(p_device, L"../../Resources/objects/money/money.dds",
+		TextureIds::TextureIds_PREVIEW_HESCO);
+
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/money/money.dds",
+		TextureIds::TextureIds_PREVIEW_MONEY);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/palm/palm.dds",
+		TextureIds::TextureIds_PREVIEW_PALM);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/plasticBarrel/plastic_barrel.dds",
+		TextureIds::TextureIds_PREVIEW_PLASTIC_BARREL);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/shrub1/shrub1.dds",
+		TextureIds::TextureIds_PREVIEW_SHRUB1);
+	if(SUCCEEDED(hr))
+		hr = loadTexture(p_device, L"../../Resources/objects/shrub2/shrub2.dds",
+		TextureIds::TextureIds_PREVIEW_SHRUB2);
+	if(SUCCEEDED(hr)) //HACK: use barrel's texture as sphere doesn't have one.
+		hr = loadTexture(p_device, L"../../Resources/objects/plasticBarrel/plastic_barrel.dds",
+		TextureIds::TextureIds_PREVIEW_SPHERE);
+
+
 	return hr;
 }
 HRESULT ManagementTex::loadTexture( ID3D11Device* p_device,

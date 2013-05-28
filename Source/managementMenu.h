@@ -26,7 +26,7 @@ public:
 	};
 	enum ToolPropertyIds
 	{
-		ToolPropertyIds_NONE,
+		ToolPropertyIds_NONE = -1,
 		ToolPropertyIds_PROPERTY_0,
 		ToolPropertyIds_PROPERTY_1,
 		ToolPropertyIds_PROPERTY_2,

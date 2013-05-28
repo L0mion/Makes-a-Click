@@ -68,6 +68,8 @@ private:
 	vector<array<float,3>> readPos;
 	vector<array<float,2>> readTexCoord;
 	
+	float m_maxSize;
+
 	//vector<string> mtlNames;
 	//Material currMaterial;
 	//vector<Material> materials;

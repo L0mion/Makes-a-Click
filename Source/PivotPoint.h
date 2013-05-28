@@ -39,7 +39,7 @@ private:
 
 	float m_sensitivity;
 
-	XMFLOAT3 m_position;
-	float m_size;
+	//XMFLOAT3 m_position;
+	//float m_size;
 	float m_speed;
 };

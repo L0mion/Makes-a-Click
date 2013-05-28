@@ -48,6 +48,8 @@ public:
 
 	void setSize( string p_barName, int p_x, int p_y );
 	void setPosition( string p_barName, int p_x, int p_y);
+	void hideAllBars();
+	void hideBar( string p_barName );
 
 	/** Returns zero on fail and nonzero on success as per TwEventWin */ 
 	int updateMsgProc( HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam );

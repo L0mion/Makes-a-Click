@@ -5,19 +5,11 @@
 #include "mathHelper.h"
 #include "vertex.h"
 
-EntityBufferInfo::~EntityBufferInfo()
-{
-	SAFE_RELEASE( m_vertexBuffer );
-	SAFE_RELEASE( m_indexBuffer );
-
-	m_stride = -1;
-	m_verticesCnt = -1;
-	m_indicesCnt = -1;
-}
-
 EntityBufferInfo::EntityBufferInfo()
 {
 	m_world = DirectX::XMFLOAT4X4( MathHelper::identityMatrix );
+	m_position = XMFLOAT3( .0f, .0f, .0f );
+	m_size = 1.0f;
 
 	m_verticesCnt = -1;
 	m_indicesCnt = -1;
@@ -29,6 +21,32 @@ EntityBufferInfo::EntityBufferInfo()
 	m_blendState = ManagementBS::BSTypes_DEFAULT;
 }
 
+EntityBufferInfo::~EntityBufferInfo()
+{
+	SAFE_RELEASE( m_vertexBuffer );
+	SAFE_RELEASE( m_indexBuffer );
+
+	m_stride = -1;
+	m_verticesCnt = -1;
+	m_indicesCnt = -1;
+}
+
+void EntityBufferInfo::setSize( const float p_size )
+{
+	m_size = p_size;
+	m_world._44 = 1.0f/p_size;
+}
+float EntityBufferInfo::getSize() const { return m_size; }
+
+void EntityBufferInfo::setPosition( const DirectX::XMFLOAT3& p_pos )
+{
+	m_position = p_pos;
+	m_world._41 = m_position.x/m_size;
+	m_world._42 = m_position.y/m_size;
+	m_world._43 = m_position.z/m_size;
+}
+DirectX::XMFLOAT3 EntityBufferInfo::getPosition() const { return m_position; }
+
 HRESULT EntityBufferInfo::setFromMold( const ObjectMold* p_mold,
 	const ManagementD3D* p_managementD3D )
 {
@@ -39,6 +57,7 @@ HRESULT EntityBufferInfo::setFromMold( const ObjectMold* p_mold,
 	hr = setIndexBuffer( p_mold->m_indices.size(), &p_mold->m_indices[0],
 		p_managementD3D );
 	m_textureId = p_mold->m_textureId;
+	m_blendState = ManagementBS::BSTypes_TRANSPARENCY;
 
 	return hr;
 }

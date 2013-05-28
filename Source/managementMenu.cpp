@@ -253,9 +253,21 @@ void ManagementMenu::setToolPropertyIcon()
 	else if(m_activeTool == ToolIds_OBJECT)
 	{
 		if(m_activeProperty == ToolPropertyIds_PROPERTY_0)
-			sprite->setTextureId(TextureIds::TextureIds_OBJECT);
+			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_FLOWER);
 		else if(m_activeProperty == ToolPropertyIds_PROPERTY_1)
-			sprite->setTextureId(TextureIds::TextureIds_OBJECT);
+			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_HEMP);
+		else if(m_activeProperty == ToolPropertyIds_PROPERTY_2)
+			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_HESCO);
+		else if(m_activeProperty == ToolPropertyIds_PROPERTY_3)
+			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_MONEY);
+		else if(m_activeProperty == ToolPropertyIds_PROPERTY_4)
+			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_PALM);
+		else if(m_activeProperty == ToolPropertyIds_PROPERTY_5)
+			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_PLASTIC_BARREL);
+		else if(m_activeProperty == ToolPropertyIds_PROPERTY_6)
+			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_SHRUB1);
+		else if(m_activeProperty == ToolPropertyIds_PROPERTY_7)
+			sprite->setTextureId(TextureIds::TextureIds_PREVIEW_SHRUB2);
 	}
 	else if(m_activeTool == ToolIds_TEXTURE_BRUSH)
 	{
@@ -978,6 +990,14 @@ void ManagementMenu::useObjectPropertiesMenu(double p_analogStickX, double p_ana
 		objectPropertiesSector2();
 	if(insideSector3(p_analogStickX, p_analogStickY))
 		objectPropertiesSector3();
+	if(insideSector4(p_analogStickX, p_analogStickY))
+		objectPropertiesSector4();
+	if(insideSector5(p_analogStickX, p_analogStickY))
+		objectPropertiesSector5();
+	if(insideSector6(p_analogStickX, p_analogStickY))
+		objectPropertiesSector6();
+	if(insideSector7(p_analogStickX, p_analogStickY))
+		objectPropertiesSector7();
 
 	moveSpriteToSector(p_analogStickX, p_analogStickY, ManagementSprite::SpriteIds_CIRCLE_HIGHLIGHT);
 }
@@ -985,7 +1005,7 @@ void ManagementMenu::objectPropertiesSector0()
 {
 	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_0;
 
-	std::wstring text = L"Object Property 0";
+	std::wstring text = L"Flower";
 	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
 
 	m_textStrings.push_back(
@@ -997,7 +1017,7 @@ void ManagementMenu::objectPropertiesSector1()
 {
 	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_1;
 
-	std::wstring text = L"Object Property 1";
+	std::wstring text = L"Hemp";
 	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
 
 	m_textStrings.push_back(
@@ -1009,7 +1029,7 @@ void ManagementMenu::objectPropertiesSector2()
 {
 	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_2;
 
-	std::wstring text = L"Object Property 2";
+	std::wstring text = L"Hesco Box";
 	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
 
 	m_textStrings.push_back(
@@ -1021,7 +1041,7 @@ void ManagementMenu::objectPropertiesSector3()
 {
 	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_3;
 
-	std::wstring text = L"Object Property 3";
+	std::wstring text = L"Money";
 	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
 
 	m_textStrings.push_back(
@@ -1031,15 +1051,51 @@ void ManagementMenu::objectPropertiesSector3()
 }
 void ManagementMenu::objectPropertiesSector4()
 {
+	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_4;
+
+	std::wstring text = L"Palm";
+	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
+
+	m_textStrings.push_back(
+		new Text(text,
+		textPos,
+		m_textColor));
 }
 void ManagementMenu::objectPropertiesSector5()
 {
+	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_5;
+
+	std::wstring text = L"Plastic Barrel";
+	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
+
+	m_textStrings.push_back(
+		new Text(text,
+		textPos,
+		m_textColor));
 }
 void ManagementMenu::objectPropertiesSector6()
 {
+	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_6;
+
+	std::wstring text = L"Shrub 1";
+	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
+
+	m_textStrings.push_back(
+		new Text(text,
+		textPos,
+		m_textColor));
 }
 void ManagementMenu::objectPropertiesSector7()
 {
+	m_tempSelectedProperty = ToolPropertyIds_PROPERTY_7;
+
+	std::wstring text = L"Shrub 2";
+	DirectX::XMFLOAT2 textPos = calcTextPosForCenter(text);
+
+	m_textStrings.push_back(
+		new Text(text,
+		textPos,
+		m_textColor));
 }
 void ManagementMenu::objectPropertiesSectorNone()
 {

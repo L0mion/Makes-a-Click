@@ -35,21 +35,21 @@ float4 ps( VSHeightMapOut psIn ) : SV_TARGET
 	float3 lightOut = parallelLight( surface, light, cameraPos,
 		psIn.normal.xyz, psIn.position.xyz );
 
-	float3 colorSand	= texSand.Sample( ssSprite, psIn.texCoord ).xyz;
-	float3 colorStone	= texStone.Sample(ssSprite, psIn.texCoord).xyz;
-	float3 colorGrass	= texGrass.Sample(ssSprite, psIn.texCoord).xyz;
-	float3 colorGravel	= texGravel.Sample(ssSprite, psIn.texCoord).xyz;
+	float4 colorSand	= texSand.Sample( ssSprite, psIn.texCoord ).xyzw;
+	float4 colorStone	= texStone.Sample(ssSprite, psIn.texCoord).xyzw;
+	float4 colorGrass	= texGrass.Sample(ssSprite, psIn.texCoord).xyzw;
+	float4 colorGravel	= texGravel.Sample(ssSprite, psIn.texCoord).xyzw;
 	
 	float2 unTiledTex = float2(psIn.texCoord.x/255.0f, psIn.texCoord.y/255.0f); 
 	float4 blendFactor = texBlendMap.Sample(ssSprite, unTiledTex);
 
-	float3 color = colorSand;
+	float4 color = colorSand;
 	color = lerp(color, colorStone, blendFactor.x);
 	color = lerp(color, colorGrass, blendFactor.y);
 	color = lerp(color, colorGravel, blendFactor.z);
 
-	float4 finalCol = float4( color*lightOut, 1.0f ); 
-
+	//float4 finalCol = float4( color*lightOut, 1.0f ); 
+	float4 finalCol = color*float4(lightOut,1.0f);
 	//return psIn.normal;
 	return finalCol;
 }

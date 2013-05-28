@@ -89,5 +89,5 @@ settings.input
 
 ### ADD EXCEPTIONS TO RULES ABOVE!!!
 # Exceptions
-!External/*
-!Resources/*
+!/External
+!/Resources

@@ -15,6 +15,8 @@ ObjFileReader::ObjFileReader()
 	//deque<string> test2 = split(a, '/');
 	//deque<string> test3 = split(a, 'd');
 	//deque<string> test4 = split(a, 'm');
+
+	m_maxSize = 1.0f;
 }
 
 ObjFileReader::~ObjFileReader()
@@ -161,6 +163,9 @@ int ObjFileReader::readFile( string p_folder, string p_fileName,
 		readNorm.clear();
 		readPos.clear();
 		readTexCoord.clear();
+		m_vertices.clear();
+		m_indices.clear();
+		m_maxSize = 0.0f;
 		/*materials.clear();*/
 		if(objFile)
 		{
@@ -225,6 +230,14 @@ int ObjFileReader::readFile( string p_folder, string p_fileName,
 				}
 			}
 			/*createModel();*/
+			for( unsigned int i=0; i<m_vertices.size(); i++ ) {
+				m_vertices[i].position[Coords::X] /= m_maxSize;
+				m_vertices[i].position[Coords::Y] /= m_maxSize;
+				m_vertices[i].position[Coords::Z] /= m_maxSize;
+			}
+
+		} else {
+			throw exception("file not found in obj reader");
 		}
 		/*return models;*/
 		ObjectMold* mold = new ObjectMold();
@@ -314,6 +327,15 @@ void ObjFileReader::readVertices(vector<string> p_lineWords)
 	pos[Coords::Y] = (float)atof(p_lineWords[1].c_str());
 	pos[Coords::Z] = (float)atof(p_lineWords[2].c_str());
 	readPos.push_back(pos);
+
+	if( pos[Coords::X] > m_maxSize ){
+		m_maxSize = pos[Coords::X];
+	} else if( pos[Coords::Y] > m_maxSize ){
+		m_maxSize = pos[Coords::Y];
+	} else if( pos[Coords::Z] > m_maxSize ){
+		m_maxSize = pos[Coords::Z];
+	}
+
 }
 
 void ObjFileReader::readTextureUV(vector<string> p_lineWords)

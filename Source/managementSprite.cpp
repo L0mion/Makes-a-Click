@@ -291,7 +291,7 @@ void ManagementSprite::initObjectPropertySprites(Sprite* p_highlighter)
 		0.0f,
 		p_highlighter->getScale().x,
 		p_highlighter->getScale().y,
-		TextureIds::TextureIds_OBJECT);
+		TextureIds::TextureIds_PREVIEW_FLOWER);
 
 	m_sprites->at(SpriteIds_OBJECT_PROPERTY_1) = new Sprite(
 		m_sectorCoords[SectorIds_SECTOR_1].x,
@@ -300,7 +300,7 @@ void ManagementSprite::initObjectPropertySprites(Sprite* p_highlighter)
 		0.0f,
 		p_highlighter->getScale().x,
 		p_highlighter->getScale().y,
-		TextureIds::TextureIds_OBJECT);
+		TextureIds::TextureIds_PREVIEW_HEMP);
 
 	m_sprites->at(SpriteIds_OBJECT_PROPERTY_2) = new Sprite(
 		m_sectorCoords[SectorIds_SECTOR_2].x,
@@ -309,7 +309,7 @@ void ManagementSprite::initObjectPropertySprites(Sprite* p_highlighter)
 		0.0f,
 		p_highlighter->getScale().x,
 		p_highlighter->getScale().y,
-		TextureIds::TextureIds_OBJECT);
+		TextureIds::TextureIds_PREVIEW_HESCO);
 
 	m_sprites->at(SpriteIds_OBJECT_PROPERTY_3) = new Sprite(
 		m_sectorCoords[SectorIds_SECTOR_3].x,
@@ -318,7 +318,43 @@ void ManagementSprite::initObjectPropertySprites(Sprite* p_highlighter)
 		0.0f,
 		p_highlighter->getScale().x,
 		p_highlighter->getScale().y,
-		TextureIds::TextureIds_OBJECT);
+		TextureIds::TextureIds_PREVIEW_MONEY);
+
+	m_sprites->at(SpriteIds_OBJECT_PROPERTY_4) = new Sprite(
+		m_sectorCoords[SectorIds_SECTOR_4].x,
+		m_sectorCoords[SectorIds_SECTOR_4].y,
+		0.0f,
+		0.0f,
+		p_highlighter->getScale().x,
+		p_highlighter->getScale().y,
+		TextureIds::TextureIds_PREVIEW_PALM);
+
+	m_sprites->at(SpriteIds_OBJECT_PROPERTY_5) = new Sprite(
+		m_sectorCoords[SectorIds_SECTOR_5].x,
+		m_sectorCoords[SectorIds_SECTOR_5].y,
+		0.0f,
+		0.0f,
+		p_highlighter->getScale().x,
+		p_highlighter->getScale().y,
+		TextureIds::TextureIds_PREVIEW_PLASTIC_BARREL);
+
+	m_sprites->at(SpriteIds_OBJECT_PROPERTY_6) = new Sprite(
+		m_sectorCoords[SectorIds_SECTOR_6].x,
+		m_sectorCoords[SectorIds_SECTOR_6].y,
+		0.0f,
+		0.0f,
+		p_highlighter->getScale().x,
+		p_highlighter->getScale().y,
+		TextureIds::TextureIds_PREVIEW_SHRUB1);
+
+	m_sprites->at(SpriteIds_OBJECT_PROPERTY_7) = new Sprite(
+		m_sectorCoords[SectorIds_SECTOR_7].x,
+		m_sectorCoords[SectorIds_SECTOR_7].y,
+		0.0f,
+		0.0f,
+		p_highlighter->getScale().x,
+		p_highlighter->getScale().y,
+		TextureIds::TextureIds_PREVIEW_SHRUB2);
 }
 void ManagementSprite::initTextureBrushPropertySprites(Sprite* p_highlighter)
 {
@@ -470,6 +506,10 @@ void ManagementSprite::setSpriteCollectionObjectPropertiesMenu()
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT_PROPERTY_1));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT_PROPERTY_2));
 	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT_PROPERTY_3));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT_PROPERTY_4));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT_PROPERTY_5));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT_PROPERTY_6));
+	m_spriteCollection->push_back(m_sprites->at(SpriteIds_OBJECT_PROPERTY_7));
 }
 void ManagementSprite::setSpriteCollectionTextureBrushPropertiesMenu()
 {

@@ -1,0 +1,27 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 05.06.2012 22:49:44
+
+#
+# object burned
+#
+
+v  -9.7463 0.0000 5.0000
+v  9.7463 0.0000 5.0000
+v  9.7463 0.0000 -5.0000
+v  -9.7463 0.0000 -5.0000
+# 4 vertices
+
+vn 0.0000 1.0000 -0.0000
+# 1 vertex normals
+
+vt 0.6585 0.1510 0.0000
+vt 0.6585 0.0161 0.0000
+vt 0.7277 0.0161 0.0000
+vt 0.7277 0.1510 0.0000
+# 4 texture coords
+
+g burned
+s 4
+f 1/1/1 2/2/1 3/3/1 4/4/1 
+# 1 polygons
+
