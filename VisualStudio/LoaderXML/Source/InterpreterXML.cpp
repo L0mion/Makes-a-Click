@@ -10,7 +10,7 @@ namespace Loader_XML {
 		//Do nothing.
 	}
 
-	bool InterpreterXML::init( Util::Mac& io_result ) {
+	bool InterpreterXML::init( Util::MacDesc& io_result ) {
 		bool sucessfulInterpret = false;
 
 		rapidxml::xml_node<>* curNode = m_toInterpret->first_node( Util::Node_MAC.c_str() );
@@ -29,7 +29,7 @@ namespace Loader_XML {
 		return sucessfulInterpret;
 	}
 
-	bool InterpreterXML::interpretResource( Util::Mac& io_result, rapidxml::xml_node<>* p_curNode ) {
+	bool InterpreterXML::interpretResource( Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode ) {
 		bool validResource = nextNode( &p_curNode, Util::Node_Resource );
 		if( validResource==true ) {
 			//Get MAC-attributes:
@@ -46,7 +46,7 @@ namespace Loader_XML {
 		return validResource;
 	}
 
-	bool InterpreterXML::interpretHeightmap( Util::Mac& io_result, rapidxml::xml_node<>* p_curNode ) {
+	bool InterpreterXML::interpretHeightmap( Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode ) {
 		//Name
 		std::string val;
 		bool validHeightMap = getAttVal( p_curNode, Util::Att_Resource_Name, val );

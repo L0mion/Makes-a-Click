@@ -5,7 +5,7 @@
 #include <string>
 
 namespace Util {
-	struct Mac;
+	struct MacDesc;
 }
 
 namespace Loader_XML {
@@ -14,12 +14,12 @@ namespace Loader_XML {
 		InterpreterXML( rapidxml::xml_document<>* p_toInterpret );
 		~InterpreterXML();
 	
-		bool init( Util::Mac& io_result );
+		bool init( Util::MacDesc& io_result );
 	protected:
 	private:
 		// OBS! This function is not yet capable to fetch multiple Resources. OBS! //
-		bool interpretResource(		Util::Mac& io_result, rapidxml::xml_node<>* p_curNode );
-		bool interpretHeightmap(	Util::Mac& io_result, rapidxml::xml_node<>* p_curNode );
+		bool interpretResource(		Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode );
+		bool interpretHeightmap(	Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode );
 
 		bool getAttVal( 
 			rapidxml::xml_node<>*	p_curNode,

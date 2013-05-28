@@ -1,5 +1,5 @@
 #pragma once
 
 #include "UtilString.h"
-#include "Mac.h"
+#include "MacDesc.h"
 #include "texel.h"

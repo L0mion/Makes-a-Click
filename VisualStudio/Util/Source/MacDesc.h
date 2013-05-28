@@ -48,7 +48,7 @@ namespace Util {
 		float posZ;
 	};
 	
-	struct Mac {
+	struct MacDesc {
 		std::string name;
 		std::string version;
 	

@@ -4,7 +4,7 @@
 #include "WriterXML.h"
 
 namespace Writer_XML {
-	WriterXML::WriterXML( Util::Mac& p_mac ) {
+	WriterXML::WriterXML( Util::MacDesc& p_mac ) {
 		m_mac = &p_mac;
 
 		m_xmler = nullptr;
