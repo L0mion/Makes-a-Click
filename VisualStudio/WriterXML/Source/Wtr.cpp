@@ -2,12 +2,10 @@
 
 namespace Writer_XML {
 	Wtr::Wtr( 
-		std::string& p_fileName,
-		std::string& p_filePath,
-		std::string& p_toWrite ) {
-		m_fileName	= &p_fileName;
-		m_filePath	= &p_filePath;
-		m_toWrite	= &p_toWrite;
+		const char* p_filename,
+		const char* p_data,
+		unsigned long p_dataCnt) : m_filename(p_filename), m_data(p_data) {
+		m_dataCnt = p_dataCnt;
 
 		m_outputStream = nullptr;
 	}
@@ -20,21 +18,25 @@ namespace Writer_XML {
 		}
 	}
 
-	bool Wtr::init() {
+	bool Wtr::init( bool p_binary ) {
 		bool sucessfulWt = false;
-
-		std::string fullPath = *m_filePath;
-		fullPath += *m_fileName;
 		
 		m_outputStream = new std::ofstream();
-		m_outputStream->open (
-			fullPath, 
-			std::ios::out );
+		if( p_binary==true ) {
+			m_outputStream->open(
+				m_filename, 
+				std::ios::out | std::ios::binary );
+		} else {
+			m_outputStream->open (
+				m_filename, 
+				std::ios::out );
+		}
 		
 		m_wtrStatus = WtrStatuses_OK;
 		getWtrStatus( m_wtrStatus );
 		if( m_wtrStatus == WtrStatuses_OK ) {
 			wt();
+			m_outputStream->close();
 			sucessfulWt = true;
 		}
 
@@ -42,7 +44,7 @@ namespace Writer_XML {
 	}
 
 	void Wtr::wt() {
-		*m_outputStream << m_toWrite;
+		m_outputStream->write( m_data, m_dataCnt );
 	}
 
 	void Wtr::getWtrStatus( WtrStatuses& p_wtrStatus ) {

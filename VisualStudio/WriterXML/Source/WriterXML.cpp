@@ -4,19 +4,22 @@
 #include "WriterXML.h"
 
 namespace Writer_XML {
-	WriterXML::WriterXML( DescMAC& p_descMac ) {
-		m_descMac = &p_descMac;
+	WriterXML::WriterXML( Util::Mac& p_mac ) {
+		m_mac = &p_mac;
 
 		m_xmler = nullptr;
 	}
 	WriterXML::~WriterXML() {
-		//Do nothing.
+		if( m_xmler!=nullptr ) {
+			delete m_xmler;
+		}
 	}
 
-	void WriterXML::init() {
-		std::string TEMPORARY_PATH = ""; //TMEP
-
-		m_xmler = new Xmler(TEMPORARY_PATH, *m_descMac);
-		m_xmler->init();
+	void WriterXML::init( std::string& io_xml ) {
+		
+		//Observe the temporary path
+		std::string TEMPORARY_PATH = "";
+		m_xmler = new Xmler(TEMPORARY_PATH, *m_mac);
+		m_xmler->init( io_xml );
 	}
 }

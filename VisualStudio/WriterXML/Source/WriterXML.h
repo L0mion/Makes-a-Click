@@ -2,21 +2,24 @@
 
 #include "DescMAC.h"
 
+namespace Util {
+	struct Mac;
+}
+
 namespace Writer_XML {
-	class DescMAC;
 	class Xmler;
 }
 
 namespace Writer_XML {
 	class WriterXML {
 	public:
-		WriterXML( DescMAC& p_descMac );
+		WriterXML( Util::Mac& p_mac );
 		~WriterXML();
 
-		void init();
+		void init( std::string& io_xml );
 	protected:
 	private:
-		DescMAC* m_descMac;
+		Util::Mac* m_mac;
 		Xmler* m_xmler;
 	};
 }

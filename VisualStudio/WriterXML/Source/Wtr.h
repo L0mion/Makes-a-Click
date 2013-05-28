@@ -14,20 +14,24 @@ namespace Writer_XML {
 	class Wtr { //Writer! :D
 	public:
 		Wtr(
-			std::string& p_fileName,
-			std::string& p_filePath,
-			std::string& p_toWrite );
+			const char* p_filename,
+			const char* p_data,
+			unsigned long p_dataCnt);
 		~Wtr();
 
-		bool init();
+		bool init( bool p_binary );
 		void wt(); //Write! :D
 	protected:
 	private:
 		void getWtrStatus( WtrStatuses& p_wtrStatus );
 
-		std::string* m_fileName;
-		std::string* m_filePath;
-		std::string* m_toWrite;
+		const char* m_filename;
+		const char* m_data;
+		unsigned long m_dataCnt;
+
+		//std::string* m_fileName;
+		//std::string* m_filePath;
+		//std::string* m_toWrite;
 		
 		std::ofstream* m_outputStream;
 		WtrStatuses m_wtrStatus;

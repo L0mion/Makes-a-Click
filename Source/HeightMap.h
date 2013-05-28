@@ -34,6 +34,10 @@ public:
 	int getCol( float p_x );
 	int getRow( float p_z );
 
+	vector<float>& getHeightmap() { return m_heightMap; }
+
+	void updateHeightmap();
+
 private:
 	void modifyHeight( int p_radius, int p_row, int p_col,
 		float p_speed, float p_lowLimit, float p_hightLimit, float p_dt);

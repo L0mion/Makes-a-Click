@@ -194,6 +194,12 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot,
 	}
 }
 
+void HeightMap::updateHeightmap() {
+	for( unsigned int i = 0; i < m_heightMap.size(); i++ ) {
+		m_heightMap[i] = m_vertices[i].position[Coords::Y];
+	}
+}
+
 void HeightMap::modifyHeight( int p_radius, int p_row, int p_col,
 							  float p_speed, float p_lowLimit, float p_hightLimit, float p_dt)
 {

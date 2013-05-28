@@ -14,6 +14,7 @@
     <ClCompile Include="Source\LoaderHeightmap.cpp" />
     <ClCompile Include="Source\LoaderMAC.cpp" />
     <ClCompile Include="Source\LoaderRaw.cpp" />
+    <ClCompile Include="Source\WriterMAC.cpp" />
     <ClCompile Include="Source\WriterZlib.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -21,6 +22,7 @@
     <ClInclude Include="Source\LoaderMAC.h" />
     <ClInclude Include="Source\LoaderRaw.h" />
     <ClInclude Include="Source\Mac.h" />
+    <ClInclude Include="Source\WriterMAC.h" />
     <ClInclude Include="Source\WriterZlib.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -52,8 +54,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)\LoaderXML\Source\;$(SolutionDir)\..\External\zlib128-dll\include\;$(SolutionDir)\Util\Source\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\External\zlib128-dll\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\Tartar\src\;$(SolutionDir)\WriterXML\Source\;$(SolutionDir)\LoaderXML\Source\;$(SolutionDir)\..\External\zlib128-dll\include\;$(SolutionDir)\Util\Source\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\Tartar\lib\$(Configuration)\;$(SolutionDir)\..\External\zlib128-dll\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
