@@ -198,7 +198,7 @@ void ManagementSprite::initToolIconSprites(float p_aspectRatio)
 						0.0f,
 						0.1f/p_aspectRatio,
 						0.1f,
-						TextureIds::TextureIds_SANB_BUCKET);
+						TextureIds::TextureIds_ADD_REMOVE);
 }
 void ManagementSprite::initMenuSprites(float p_aspectRatio)
 {
@@ -256,7 +256,7 @@ void ManagementSprite::initSandPropertySprites(Sprite* p_highlighter)
 		0.0f,
 		p_highlighter->getScale().x,
 		p_highlighter->getScale().y,
-		TextureIds::TextureIds_SANB_BUCKET);
+		TextureIds::TextureIds_ADD_REMOVE);
 
 	m_sprites->at(SpriteIds_SAND_PROPERTY_1) = new Sprite(m_sectorCoords[SectorIds_SECTOR_1].x,
 		m_sectorCoords[SectorIds_SECTOR_1].y,
@@ -264,7 +264,7 @@ void ManagementSprite::initSandPropertySprites(Sprite* p_highlighter)
 		0.0f,
 		p_highlighter->getScale().x,
 		p_highlighter->getScale().y,
-		TextureIds::TextureIds_SANB_BUCKET);
+		TextureIds::TextureIds_SMOOTH);
 
 	m_sprites->at(SpriteIds_SAND_PROPERTY_2) = new Sprite(m_sectorCoords[SectorIds_SECTOR_2].x,
 		m_sectorCoords[SectorIds_SECTOR_2].y,
