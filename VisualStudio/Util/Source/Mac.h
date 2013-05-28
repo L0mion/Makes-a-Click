@@ -22,6 +22,8 @@ namespace Util {
 	static const std::string Resource_Type_Heightmap	= "Heightmap";
 	static const std::string Resource_Type_Blendmap		= "Blendmap";
 
+	static const std::string Resource_Type_Object_Barrel = "Barrel";
+
 	struct MacHeightmap {
 		std::string name;
 		std::string ending;
@@ -37,6 +39,13 @@ namespace Util {
 		std::string name;
 		std::string width;
 		std::string height;
+	};
+
+	struct MacObject {
+		std::string type;
+		float posX;
+		float posY;
+		float posZ;
 	};
 	
 	struct Mac {
