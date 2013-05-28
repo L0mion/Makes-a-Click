@@ -1,6 +1,8 @@
 #pragma once
 
+#include <vector>
 #include <string>
+#include <sstream>
 
 namespace Util {
 	//Nodes
@@ -17,12 +19,16 @@ namespace Util {
 	static const std::string Att_Resource_CellSize	= "CellSize";
 	static const std::string Att_Resource_Scale		= "Scale"	;
 	static const std::string Att_Resource_Offset	= "Offset"	;
+	static const std::string Att_Resource_Pos_X		= "PosX"	;
+	static const std::string Att_Resource_Pos_Y		= "PosY"	;
+	static const std::string Att_Resource_Pos_Z		= "PosZ"	;
 
 	//Expected types
 	static const std::string Resource_Type_Heightmap	= "Heightmap";
 	static const std::string Resource_Type_Blendmap		= "Blendmap";
 
-	static const std::string Resource_Type_Object_Barrel = "Barrel";
+	static const std::string Resource_Type_Object = "Object";
+	static const std::string Object_Type_Barrel = "Barrel";
 
 	struct MacHeightmap {
 		std::string name;
@@ -42,7 +48,7 @@ namespace Util {
 	};
 
 	struct MacObject {
-		std::string type;
+		std::string name;
 		float posX;
 		float posY;
 		float posZ;
@@ -55,5 +61,7 @@ namespace Util {
 		// Resources
 		MacHeightmap heightmap;
 		MacBlendmap blendmap;
+
+		std::vector<MacObject> objects;
 	};
 }

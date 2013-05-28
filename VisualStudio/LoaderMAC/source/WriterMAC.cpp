@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <cstdlib>
 #include <stdio.h>
-#include <Tartar.h> //awwwyeah
+//#include <Tartar.h> //awwwyeah
 #include <string>
 
 #include "Mac.h"

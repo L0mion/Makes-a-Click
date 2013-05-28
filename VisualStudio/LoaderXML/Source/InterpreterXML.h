@@ -20,6 +20,7 @@ namespace Loader_XML {
 		// OBS! This function is not yet capable to fetch multiple Resources. OBS! //
 		bool interpretResource(		Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode );
 		bool interpretHeightmap(	Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode );
+		bool interpretObject(		Util::MacDesc& io_result, rapidxml::xml_node<>* p_curNode );
 
 		bool getAttVal( 
 			rapidxml::xml_node<>*	p_curNode,

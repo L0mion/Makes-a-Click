@@ -1,4 +1,5 @@
 #include <string>
+#include <sstream>
 #include <rapidxml_print.hpp>
 
 #include <Util.h>
@@ -51,6 +52,24 @@ namespace Writer_XML {
 		appendAtt( n, Util::Att_Resource_Scale,		m_mac->heightmap.scale			);
 		appendAtt( n, Util::Att_Resource_Offset,	m_mac->heightmap.offset			);
 		p->append_node( n );
+
+		std::ostringstream oStream;
+		for(unsigned  int i=0; i<m_mac->objects.size(); i++)
+		{
+			n = allocNode( Util::Node_Resource );
+			appendAtt( n, Util::Att_Resource_Type, Util::Resource_Type_Object );
+			appendAtt( n, Util::Att_Resource_Name, m_mac->objects[i].name );
+			oStream.str(std::string());
+			oStream << m_mac->objects[i].posX;
+			appendAtt( n, Util::Att_Resource_Pos_X, oStream.str() );
+			oStream.str(std::string());
+			oStream << m_mac->objects[i].posY;
+			appendAtt( n, Util::Att_Resource_Pos_Y, oStream.str() );
+			oStream.str(std::string());
+			oStream << m_mac->objects[i].posZ;
+			appendAtt( n, Util::Att_Resource_Pos_Z, oStream.str() );
+			p->append_node( n );
+		}
 
 		getXmlAsString( io_xml );
 	}

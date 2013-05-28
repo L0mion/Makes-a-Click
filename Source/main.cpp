@@ -32,6 +32,7 @@
 //io
 #include <LoaderMAC.h>
 #include <WriterMAC.h>
+#include <MacDesc.h>
 #include "ObjectTool.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
@@ -102,7 +103,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
 		g_renderer->getD3DManagement()->getDeviceContext());
 
-	ObjectTool objectTool( g_renderer );
+	std::vector<Util::MacObject> macObjects;
+	ObjectTool objectTool( g_renderer, macObjects );
 
 	if(SUCCEEDED(hr))
 	{
@@ -173,6 +175,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	mac.macDesc.blendmap.name = "TestLvl";
 	mac.macDesc.blendmap.width = Util::UtilString::Int2Std(blendMap->getWidth());
 	mac.macDesc.blendmap.height = Util::UtilString::Int2Std(blendMap->getHeight());
+	mac.macDesc.objects = objectTool.getMacObjects();
 	
 	WriterMAC* writerMAC = new WriterMAC( mac );
 	bool okSave = writerMAC->init();
