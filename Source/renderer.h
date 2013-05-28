@@ -26,7 +26,7 @@ public:
 	~Renderer();
 
 	void beginRender();
-	void renderHeightMap( HeightMap* p_heightMap );
+	void renderHeightMap( EntityBufferInfo* p_info );
 	void renderSprites(ManagementSprite* p_managementSprite);
 	void renderEntities();
 	void renderEntityBufferInfo( EntityBufferInfo* p_info );

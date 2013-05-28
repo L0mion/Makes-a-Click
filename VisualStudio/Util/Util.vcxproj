@@ -67,7 +67,8 @@
     <ClCompile Include="Source\UtilString.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Mac.h" />
+    <ClInclude Include="Source\MacDesc.h" />
+    <ClInclude Include="Source\texel.h" />
     <ClInclude Include="Source\Util.h" />
     <ClInclude Include="Source\UtilString.h" />
   </ItemGroup>

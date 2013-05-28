@@ -57,16 +57,37 @@ void Renderer::beginRender()
 	managementD3D_->setBackBuffer();
 
 	managementShader_->setShader(devcon, ManagementShader::ShaderIds_HEIGHTMAP);
-	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_STONE, 1);
+	/*managementTex_->psSetTexture(devcon, TextureIds::TextureIds_STONE, 1);
 	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_GRASS, 2);
-	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_GRAVEL, 3);
+	managementTex_->psSetTexture(devcon, TextureIds::TextureIds_GRAVEL, 3);*/
 	//managementShader_->setShader(devcon, ManagementShader::ShaderIds_DEFAULT);
 }
 
-void Renderer::renderHeightMap( HeightMap* p_heightMap )
+void Renderer::renderHeightMap( EntityBufferInfo* p_info )
 {
-	EntityBufferInfo* info = NULL;
-	//info = p_heightMap->getEntityBufferInfo();
+	ID3D11DeviceContext* devcon = managementD3D_->getDeviceContext();
+
+	managementBS_->setBlendState( devcon, p_info->m_blendState );
+	managementSS_->setSS(devcon, ManagementSS::SSTypes_WRAP, 0);
+	managementCB_->vsSetCB(devcon, CBTypes_OBJECT);
+	managementCB_->updateCBObject( devcon, p_info->m_world );
+
+	//managementTex_->psSetTexture( devcon, p_info->m_textureId, 0 );
+	managementTex_->psSetTexture( devcon, TextureIds::TextureIds_HEIGHTMAP, 0);
+	managementTex_->psSetTexture( devcon, TextureIds::TextureIds_STONE, 1);
+	managementTex_->psSetTexture( devcon, TextureIds::TextureIds_GRASS, 2);
+	managementTex_->psSetTexture( devcon, TextureIds::TextureIds_GRAVEL, 3);
+
+	UINT stride = p_info->m_stride;
+	UINT offset = 0;
+
+	devcon->OMSetDepthStencilState(0, 0);
+
+	devcon->IASetVertexBuffers(0, 1, &p_info->m_vertexBuffer, &stride, &offset);
+	devcon->IASetIndexBuffer(p_info->m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	devcon->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	devcon->DrawIndexed(p_info->m_indicesCnt, 0, 0);
 }
 
 void Renderer::renderSprites(ManagementSprite* managementSprite)
@@ -125,6 +146,9 @@ void Renderer::renderEntityBufferInfo( EntityBufferInfo* p_info )
 	managementCB_->updateCBObject( devcon, p_info->m_world );
 
 	managementTex_->psSetTexture( devcon, p_info->m_textureId, 0 );
+	managementTex_->psSetTexture( devcon, p_info->m_textureId, 1 );
+	managementTex_->psSetTexture( devcon, p_info->m_textureId, 2 );
+	managementTex_->psSetTexture( devcon, p_info->m_textureId, 3 );
 
 	UINT stride = p_info->m_stride;
 	UINT offset = 0;

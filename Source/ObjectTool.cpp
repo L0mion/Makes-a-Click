@@ -1,21 +1,26 @@
 #include "ObjectTool.h"
 
 #include "EntityBufferInfo.h"
+#include "HeightMap.h"
+#include "ObjectMold.h"
 #include "PivotPoint.h"
 #include "renderer.h"
-#include "ObjectMold.h"
+#include <DirectXMath.h>
+#include <MacDesc.h>
 #include <cstdlib>
 #include <ctime>
-#include "HeightMap.h"
-#include <DirectXMath.h>
 
-ObjectTool::ObjectTool( Renderer* p_renderer )
+ObjectTool::ObjectTool( Renderer* p_renderer, std::vector<Util::MacObject> p_macObjects )
 {
 	m_timeSinceLastPlacement = 0.0f;
 
 	readObjects( p_renderer );
+	m_macObjects = p_macObjects;
+	placeObjects( p_renderer );
 
 	srand((unsigned int)time(NULL));
+	m_macObjects = p_macObjects;
+
 }
 
 ObjectTool::~ObjectTool()
@@ -23,7 +28,7 @@ ObjectTool::~ObjectTool()
 	//done by reader
 	//delete m_barrelMold;
 	for( int i=0; i<ObjectTypes_CNT; i++ ) {
-		for( unsigned int j=0; j<m_molds[ObjectTypes_CNT].size(); j++ ) {
+		for( unsigned int j=0; j<m_molds[i].size(); j++ ) {
 			SAFE_DELETE(m_molds[i][j]);
 		}
 	}
@@ -47,34 +52,52 @@ void ObjectTool::placeObject( Renderer* p_renderer,
 	const ObjectTypes p_objectType, const PivotPoint* p_pivot,
 	const HeightMap* p_heightmap )
 {
+	if( m_molds[p_objectType].size() > 0 )
+	{
+		float diameter = p_pivot->getSize()*2;
+		float area = diameter * DirectX::XM_PI; 
+		int numObjsToPlace = (int) area * p_pivot->getSpeed();
+		for( int i=0; i<numObjsToPlace; i++ ) {
+			int idx = rand() % m_molds[p_objectType].size();
 
-		if( m_molds[p_objectType].size() > 0 )
-		{
-			float diameter = p_pivot->getSize()*2;
-			float area = diameter * DirectX::XM_PI; 
-			int numObjsToPlace = (int) area * p_pivot->getSpeed();
-			for( int i=0; i<numObjsToPlace; i++ ) {
-				int idx = rand() % m_molds[p_objectType].size();
+			EntityBufferInfo* obj = new EntityBufferInfo();
+			obj->setFromMold( m_molds[p_objectType][idx], p_renderer->getD3DManagement() );
 
-				EntityBufferInfo* obj = new EntityBufferInfo();
-				obj->setFromMold( m_molds[p_objectType][idx], p_renderer->getD3DManagement() );
 
-				XMFLOAT3 pos = getRandomPos( p_heightmap, p_pivot->getPosition(), p_pivot->getSize() );
-				obj->setPosition( pos );
-				/*obj->setSize( p_pivot->getSize() );*/
-				p_renderer->addEntity( obj );
-			}
+			XMFLOAT3 pos = getRandomPos( p_heightmap, p_pivot->getPosition(), p_pivot->getSize() );
+			obj->setPosition( pos );
+
+			Util::MacObject object;
+
+			// EVIL HACK! SAVE THEZE F*****S! 
+			int categoryIdx = p_objectType; 
+			int modelIdx = idx;
+
+			object.name = Util::Object_Type_Barrel;
+			object.posX = pos.x;
+			object.posY = pos.y;
+			object.posZ = pos.z;
+			m_macObjects.push_back(object);
+
+			/*obj->setSize( p_pivot->getSize() );*/
+			p_renderer->addEntity( obj );
 		}
+	}
+}
+
+std::vector<Util::MacObject> ObjectTool::getMacObjects()
+{
+	return m_macObjects;
 }
 
 void ObjectTool::readObjects( Renderer* p_renderer )
 {
-	readHemp( p_renderer );
+	//readHemp( p_renderer );
 	readShrubs( p_renderer ); 
-	readMoney( p_renderer );
-	readStones( p_renderer ); //hesco
-	readPalms( p_renderer );
-	readBarrels( p_renderer );
+	//readMoney( p_renderer );
+	//readStones( p_renderer ); //hesco
+	//readPalms( p_renderer );
+	//readBarrels( p_renderer );
 } 
 
 void ObjectTool::readHemp( Renderer* p_renderer )
@@ -182,4 +205,26 @@ DirectX::XMFLOAT3 ObjectTool::getRandomPos( const HeightMap* p_heightmap,
 	pos.y = height;
 
 	return pos;
+}
+
+void ObjectTool::placeObjects( Renderer* p_renderer )
+{
+	for(unsigned int i=0; i<m_macObjects.size(); i++)
+	{
+		if(m_macObjects[i].name == Util::Object_Type_Barrel)
+		{
+			EntityBufferInfo* barrel = new EntityBufferInfo();
+
+			// EVIL HACK! HARDCODEING FROM HELL!
+			int categoryIdx = 0;
+			int modelIdx = 0;
+
+			barrel->setFromMold( m_molds[categoryIdx][modelIdx], p_renderer->getD3DManagement() );
+
+			XMFLOAT3 pos( m_macObjects[i].posX, m_macObjects[i].posY, m_macObjects[i].posZ );
+			barrel->setPosition(pos);
+
+			p_renderer->addEntity( barrel );
+		}
+	}
 }

@@ -163,7 +163,7 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot,
 
 	// Modify heightmap 
 	//float rad = 10.0f;
-	float hightLimit = 25.60f;
+	float hightLimit = 25.50f;
 	float lowLimit = 0.0f;
 	float speedFac = 30.0f;
 	float speed = p_pivot->getSpeed() * speedFac;
@@ -191,6 +191,12 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot,
 			D3D11_MAP_WRITE_DISCARD, 0, &resource);
 		memcpy( resource.pData,& m_vertices[0], sizeof(Vertex_PNT)*m_vertexCnt );
 		devcon->Unmap( m_bufferInfo->m_vertexBuffer, 0 );
+	}
+}
+
+void HeightMap::updateHeightmap() {
+	for( unsigned int i = 0; i < m_heightMap.size(); i++ ) {
+		m_heightMap[i] = m_vertices[i].position[Coords::Y];
 	}
 }
 

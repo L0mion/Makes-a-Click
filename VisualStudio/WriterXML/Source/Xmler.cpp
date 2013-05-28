@@ -1,5 +1,8 @@
 #include <string>
+#include <sstream>
 #include <rapidxml_print.hpp>
+
+#include <Util.h>
 
 #include "SettingsWriterXML.h"
 #include "DescMAC.h"
@@ -8,9 +11,9 @@
 #include "Xmler.h"
 
 namespace Writer_XML {
-	Xmler::Xmler( std::string& p_pathMac, DescMAC& p_descMac ) {
-		m_pathMac = &p_pathMac;
-		m_descMAC = &p_descMac;
+	Xmler::Xmler( std::string& p_pathMac, Util::MacDesc& p_mac ) {
+		m_pathMac	= &p_pathMac;
+		m_mac		= &p_mac;
 
 		m_xml = nullptr;
 		m_wtr = nullptr;
@@ -26,49 +29,62 @@ namespace Writer_XML {
 		}
 	}
 
-	bool Xmler::init() {
+	void Xmler::init( std::string& io_xml ) {
 		m_xml = new XmlDoc();
+		XmlNode* n;
+		XmlNode* p;
 
 		//Create the original node:	
-		//m_xml.append_node(allocNode(Util::DefinitionMac_LEVEL));
-		m_xml->append_node(allocNode("1"));
-		m_xml->append_node(allocNode("2"));
-		m_xml->append_node(allocNode("3"));
-		m_xml->append_node(allocNode("4"));
+		n = allocNode( Util::Node_MAC );
+		appendAtt( n, Util::Att_MAC_Version,	m_mac->version );
+		appendAtt( n, Util::Att_MAC_Name,		m_mac->name );
+		m_xml->append_node( n );
+		p = n;
 
-		bool sucessfulPrint = print();
+		// Link heightmap
+		n = allocNode( Util::Node_Resource );
+		appendAtt( n, Util::Att_Resource_Type,		Util::Resource_Type_Heightmap	);
+		appendAtt( n, Util::Att_Resource_Name,		m_mac->heightmap.name			);
+		appendAtt( n, Util::Att_Resource_Ending,	m_mac->heightmap.ending			);
+		appendAtt( n, Util::Att_Resource_CntCol,	m_mac->heightmap.cntCol			);
+		appendAtt( n, Util::Att_Resource_CntRow,	m_mac->heightmap.cntRow			);
+		appendAtt( n, Util::Att_Resource_CellSize,	m_mac->heightmap.cellSize		);
+		appendAtt( n, Util::Att_Resource_Scale,		m_mac->heightmap.scale			);
+		appendAtt( n, Util::Att_Resource_Offset,	m_mac->heightmap.offset			);
+		p->append_node( n );
 
-		return sucessfulPrint;
+		std::ostringstream oStream;
+		for(unsigned  int i=0; i<m_mac->objects.size(); i++)
+		{
+			n = allocNode( Util::Node_Resource );
+			appendAtt( n, Util::Att_Resource_Type, Util::Resource_Type_Object );
+			appendAtt( n, Util::Att_Resource_Name, m_mac->objects[i].name );
+			oStream.str(std::string());
+			oStream << m_mac->objects[i].posX;
+			appendAtt( n, Util::Att_Resource_Pos_X, oStream.str() );
+			oStream.str(std::string());
+			oStream << m_mac->objects[i].posY;
+			appendAtt( n, Util::Att_Resource_Pos_Y, oStream.str() );
+			oStream.str(std::string());
+			oStream << m_mac->objects[i].posZ;
+			appendAtt( n, Util::Att_Resource_Pos_Z, oStream.str() );
+			p->append_node( n );
+		}
+		
+		// Link blendmap
+		n = allocNode( Util::Node_Resource );
+		appendAtt( n, Util::Att_Resource_Type,		Util::Resource_Type_Blendmap	);
+		appendAtt( n, Util::Att_Resource_Name,		m_mac->blendmap.name			);
+		appendAtt( n, Util::Att_Resource_Ending,	m_mac->blendmap.ending			);
+		appendAtt( n, Util::Att_Resource_CntRow,	m_mac->blendmap.width			);
+		appendAtt( n, Util::Att_Resource_CntCol,	m_mac->blendmap.height			);
+		p->append_node( n );
 
-		//std::string nodeName = "StringWithLifeTimeAsDocument";
-		//// Allocate string and copy name into it
-		//char* nodeNameChar = doc.allocate_string(nodeName.c_str());
-		//// Set node name to node_name
-		//rapidxml::xml_node<>* node = doc.allocate_node(
-		//	rapidxml::node_element, 
-		//	nodeNameChar);
-		//doc.append_node(node);
-		//
-		//std::string anotherNodeName = "AnotherStringEtc.";
-		//char* anotherNodeNameChar = doc.allocate_string(anotherNodeName.c_str());
-		//rapidxml::xml_node<>* anotherNode = doc.allocate_node(
-		//	rapidxml::node_element,
-		//	anotherNodeNameChar);
-		//doc.append_node(anotherNode);
+		getXmlAsString( io_xml );
 	}
 
-	bool Xmler::print() {
-		std::string xml_string;
-		getXmlAsString(xml_string);
-
-		std::string fileName = m_descMAC->getNameFile();
-		m_wtr = new Wtr( 
-			*m_pathMac, 
-			fileName, 
-			xml_string );
-		bool sucessfulPrint = m_wtr->init();
-
-		return sucessfulPrint;
+	void Xmler::appendAtt( XmlNode* p_n, const std::string& p_a, const std::string& p_val ) {
+		p_n->append_attribute( allocAtt( p_a, p_val ) );
 	}
 
 	void Xmler::getXmlAsString( std::string& p_s ) {
@@ -84,7 +100,29 @@ namespace Writer_XML {
 			allocString(p_s));
 	}
 
+	XmlAtt* Xmler::allocAtt( const std::string& p_a, const std::string& p_b ) {
+		return m_xml->allocate_attribute(
+			allocString(p_a),
+			allocString(p_b));
+	}
+
 	char* Xmler::allocString( const std::string& p_s ) {
 		return m_xml->allocate_string(p_s.c_str());
 	}
 }
+
+/*
+bool Xmler::print() {
+std::string xml_string;
+getXmlAsString(xml_string);
+
+std::string fileName = m_mac->name;
+m_wtr = new Wtr( 
+*m_pathMac, 
+fileName, 
+xml_string );
+bool sucessfulPrint = m_wtr->init();
+
+return sucessfulPrint;
+}
+*/

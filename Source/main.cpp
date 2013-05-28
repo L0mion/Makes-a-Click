@@ -29,8 +29,10 @@
 #include "utility.h"
 #include "window.h"
 
-//Loading
+//io
 #include <LoaderMAC.h>
+#include <WriterMAC.h>
+#include <MacDesc.h>
 #include "ObjectTool.h"
 
 HRESULT initialize(HINSTANCE hInstance, int cmdShow);
@@ -74,18 +76,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	bool sucessfulLoad = loaderMAC->init( mac );
 	delete loaderMAC;
 
-
 	HeightMap* heightMap = new HeightMap(
 		g_renderer->getD3DManagement(),
 		mac.heightmap,
 		(float)std::atof(			mac.macDesc.heightmap.cellSize.c_str()	),	//Jag ska fixa detta. Lovar.
 		(unsigned int)std::atoi(	mac.macDesc.heightmap.cntCol.c_str()	),	//Jag ska fixa detta. Lovar.
 		(unsigned int)std::atoi(	mac.macDesc.heightmap.cntRow.c_str()	));	//Jag ska fixa detta. Lovar.
-	EntityBufferInfo* heightMapBuffers = heightMap->getEntityBufferInfo();
-	g_renderer->addEntity( heightMapBuffers );
+	EntityBufferInfo* heightMapInfo = heightMap->getEntityBufferInfo();
+	//g_renderer->addEntity( heightMapInfo );
 
-	BlendMap* blendMap = new BlendMap();
-	blendMap->init(g_renderer->getD3DManagement()->getDevice(), 256, 256);
+	BlendMap* blendMap = new BlendMap(mac.blendmap);
+	blendMap->init(g_renderer->getD3DManagement()->getDevice(), g_renderer->getD3DManagement()->getDeviceContext(), 256, 256);
 	blendMap->psSetBlendMap(g_renderer->getD3DManagement()->getDeviceContext(), 4);
 
 	ObjFileReader reader;
@@ -101,7 +102,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
 		g_renderer->getD3DManagement()->getDeviceContext());
 
-	ObjectTool objectTool( g_renderer );
+	ObjectTool* objectTool = new ObjectTool( g_renderer, mac.macDesc.objects );
 
 	DebugGUI::getInstance()->hideAllBars();
 
@@ -142,7 +143,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 						dt);
 				} else if( g_managementMenu->getActiveTool() == ManagementMenu::ToolIds_OBJECT ) {
 					//ManagementMenu;
-					objectTool.update( dt, g_renderer,
+					objectTool->update( dt, g_renderer,
 						g_managementMenu->getActiveProperty(), pivot, heightMap );
 				}
 
@@ -155,6 +156,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			g_renderer->update( finalMatrix, cameraControl->getPosition() );
 			g_renderer->beginRender();
+			g_renderer->renderHeightMap( heightMapInfo );
 			g_renderer->renderEntities();
 			g_renderer->renderEntityBufferInfo(blueberry);
 			g_renderer->renderSprites(g_managementMenu->getManagementSprite());
@@ -169,6 +171,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
+	// Save lvl
+	heightMap->updateHeightmap();
+	mac.heightmap	= heightMap->getHeightmap();
+
+	mac.blendmap	= blendMap->getTexels();
+	mac.macDesc.blendmap.name = "TestLvl";
+	mac.macDesc.blendmap.ending = "map";
+	mac.macDesc.blendmap.width = Util::UtilString::Int2Std(blendMap->getWidth());
+	mac.macDesc.blendmap.height = Util::UtilString::Int2Std(blendMap->getHeight());
+	mac.macDesc.objects = objectTool->getMacObjects();
+	
+	WriterMAC* writerMAC = new WriterMAC( mac );
+	bool okSave = writerMAC->init();
+
+	//delete objectTool;
 	delete cameraControl;
 	delete heightMap;
 	delete xinput;

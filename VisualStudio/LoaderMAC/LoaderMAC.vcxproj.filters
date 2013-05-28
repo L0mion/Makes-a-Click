@@ -11,6 +11,7 @@
     <ClCompile Include="Source\WriterZlib.cpp">
       <Filter>WriterZlib</Filter>
     </ClCompile>
+    <ClCompile Include="Source\WriterMAC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\LoaderMAC.h" />
@@ -24,6 +25,7 @@
     <ClInclude Include="Source\WriterZlib.h">
       <Filter>WriterZlib</Filter>
     </ClInclude>
+    <ClInclude Include="Source\WriterMAC.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="LoaderHeightmap">
