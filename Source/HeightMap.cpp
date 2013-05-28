@@ -163,7 +163,7 @@ void HeightMap::update( ManagementD3D* p_managementD3D, PivotPoint* p_pivot,
 
 	// Modify heightmap 
 	//float rad = 10.0f;
-	float hightLimit = 25.60f;
+	float hightLimit = 25.50f;
 	float lowLimit = 0.0f;
 	float speedFac = 30.0f;
 	float speed = p_pivot->getSpeed() * speedFac;
