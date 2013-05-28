@@ -8,6 +8,9 @@
     <ClCompile Include="Source\LoaderRaw.cpp">
       <Filter>LoaderRaw</Filter>
     </ClCompile>
+    <ClCompile Include="Source\WriterZlib.cpp">
+      <Filter>WriterZlib</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\LoaderMAC.h" />
@@ -18,6 +21,9 @@
     <ClInclude Include="Source\LoaderRaw.h">
       <Filter>LoaderRaw</Filter>
     </ClInclude>
+    <ClInclude Include="Source\WriterZlib.h">
+      <Filter>WriterZlib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="LoaderHeightmap">
@@ -25,6 +31,9 @@
     </Filter>
     <Filter Include="LoaderRaw">
       <UniqueIdentifier>{8c6fe44a-e34f-40b9-9354-ad6c0b8f436a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WriterZlib">
+      <UniqueIdentifier>{102848eb-f27e-419a-b55f-11ee51fb3fa9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -7,6 +7,9 @@
 
 #include "LoaderMAC.h"
 
+//TEMP
+#include "WriterZlib.h"
+
 LoaderMAC::LoaderMAC() :
 	m_filePathToSearch	( L"../../Resources/Levels/"	),
 	m_fileEnding		( L".xml"						),
@@ -24,6 +27,10 @@ LoaderMAC::~LoaderMAC() {
 }
 
 bool LoaderMAC::init( Mac& io_result ) {
+	//TOTALLY TEMP
+	//WriterZlib writerZlib;
+	//bool result = writerZlib.init();
+
 	//Load xml
 	m_loaderXML = new Loader_XML::LoaderXML(
 		m_filePathToSearch,
