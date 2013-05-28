@@ -135,6 +135,16 @@ namespace Loader_XML {
 			io_result.objects.back().name = val;
 		}
 
+		validObject = validObject && getAttVal( p_curNode, Util::Att_Resource_Category, val );
+		if( validObject ) {
+			io_result.objects.back().categoryIndex = ::atoi(val.c_str());
+		}
+
+		validObject = validObject && getAttVal( p_curNode, Util::Att_Resource_Model, val );
+		if( validObject ) {
+			io_result.objects.back().modelIndex = ::atoi(val.c_str());
+		}
+
 		validObject = validObject && getAttVal( p_curNode, Util::Att_Resource_Pos_X, val );
 		if( validObject ) {
 			io_result.objects.back().posX = ::atof(val.c_str());

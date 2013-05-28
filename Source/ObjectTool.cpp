@@ -73,10 +73,12 @@ void ObjectTool::placeObject( Renderer* p_renderer,
 			int categoryIdx = p_objectType; 
 			int modelIdx = idx;
 
-			object.name = Util::Object_Type_Barrel;
-			object.posX = pos.x;
-			object.posY = pos.y;
-			object.posZ = pos.z;
+			object.name			 = Util::Object_Type_Barrel;
+			object.categoryIndex = categoryIdx;
+			object.modelIndex	 = modelIdx;
+			object.posX			 = pos.x;
+			object.posY			 = pos.y;
+			object.posZ			 = pos.z;
 			m_macObjects.push_back(object);
 
 			/*obj->setSize( p_pivot->getSize() );*/
@@ -92,12 +94,12 @@ std::vector<Util::MacObject> ObjectTool::getMacObjects()
 
 void ObjectTool::readObjects( Renderer* p_renderer )
 {
-	//readHemp( p_renderer );
+	readHemp( p_renderer );
 	readShrubs( p_renderer ); 
-	//readMoney( p_renderer );
-	//readStones( p_renderer ); //hesco
-	//readPalms( p_renderer );
-	//readBarrels( p_renderer );
+	readMoney( p_renderer );
+	readStones( p_renderer ); //hesco
+	readPalms( p_renderer );
+	readBarrels( p_renderer );
 } 
 
 void ObjectTool::readHemp( Renderer* p_renderer )
@@ -216,8 +218,8 @@ void ObjectTool::placeObjects( Renderer* p_renderer )
 			EntityBufferInfo* barrel = new EntityBufferInfo();
 
 			// EVIL HACK! HARDCODEING FROM HELL!
-			int categoryIdx = 0;
-			int modelIdx = 0;
+			int categoryIdx = m_macObjects[i].categoryIndex;
+			int modelIdx = m_macObjects[i].modelIndex;
 
 			barrel->setFromMold( m_molds[categoryIdx][modelIdx], p_renderer->getD3DManagement() );
 

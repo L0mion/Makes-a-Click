@@ -19,6 +19,9 @@ namespace Util {
 	static const std::string Att_Resource_CellSize	= "CellSize";
 	static const std::string Att_Resource_Scale		= "Scale"	;
 	static const std::string Att_Resource_Offset	= "Offset"	;
+
+	static const std::string Att_Resource_Category  = "Category";
+	static const std::string Att_Resource_Model		= "Model"	;
 	static const std::string Att_Resource_Pos_X		= "PosX"	;
 	static const std::string Att_Resource_Pos_Y		= "PosY"	;
 	static const std::string Att_Resource_Pos_Z		= "PosZ"	;
@@ -50,6 +53,8 @@ namespace Util {
 
 	struct MacObject {
 		std::string name;
+		int categoryIndex;
+		int modelIndex;
 		float posX;
 		float posY;
 		float posZ;

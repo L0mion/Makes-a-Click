@@ -59,6 +59,14 @@ namespace Writer_XML {
 			n = allocNode( Util::Node_Resource );
 			appendAtt( n, Util::Att_Resource_Type, Util::Resource_Type_Object );
 			appendAtt( n, Util::Att_Resource_Name, m_mac->objects[i].name );
+			
+			oStream.str(std::string());
+			oStream << m_mac->objects[i].categoryIndex;
+			appendAtt( n, Util::Att_Resource_Category, oStream.str() );
+			oStream.str(std::string());
+			oStream << m_mac->objects[i].modelIndex;
+			appendAtt( n, Util::Att_Resource_Model, oStream.str() );
+			
 			oStream.str(std::string());
 			oStream << m_mac->objects[i].posX;
 			appendAtt( n, Util::Att_Resource_Pos_X, oStream.str() );
