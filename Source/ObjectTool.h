@@ -35,6 +35,7 @@ public:
 private:
 	void readObjects( Renderer* p_renderer );
 	void readBarrel( Renderer* p_renderer );
+	void placeObjects( Renderer* p_renderer );
 
 private:
 	ObjFileReader m_reader;

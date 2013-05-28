@@ -42,6 +42,8 @@ namespace Loader_XML {
 				interpretHeightmap( io_result, p_curNode );
 			} else if( resourceType==Util::Resource_Type_Blendmap ) {
 				interpretBlendmap( io_result, p_curNode );
+			} else if( resourceType==Util::Resource_Type_Object ) {
+				interpretObject( io_result, p_curNode );
 			}
 		}
 

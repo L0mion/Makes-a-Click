@@ -10,6 +10,7 @@ ObjectTool::ObjectTool( Renderer* p_renderer, std::vector<Util::MacObject> p_mac
 {
 	readObjects( p_renderer );
 	m_macObjects = p_macObjects;
+	placeObjects(p_renderer);
 }
 
 ObjectTool::~ObjectTool()
@@ -54,4 +55,21 @@ void ObjectTool::readBarrel( Renderer* p_renderer )
 {
 	m_barrelMold = m_reader.omFromFilename( "../../resources/",
 		"plastic_barrel_scaled.obj", false, p_renderer->getD3DManagement() );
+}
+
+void ObjectTool::placeObjects( Renderer* p_renderer )
+{
+	for(unsigned int i=0; i<m_macObjects.size(); i++)
+	{
+		if(m_macObjects[i].name == Util::Object_Type_Barrel)
+		{
+			EntityBufferInfo* barrel = new EntityBufferInfo();
+			barrel->setFromMold( m_barrelMold, p_renderer->getD3DManagement() );
+
+			barrel->m_world._41 = m_macObjects[i].posX;
+			barrel->m_world._42 = m_macObjects[i].posY;
+			barrel->m_world._43 = m_macObjects[i].posZ;
+			p_renderer->addEntity( barrel );
+		}
+	}
 }

@@ -103,8 +103,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	hr = g_managementMenu->init(g_renderer->getD3DManagement()->getDevice(), 
 		g_renderer->getD3DManagement()->getDeviceContext());
 
-	std::vector<Util::MacObject> macObjects;
-	ObjectTool objectTool( g_renderer, macObjects );
+	ObjectTool objectTool( g_renderer, mac.macDesc.objects );
 
 	if(SUCCEEDED(hr))
 	{
