@@ -90,7 +90,7 @@ ID3D11ShaderResourceView* BlendMap::getSrvBlendMap() const
 	return m_srvBlendMap;
 }
 
-HRESULT BlendMap::init(ID3D11Device* p_device, int p_width, int p_height)
+HRESULT BlendMap::init(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon, int p_width, int p_height)
 {
 	m_width		= p_width;
 	m_height	= p_height;
@@ -101,6 +101,8 @@ HRESULT BlendMap::init(ID3D11Device* p_device, int p_width, int p_height)
 	hr = initTexBlendMap(p_device, p_width, p_height);
 	if(SUCCEEDED(hr))
 		hr = initSrvBlendMap(p_device);
+	if( SUCCEEDED(hr) )
+		hr = updateTexture(p_devcon);
 
 	return hr;
 }

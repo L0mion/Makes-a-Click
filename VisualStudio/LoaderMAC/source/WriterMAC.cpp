@@ -26,7 +26,7 @@ bool WriterMAC::init() {
 	writerXML->init( xml );
 	
 	// Get raw heightmap
-	std::vector<char> rawHM;
+	std::vector<unsigned char> rawHM;
 	uglyHeightmapToRaw( 
 		m_mac->heightmap, 
 		(float)std::atof(macmac.heightmap.scale.c_str()),  //HAHA
@@ -34,7 +34,7 @@ bool WriterMAC::init() {
 		rawHM );
 
 	// Get raw blendmap
-	std::vector<char> rawBM;
+	std::vector<unsigned char> rawBM;
 	uglyBlendmapToRaw(
 		m_mac->blendmap, 
 		std::atof(macmac.blendmap.width.c_str()), 
@@ -59,7 +59,7 @@ bool WriterMAC::init() {
 	//bool ok = wtr->init( true );
 
 	std::string pathxml = path + xmlName;
-	Writer_XML::Wtr* wtr = new Writer_XML::Wtr( pathxml.c_str(), xml.c_str(), xml.size() );
+	Writer_XML::Wtr* wtr = new Writer_XML::Wtr( pathxml.c_str(), (unsigned char*)xml.c_str(), xml.size() );
 	bool ok = wtr->init(true);
 	delete wtr;
 
@@ -79,7 +79,7 @@ bool WriterMAC::init() {
 	return ok;
 }
 
-void WriterMAC::uglyHeightmapToRaw( std::vector<float>& p_heightmap, float p_scale, float p_offset, std::vector<char>& io_raw ) {
+void WriterMAC::uglyHeightmapToRaw( std::vector<float>& p_heightmap, float p_scale, float p_offset, std::vector<unsigned char>& io_raw ) {
 	unsigned int numVertices = p_heightmap.size(); 
 
 	io_raw.resize( numVertices );
@@ -92,20 +92,23 @@ void WriterMAC::uglyBlendmapToRaw(
 	std::vector<Util::Texel>& p_blendmap,
 	unsigned int p_row,
 	unsigned int p_col,
-	std::vector<char>& io_raw) {
+	std::vector<unsigned char>& io_raw) {
 		unsigned int numTexels = p_row * p_col;
 
 		io_raw.resize(numTexels * 4);
-		for( unsigned int i = 0; i < numTexels; i++ ) {
-			int rgba[4];
-			rgba[0] = int(p_blendmap[i].m_red	* 255);
-			rgba[1] = int(p_blendmap[i].m_green	* 255);
-			rgba[2] = int(p_blendmap[i].m_blue	* 255);
-			rgba[3] = int(p_blendmap[i].m_alpha * 255);
+		int t = 0;
+		for( unsigned int i = 0; i < numTexels*4; i+=4 ) {
+			int r = (int)(p_blendmap[t].m_red	* 255.0f);
+			int g = (int)(p_blendmap[t].m_green	* 255.0f);
+			int b = (int)(p_blendmap[t].m_blue	* 255.0f);
+			int a = (int)(p_blendmap[t].m_alpha	* 255.0f);
+			t++;
 
-			std::memcpy(&io_raw[i] ,	&rgba[0],	sizeof(char));
-			std::memcpy(&io_raw[i+1],	&rgba[1], sizeof(char));
-			std::memcpy(&io_raw[i+2],	&rgba[2], sizeof(char));
-			std::memcpy(&io_raw[i+3],	&rgba[3], sizeof(char));
+			std::memcpy(&io_raw[i] ,	&r,	sizeof(unsigned char));
+			std::memcpy(&io_raw[i+1],	&g,	sizeof(unsigned char));
+			std::memcpy(&io_raw[i+2],	&b,	sizeof(unsigned char));
+			std::memcpy(&io_raw[i+3],	&a,	sizeof(unsigned char));
 		}	 
+
+		std::string temp = "";
 }

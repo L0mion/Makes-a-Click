@@ -30,7 +30,7 @@ public:
 	ID3D11Texture2D* getTexBlendMap() const;
 	ID3D11ShaderResourceView* getSrvBlendMap() const;
 
-	HRESULT init(ID3D11Device* p_device, int p_width, int p_height);
+	HRESULT init(ID3D11Device* p_device, ID3D11DeviceContext* p_devcon, int p_width, int p_height);
 
 	std::vector<Util::Texel>& getTexels() { return m_texels; }
 	int getWidth() { return m_width; }

@@ -85,7 +85,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	g_renderer->addEntity( heightMapBuffers );
 
 	BlendMap* blendMap = new BlendMap(mac.blendmap);
-	blendMap->init(g_renderer->getD3DManagement()->getDevice(), 256, 256);
+	blendMap->init(g_renderer->getD3DManagement()->getDevice(), g_renderer->getD3DManagement()->getDeviceContext(), 256, 256);
 	blendMap->psSetBlendMap(g_renderer->getD3DManagement()->getDeviceContext(), 4);
 
 	ObjFileReader reader;
