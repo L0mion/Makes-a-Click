@@ -112,12 +112,9 @@ HRESULT ManagementTex::init(ID3D11Device* p_device)
 		hr = loadTexture(p_device, L"../../Resources/objects/shrubs/trop_shrub_05.dds",
 		TextureIds::TextureIds_OBJ_SHRUB5);
 
-	if(SUCCEEDED(hr)) // Fails for some unknown reason, HR_ERROR_NOT_SUPPORTED
+	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Resources/objects/hesco/diffuse.dds",
 		TextureIds::TextureIds_OBJ_HESCO);
-	//if(SUCCEEDED(hr)) // TEMPORARY
-	//	hr = loadTexture(p_device, L"../../Resources/objects/money/money.dds",
-	//	TextureIds::TextureIds_OBJ_HESCO);
 
 	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Resources/objects/money/money.dds",
@@ -142,12 +139,9 @@ HRESULT ManagementTex::init(ID3D11Device* p_device)
 		hr = loadTexture(p_device, L"../../Resources/objects/hemps/preview.dds",
 		TextureIds::TextureIds_PREVIEW_HEMPS);
 
-	if(SUCCEEDED(hr)) // Fails for some unknown reason, HR_ERROR_NOT_SUPPORTED
+	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Resources/objects/hesco/preview.dds",
 		TextureIds::TextureIds_PREVIEW_HESCO);
-	//if(SUCCEEDED(hr)) // TEMPORARY
-	//	hr = loadTexture(p_device, L"../../Resources/objects/money/preview.dds",
-	//	TextureIds::TextureIds_PREVIEW_HESCO);
 
 	if(SUCCEEDED(hr))
 		hr = loadTexture(p_device, L"../../Resources/objects/money/preview.dds",

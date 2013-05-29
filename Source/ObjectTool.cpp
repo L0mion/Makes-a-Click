@@ -69,13 +69,9 @@ void ObjectTool::placeObject( Renderer* p_renderer,
 
 			Util::MacObject object;
 
-			// EVIL HACK! SAVE THEZE F*****S! 
-			int categoryIdx = p_objectType; 
-			int modelIdx = idx;
-
 			object.name			 = Util::Object_Type_Barrel;
-			object.categoryIndex = categoryIdx;
-			object.modelIndex	 = modelIdx;
+			object.categoryIndex = p_objectType;
+			object.modelIndex	 = idx;
 			object.posX			 = pos.x;
 			object.posY			 = pos.y;
 			object.posZ			 = pos.z;
@@ -161,15 +157,15 @@ void ObjectTool::readStones( Renderer* p_renderer )
 void ObjectTool::readPalms( Renderer* p_renderer )
 {
 	addMold( ObjectTypes_PALM, TextureIds::TextureIds_OBJ_PALM, 
-		"../../resources/objects/palms/", "palm_bend.obj", 2.0f, p_renderer );
+		"../../resources/objects/palms/", "palm_bend.obj", 4.0f, p_renderer );
 	addMold( ObjectTypes_PALM, TextureIds::TextureIds_OBJ_PALM, 
 		"../../resources/objects/palms/", "palm_dual.obj", 3.5f, p_renderer );
 	addMold( ObjectTypes_PALM, TextureIds::TextureIds_OBJ_PALM, 
-		"../../resources/objects/palms/", "palm_dual_bend.obj", 2.5f, p_renderer );
+		"../../resources/objects/palms/", "palm_dual_bend.obj", 3.5f, p_renderer );
 	addMold( ObjectTypes_PALM, TextureIds::TextureIds_OBJ_PALM, 
 		"../../resources/objects/palms/", "palm_straight.obj", 5.0f, p_renderer );
 	addMold( ObjectTypes_PALM, TextureIds::TextureIds_OBJ_PALM, 
-		"../../resources/objects/palms/", "palm_trio.obj", 2.0f, p_renderer );
+		"../../resources/objects/palms/", "palm_trio.obj", 3.0f, p_renderer );
 }
 
 void ObjectTool::readBarrels( Renderer* p_renderer )
@@ -217,7 +213,6 @@ void ObjectTool::placeObjects( Renderer* p_renderer )
 		{
 			EntityBufferInfo* barrel = new EntityBufferInfo();
 
-			// EVIL HACK! HARDCODEING FROM HELL!
 			int categoryIdx = m_macObjects[i].categoryIndex;
 			int modelIdx = m_macObjects[i].modelIndex;
 

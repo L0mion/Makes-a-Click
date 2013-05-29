@@ -66,17 +66,8 @@ private:
 private:
 	ObjFileReader m_reader;
 	vector<ObjectMold*> m_molds[ObjectTypes_CNT];
-	//ObjectMold* m_barrelMold;
 	float m_timeSinceLastPlacement;
 
-//=======
-//	void readBarrel( Renderer* p_renderer );
 	void placeObjects( Renderer* p_renderer );
-//
-//private:
-//	ObjFileReader m_reader;
-//
-//	ObjectMold* m_barrelMold;
 	std::vector<Util::MacObject> m_macObjects;
-//>>>>>>> 8eca735681a7a8a03481fcc59d55b77697601a7a
 };
