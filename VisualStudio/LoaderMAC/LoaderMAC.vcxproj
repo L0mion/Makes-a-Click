@@ -58,8 +58,8 @@
     <LibraryPath>$(SolutionDir)\..\Tartar\lib\$(Configuration)\;$(SolutionDir)\..\External\zlib128-dll\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)\LoaderXML\Source\;$(SolutionDir)\..\External\zlib128-dll\include\;$(SolutionDir)\Util\Source\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\External\zlib128-dll\lib\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\Tartar\src\;$(SolutionDir)\WriterXML\Source\;$(SolutionDir)\LoaderXML\Source\;$(SolutionDir)\..\External\zlib128-dll\include\;$(SolutionDir)\Util\Source\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\Tartar\lib\$(Configuration)\;$(SolutionDir)\..\External\zlib128-dll\lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
